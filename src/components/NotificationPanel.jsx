@@ -1,0 +1,26 @@
+const NotificationPanel = () => {
+  const notifications = [
+    { id: 1, text: "Your class has been approved", time: "2h ago" },
+    { id: 2, text: "New student enrolled", time: "1d ago" },
+    { id: 3, text: "Assignment submitted", time: "3d ago" },
+  ];
+
+  return (
+    <aside className="w-72 hidden lg:flex flex-col bg-white shadow-md p-6 h-[calc(100vh-64px)] overflow-y-auto">
+      <h2 className="text-lg font-semibold text-blue-700 mb-4">Notifications</h2>
+      <ul className="space-y-4 text-sm">
+        {notifications.map((n) => (
+          <li
+            key={n.id}
+            className="bg-blue-50 hover:bg-blue-100 p-3 rounded-md transition"
+          >
+            <p className="text-blue-900">{n.text}</p>
+            <span className="text-xs text-gray-500">{n.time}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+};
+
+export default NotificationPanel;

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-// import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 // import AllClasses from "../pages/AllClasses";
 // import Teach from "../pages/Teach";
@@ -11,10 +11,11 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 
 
+
 // Dashboard pages (these will be nested by role)
+import Profile from "../pages/Profile";
 // import StudentDashboard from "../pages/dashboard/student/StudentDashboard";
 // import MyEnrollClass from "../pages/dashboard/student/MyEnrollClass";
-// import MyProfile from "../pages/dashboard/shared/MyProfile";
 
 // import TeacherDashboard from "../pages/dashboard/teacher/TeacherDashboard";
 // import AddClass from "../pages/dashboard/teacher/AddClass";
@@ -55,10 +56,10 @@ const router = createBrowserRouter([
   },
 
   // Dashboard routes (Private)
-//   {
-//     path: "/dashboard",
-//     element: <DashboardLayout />,
-//     children: [
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
 //       // Student routes
 //       { path: "student", element: <StudentDashboard /> },
 //       { path: "my-enroll-class", element: <MyEnrollClass /> },
@@ -76,10 +77,10 @@ const router = createBrowserRouter([
 //       { path: "all-classes", element: <AllClassAdmin /> },
 //       { path: "teacher-requests", element: <TeacherRequests /> },
 
-//       // Shared
-//       { path: "profile", element: <MyProfile /> },
-//     ],
-//   },
+      // Shared
+      { path: "profile", element: <Profile/> },
+    ],
+  },
 ]);
 
 export default router;

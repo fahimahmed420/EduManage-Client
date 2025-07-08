@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 // Import your Lottie animation JSON files
@@ -58,7 +59,7 @@ const PartnersSlider = () => {
           {[...partners, ...partners,...partners].map((partner, index) => (
             <div
               key={index}
-              className="relative min-w-[200px] h-36 bg-white rounded-xl shadow-md overflow-hidden group cursor-pointer"
+              className="relative min-w-[200px] h-36 bg-white rounded-4xl shadow-md overflow-hidden group cursor-pointer my-2"
             >
               {/* Lottie Animation */}
               <div className="flex justify-center items-center h-full p-4">

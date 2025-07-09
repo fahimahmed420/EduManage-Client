@@ -22,7 +22,7 @@ const Banner = () => {
     { title: "Assignments Hub", color: "from-pink-500 to-red-500", icon: <FaTasks size={30} /> },
     { title: "Teach on EduManage", color: "from-green-400 to-teal-500", icon: <FaChalkboardTeacher size={30} /> },
     { title: "Collaborate with Peers", color: "from-yellow-400 to-orange-500", icon: <FaUsers size={30} /> },
-    { title: "Track Progress", color: "from-indigo-500 to-cyan-500", icon: <FaChartLine size={30} /> },
+    { title: "Tracking Progress", color: "from-indigo-500 to-cyan-500", icon: <FaChartLine size={30} /> },
     { title: "Resource Library", color: "from-rose-500 to-pink-500", icon: <FaFolderOpen size={30} /> },
   ];
 

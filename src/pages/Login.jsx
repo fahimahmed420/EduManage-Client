@@ -26,6 +26,33 @@ const ChecklistItem = ({ valid, label }) => (
   </div>
 );
 
+const saveUserToDB = async (user) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: user.displayName || user.name,
+        email: user.email,
+        photo: user.photoURL || user.photo,
+        role: "student",
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Failed to save user:", errorData);
+    } else {
+      const data = await res.json();
+      return data;
+    }
+  } catch (err) {
+    console.error("Error saving user to DB:", err.message);
+  }
+};
+
+
+
 export default function Login() {
   const { signInUser, signInWithGoogle, passReset } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -72,7 +99,13 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      const user = result?.user;
+
+      if (user) {
+        await saveUserToDB(user);
+      }
+
       toast.success("Signed in with Google!");
       navigate("/");
     } catch (error) {
@@ -81,6 +114,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+
 
   const handlePasswordReset = async () => {
     if (!email) {
@@ -202,9 +236,8 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold flex justify-center items-center gap-2 transition ${
-              loading && "opacity-50 cursor-not-allowed"
-            }`}
+            className={`w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold flex justify-center items-center gap-2 transition ${loading && "opacity-50 cursor-not-allowed"
+              }`}
           >
             {loading ? (
               <>

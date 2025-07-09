@@ -2,7 +2,6 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
-import defaultUser from "../assets/user.jpg";
 import { AuthContext } from "../contexts/AuthContext";
 import GraduationHat from "../assets/logo-animation.json";
 import Lottie from "lottie-react";
@@ -13,6 +12,8 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef();
+  console.log("User photoURL:", user?.photoURL);
+
 
   const handleLogout = () => {
     signOutUser()
@@ -89,19 +90,18 @@ const Navbar = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <img
-                src={user.photoURL || defaultUser}
-                className="w-10 h-10 rounded-full border cursor-pointer"
+                src={user.photoURL}
+                className="w-10 h-10 rounded-full cursor-pointer relative z-10"
                 alt="profile"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              />
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}/>
+
 
               {/* Slide-down dropdown */}
               <div
                 className={`absolute right-0 mt-2 w-48 bg-gray-100 border border-gray-300 shadow-lg rounded-md p-3 z-20 overflow-hidden transition-[max-height,opacity,transform] duration-300 ease-in-out
-                  ${
-                    isDropdownOpen
-                      ? "max-h-60 opacity-100 translate-y-0"
-                      : "max-h-0 opacity-0 -translate-y-2 pointer-events-none"
+                  ${isDropdownOpen
+                    ? "max-h-60 opacity-100 translate-y-0"
+                    : "max-h-0 opacity-0 -translate-y-2 pointer-events-none"
                   }
                 `}
                 style={{ willChange: "max-height, opacity, transform" }}

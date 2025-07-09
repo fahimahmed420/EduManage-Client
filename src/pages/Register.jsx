@@ -9,6 +9,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import GraduationHat from "../assets/logo-animation.json";
 import Lottie from "lottie-react";
 
+// Password Checklist UI
 const ChecklistItem = ({ valid, label }) => (
   <div className="flex items-center gap-2">
     {valid ? (
@@ -18,23 +19,44 @@ const ChecklistItem = ({ valid, label }) => (
     ) : (
       <span className="text-red-500 text-base font-semibold">✖</span>
     )}
-    <span
-      className={valid ? "text-green-600 text-sm" : "text-red-500 text-sm"}
-    >
+    <span className={valid ? "text-green-600 text-sm" : "text-red-500 text-sm"}>
       {label}
     </span>
   </div>
 );
 
+// Save new user to DB
+const saveUserToDB = async (user) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: user.displayName || user.name,
+        email: user.email,
+        photo: user.photoURL || user.photo,
+        role: "student",
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Failed to save user:", errorData);
+    }
+  } catch (err) {
+    console.error("Error saving user to DB:", err.message);
+  }
+};
+
 export default function Register() {
-  const { createUser, signInWithGoogle } = useContext(AuthContext); // Use createUser from context
+  const { createUser, signInWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [nameTouched, setNameTouched] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [photoURL, setPhotoURL] = useState(""); // New photoURL input
+  const [photoURL, setPhotoURL] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
@@ -63,10 +85,13 @@ export default function Register() {
 
     try {
       setLoading(true);
-      // Call createUser from AuthContext
-      await createUser(email, password, name, photoURL);
+      const userCredential = await createUser(email, password, name, photoURL);
+      const createdUser = userCredential?.user;
+
+      await saveUserToDB(createdUser);
+
       toast.success("Account created successfully!");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       toast.error(error.message || "Registration failed.");
     } finally {
@@ -77,7 +102,9 @@ export default function Register() {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      const user = result?.user;
+      if (user) await saveUserToDB(user);
       toast.success("Signed up with Google!");
       navigate("/");
     } catch (error) {
@@ -89,32 +116,19 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-100 to-blue-200 px-4">
-      {/* Glassmorphic Card */}
       <div className="glass-card w-full max-w-sm p-6 space-y-6 shadow-2xl rounded-2xl">
         {/* Logo */}
         <div className="flex justify-center">
-          <Link
-            to="/"
-            className="flex justify-center items-center gap-2 text-blue-600 font-extrabold text-2xl hover:underline"
-          >
-            <Lottie
-              className="w-14"
-              animationData={GraduationHat}
-              loop
-              autoplay
-            />
+          <Link to="/" className="flex items-center gap-2 text-blue-600 font-extrabold text-2xl hover:underline">
+            <Lottie className="w-14" animationData={GraduationHat} loop autoplay />
             EduManage
           </Link>
         </div>
 
         {/* Heading */}
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Create your account
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Sign up to access all educational tools and resources.
-          </p>
+          <h1 className="text-2xl font-bold text-gray-800">Create your account</h1>
+          <p className="text-gray-500 text-sm mt-1">Sign up to access all educational tools and resources.</p>
         </div>
 
         {/* Form */}
@@ -127,12 +141,10 @@ export default function Register() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={() => setNameTouched(true)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 bg-white/70 backdrop-blur-md"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white/70 backdrop-blur-md"
             />
             {nameTouched && !name && (
-              <p className="text-red-500 text-xs mt-1">
-                Please enter your name.
-              </p>
+              <p className="text-red-500 text-xs mt-1">Please enter your name.</p>
             )}
           </div>
 
@@ -143,7 +155,7 @@ export default function Register() {
               placeholder="Profile Photo URL (optional)"
               value={photoURL}
               onChange={(e) => setPhotoURL(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 bg-white/70 backdrop-blur-md"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white/70 backdrop-blur-md"
             />
             {photoURL && (
               <div className="flex justify-center mt-2">
@@ -163,12 +175,10 @@ export default function Register() {
               placeholder="student@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 bg-white/70 backdrop-blur-md"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white/70 backdrop-blur-md"
             />
             {!isEmailValid && email && (
-              <p className="text-red-500 text-xs mt-1">
-                Please enter a valid email.
-              </p>
+              <p className="text-red-500 text-xs mt-1">Please enter a valid email.</p>
             )}
           </div>
 
@@ -181,14 +191,14 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(false)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 bg-white/70 backdrop-blur-md pr-10"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white/70 backdrop-blur-md pr-10"
             />
             <button
               type="button"
-              aria-label={showPassword ? "Hide password" : "Show password"}
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
               tabIndex={-1}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <FiEyeOff /> : <FiEye />}
             </button>
@@ -197,26 +207,14 @@ export default function Register() {
           {/* Password Checklist */}
           {(passwordFocused || password.length > 0) && (
             <div className="space-y-1">
-              <ChecklistItem
-                valid={passwordRegex.length.test(password)}
-                label="At least 8 characters"
-              />
-              <ChecklistItem
-                valid={passwordRegex.uppercase.test(password)}
-                label="At least 1 uppercase letter"
-              />
-              <ChecklistItem
-                valid={passwordRegex.lowercase.test(password)}
-                label="At least 1 lowercase letter"
-              />
-              <ChecklistItem
-                valid={passwordRegex.digit.test(password)}
-                label="At least 1 number"
-              />
+              <ChecklistItem valid={passwordRegex.length.test(password)} label="At least 8 characters" />
+              <ChecklistItem valid={passwordRegex.uppercase.test(password)} label="At least 1 uppercase letter" />
+              <ChecklistItem valid={passwordRegex.lowercase.test(password)} label="At least 1 lowercase letter" />
+              <ChecklistItem valid={passwordRegex.digit.test(password)} label="At least 1 number" />
             </div>
           )}
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -255,16 +253,13 @@ export default function Register() {
         {/* Login Link */}
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 hover:underline font-medium"
-          >
+          <Link to="/login" className="text-blue-600 hover:underline font-medium">
             Sign in
           </Link>
         </p>
       </div>
 
-      {/* Toastify Container */}
+      {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

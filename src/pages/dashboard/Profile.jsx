@@ -1,28 +1,28 @@
 import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
-import { AuthContext } from "../contexts/AuthContext";
 import { FiCopy, FiEdit, FiSave } from "react-icons/fi";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
 
-  // Initial values — replace phone/role with values from DB if needed
+  
   const [firstName, setFirstName] = useState(user?.displayName?.split(" ")[0] || "");
   const [lastName, setLastName] = useState(user?.displayName?.split(" ")[1] || "");
   const [email] = useState(user?.email || "");
-  const [phone, setPhone] = useState("+880 1000000000"); // Fetch from DB in real app
-  const [role, setRole] = useState("student"); // Possible: student, teacher, admin
+  const [phone, setPhone] = useState("+880 1000000000");
+  const [role, setRole] = useState("student");
   const [editMode, setEditMode] = useState(false);
 
   const handleSave = () => {
-    // 🔒 Send updated values to DB here
+    //  Send updated values to DB here
     setEditMode(false);
     console.log("Saved:", { firstName, lastName, phone, role });
   };
 
   return (
     <motion.div
-      className="bg-white rounded-3xl shadow-lg p-6 max-w-3xl mx-auto h-full"
+      className="bg-white rounded-3xl shadow-lg p-6 mx-auto h-full"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}

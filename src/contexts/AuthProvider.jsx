@@ -8,74 +8,91 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  reload
 } from 'firebase/auth';
 import { auth } from '../../firebase.init';
+
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(undefined);
 
-  // Create user with email/password
   const createUser = async (email, password, fullName = '', photoURL = '') => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    if (fullName || photoURL) {
-      await updateProfile(userCredential.user, {
-        displayName: fullName,
-        photoURL: photoURL,
-      });
-      setUser({ ...userCredential.user, displayName: fullName, photoURL }); 
-    } else {
-      setUser(userCredential.user);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (fullName || photoURL) {
+        await updateProfile(userCredential.user, { displayName: fullName, photoURL });
+        await reload(userCredential.user);
+      }
+      setUser(auth.currentUser);
+      return userCredential;
+    } catch (error) {
+      console.log(error);
     }
-    return userCredential;
   };
 
-  // Sign in user with email/password
   const signInUser = async (email, password) => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    setUser(userCredential.user);
-    return userCredential;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      return userCredential;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // Google Sign In
-  const googleProvider = new GoogleAuthProvider();
   const signInWithGoogle = async () => {
-    const result = await signInWithPopup(auth, googleProvider);
-    setUser(result.user);
-    return result;
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      setUser(result.user);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // Sign out
   const signOutUser = async () => {
-    await signOut(auth);
-    setUser(null);
+    try {
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // password reset
-  const passReset =async(email)=>{
-    const result= await sendPasswordResetEmail(auth,email);
-    return result;
-  }
+  const resetPassword = async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // Listen to auth state changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); 
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${currentUser.email}`);
+          const userData = await res.json();
+
+          setUser({
+            ...currentUser,
+            role: userData?.role || "student", // fallback
+          });
+        } catch (err) {
+          console.error("Error fetching role:", err);
+          setUser({ ...currentUser, role: "student" }); // fallback
+        }
+      } else {
+        setUser(null);
+      }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const userInfo = {
-    user,
-    createUser,
-    signInUser,
-    signOutUser,
-    signInWithGoogle,
-    passReset
-  };
 
-  // Only show loading screen while user === undefined (not yet checked)
   if (user === undefined) {
     return (
       <div className="text-center text-white text-xl py-10">
@@ -86,7 +103,16 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={userInfo}>
+    <AuthContext.Provider
+      value={{
+        user,
+        createUser,
+        signInUser,
+        signOutUser,
+        signInWithGoogle,
+        resetPassword,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

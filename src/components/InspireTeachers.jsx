@@ -26,7 +26,7 @@ const InspireTeachers = () => {
             Join EduManage as a teacher and impact thousands of learners. Teach live classes, share assignments, and grow your teaching career while helping students succeed.
           </p>
           <Link
-            to="/become-a-teacher"
+            to="/teach"
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold transition duration-300 w-fit"
           >
             Start Teaching

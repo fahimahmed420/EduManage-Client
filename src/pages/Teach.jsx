@@ -12,7 +12,7 @@ const CustomSuccessToast = ({ name }) => (
         />
         <div>
             <p className="font-semibold text-green-600">Request Submitted!</p>
-            <p className="text-sm text-gray-600">{name}, we'll review your application soon.</p>
+            <p className="text-sm text-gray-600">{name}, we’ll review your application soon.</p>
         </div>
     </div>
 );
@@ -27,10 +27,11 @@ const Teach = () => {
         title: "",
         category: "",
     });
+    const [submitting, setSubmitting] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
@@ -42,15 +43,16 @@ const Teach = () => {
             return;
         }
 
+        setSubmitting(true);
         try {
-            const res = await axios.post(
+            await axios.post(
                 `${import.meta.env.VITE_API_URL}/teacherRequests`,
                 formData
             );
             toast.success(<CustomSuccessToast name={formData.name} />, {
                 icon: false,
                 closeButton: false,
-                className: "bg-white shadow-md rounded-lg p-4",
+                className: "bg-white shadow-md rounded-lg p-4 animate-slide-in",
             });
             setFormData({
                 name: user?.displayName || "",
@@ -62,18 +64,23 @@ const Teach = () => {
             });
         } catch (err) {
             toast.error("Failed to submit. Please try again.");
+        } finally {
+            setSubmitting(false);
         }
     };
 
     return (
-        <div className="max-w-2xl mx-auto px-4 py-10">
-            <h2 className="text-3xl font-bold mb-2">Teach Application</h2>
-            <p className="text-gray-500 mb-8">
+        <div className="max-w-2xl mx-auto px-4 py-8 sm:py-10">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-center">Teach Application</h2>
+            <p className="text-gray-500 mb-8 text-center text-sm sm:text-base">
                 Share your expertise and inspire learners worldwide. Complete the form
                 below to start your application.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form
+                onSubmit={handleSubmit}
+                className="space-y-5 sm:space-y-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm"
+            >
                 {/* Name */}
                 <div>
                     <label className="block font-medium mb-1">Name</label>
@@ -82,7 +89,7 @@ const Teach = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full border px-4 py-2 rounded"
+                        className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
                         placeholder="Full Name"
                         required
                     />
@@ -92,7 +99,7 @@ const Teach = () => {
                 <div className="flex items-center gap-3">
                     <img
                         src={formData.photo || "https://i.ibb.co/9t9cYgW/avatar.png"}
-                        className="w-12 h-12 rounded-full border"
+                        className="w-12 h-12 rounded-full border object-cover"
                         alt="Profile"
                     />
                     <span className="text-sm text-gray-600">Profile Picture</span>
@@ -106,7 +113,7 @@ const Teach = () => {
                         name="email"
                         readOnly
                         value={formData.email}
-                        className="w-full border px-4 py-2 rounded bg-gray-100 cursor-not-allowed"
+                        className="w-full px-4 py-2 rounded-md bg-gray-100 text-gray-500 border border-gray-200 cursor-not-allowed"
                         required
                     />
                 </div>
@@ -118,7 +125,7 @@ const Teach = () => {
                         name="experienceLevel"
                         value={formData.experienceLevel}
                         onChange={handleChange}
-                        className="w-full border px-4 py-2 rounded"
+                        className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
                         required
                     >
                         <option value="">Select Level</option>
@@ -136,7 +143,7 @@ const Teach = () => {
                         name="title"
                         value={formData.title}
                         onChange={handleChange}
-                        className="w-full border px-4 py-2 rounded"
+                        className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
                         placeholder="e.g., Expert in Data Science"
                         required
                     />
@@ -149,7 +156,7 @@ const Teach = () => {
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full border px-4 py-2 rounded"
+                        className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
                         required
                     >
                         <option value="">Select Category</option>
@@ -164,9 +171,14 @@ const Teach = () => {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold"
+                    disabled={submitting}
+                    className={`w-full py-3 rounded-md text-white font-semibold transition ${
+                        submitting
+                            ? "bg-blue-300 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700"
+                    }`}
                 >
-                    Submit for Review
+                    {submitting ? "Submitting..." : "Submit for Review"}
                 </button>
             </form>
         </div>

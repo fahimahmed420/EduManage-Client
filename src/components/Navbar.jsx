@@ -5,14 +5,38 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../contexts/AuthContext";
 import GraduationHat from "../assets/logo-animation.json";
 import Lottie from "lottie-react";
+import axios from "axios";
+
+const API = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState("");
   const navigate = useNavigate();
   const dropdownRef = useRef();
-  console.log("User photoURL:", user?.photoURL);
+
+  const DEFAULT_AVATAR = "https://i.ibb.co/ZzW3T9xN/memberdeals-summerfun-465x254.jpg";
+
+  // Fetch user profile photo from database
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user?.email) {
+        try {
+          const res = await axios.get(`${API}/users/${user.email}`);
+          setProfilePhoto(res.data.photo);
+        } catch (err) {
+          console.error("❌ Failed to fetch user profile:", err);
+          setProfilePhoto(DEFAULT_AVATAR);
+        }
+      } else {
+        setProfilePhoto(DEFAULT_AVATAR);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user?.email]);
 
 
   const handleLogout = () => {
@@ -22,7 +46,7 @@ const Navbar = () => {
         Swal.fire("Logged out!", "", "success");
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   const navItems = (
@@ -90,11 +114,12 @@ const Navbar = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <img
-                src={user.photoURL}
-                className="w-10 h-10 rounded-full cursor-pointer relative z-10"
+                src={profilePhoto || DEFAULT_AVATAR} // use fallback
+                className="w-10 h-10 rounded-full cursor-pointer relative z-10 object-cover"
                 alt="profile"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}/>
-
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                onError={(e) => (e.target.src = DEFAULT_AVATAR)} // prevent broken image
+              />
 
               {/* Slide-down dropdown */}
               <div
@@ -104,7 +129,6 @@ const Navbar = () => {
                     : "max-h-0 opacity-0 -translate-y-2 pointer-events-none"
                   }
                 `}
-                style={{ willChange: "max-height, opacity, transform" }}
               >
                 <p className="font-semibold text-gray-800">{user.displayName}</p>
                 <hr className="my-2 border-gray-300" />
@@ -140,7 +164,6 @@ const Navbar = () => {
             </Link>
           ) : (
             <div className="space-y-1">
-              {/* No user name on mobile, only dashboard and logout */}
               <Link
                 to="/dashboard"
                 className="block hover:text-blue-600"

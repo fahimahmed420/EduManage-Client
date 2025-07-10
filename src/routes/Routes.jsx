@@ -17,13 +17,14 @@ import Register from "../pages/Register";
 // import MyEnrollClass from "../pages/dashboard/student/MyEnrollClass";
 
 // import TeacherDashboard from "../pages/dashboard/teacher/TeacherDashboard";
-// import AddClass from "../pages/dashboard/teacher/AddClass";
-// import MyClass from "../pages/dashboard/teacher/MyClass";
+import MyClasses from "../pages/dashboard/teacher/MyClasses";
+import AddClass from "../pages/dashboard/teacher/AddClass";
 
 import AllUsers from "../pages/dashboard/admin/AllUsers";
 import AllClassAdmin from "../pages/dashboard/admin/AllClassAdmin";
 import TeacherRequests from "../pages/dashboard/admin/TeacherRequests";
 import Profile from "../pages/dashboard/Profile";
+
 
 
 // Class Details Page (Private)
@@ -67,8 +68,8 @@ const router = createBrowserRouter([
 
 //       // Teacher routes
 //       { path: "teacher", element: <TeacherDashboard /> },
-//       { path: "add-class", element: <AddClass /> },
-//       { path: "my-class", element: <MyClass /> },
+      { path: "add-class", element: <AddClass /> },
+      { path: "my-class", element: <MyClasses /> },
 //       { path: "my-class/:id", element: <div>My Class Details</div> },
 
       // Admin routes

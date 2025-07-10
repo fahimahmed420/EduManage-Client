@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import Lottie from "lottie-react";
 import Swal from "sweetalert2";
+import axios from "axios"; // 👈 import axios
 import GraduationHat from "../assets/logo-animation.json";
 import defaultUser from "../assets/user.jpg";
 import { AuthContext } from "../contexts/AuthContext";
@@ -22,11 +23,14 @@ import NotificationPanel from "../components/NotificationPanel";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const API = "http://localhost:5000"; // 👈 Replace with your backend URL
+
 const DashboardLayout = () => {
   const { user, signOutUser } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false); // Mobile menu
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // Desktop sidebar collapsed state
+  const [profilePhoto, setProfilePhoto] = useState(defaultUser); // 👈 state for profile photo
   const dropdownRef = useRef();
   const navigate = useNavigate();
 
@@ -42,7 +46,6 @@ const DashboardLayout = () => {
       .catch(console.error);
   };
 
-  // Define dashboard links with icons
   const dashboardLinks = {
     admin: [
       { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
@@ -60,6 +63,24 @@ const DashboardLayout = () => {
       { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
     ],
   };
+
+  // Fetch user profile photo from API
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user?.email) {
+        try {
+          const res = await axios.get(`${API}/users/${user.email}`);
+          // Set photo from DB or fallback to Firebase or default
+          setProfilePhoto(res.data.photo || user.photoURL || defaultUser);
+        } catch (err) {
+          console.error("❌ Failed to fetch user profile:", err);
+          setProfilePhoto(user.photoURL || defaultUser);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [user?.email]);
 
   useEffect(() => {
     const handleOutside = (e) => {
@@ -89,9 +110,9 @@ const DashboardLayout = () => {
             {user && (
               <div className="relative" ref={dropdownRef}>
                 <img
-                  src={user.photoURL || defaultUser}
+                  src={profilePhoto} // 👈 use fetched photo
                   alt="Profile"
-                  className="w-9 h-9 md:w-10 md:h-10 rounded-full border cursor-pointer"
+                  className="w-9 h-9 md:w-10 md:h-10 rounded-full border cursor-pointer object-cover"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 />
                 <div
@@ -159,25 +180,19 @@ const DashboardLayout = () => {
       </nav>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar for large screens */}
+        {/* Sidebar */}
         <aside
           className={`hidden md:flex flex-col bg-white shadow-sm p-4 transition-all duration-300
             ${sidebarCollapsed ? "w-20" : "w-52"}
           `}
-          style={{ borderRight: "1px solid #e5e7eb" /* Tailwind gray-200 */ }}
+          style={{ borderRight: "1px solid #e5e7eb" }}
         >
-          {/* Collapse toggle button */}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             className="self-end mb-4 p-1 rounded-md hover:bg-gray-100 text-gray-500"
             title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-            aria-label={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
-            {sidebarCollapsed ? (
-              <FaAngleRight className="text-lg" />
-            ) : (
-              <FaAngleLeft className="text-lg" />
-            )}
+            {sidebarCollapsed ? <FaAngleRight /> : <FaAngleLeft />}
           </button>
 
           <nav className="flex flex-col gap-1 text-gray-700 flex-grow">
@@ -190,13 +205,12 @@ const DashboardLayout = () => {
                     isActive ? "bg-blue-100 font-semibold" : ""
                   }`
                 }
-                title={sidebarCollapsed ? item.label : undefined} // tooltip on collapse
+                title={sidebarCollapsed ? item.label : undefined}
               >
                 <div className="text-lg flex-shrink-0">{item.icon}</div>
                 {!sidebarCollapsed && <span>{item.label}</span>}
               </NavLink>
             ))}
-
             <button
               onClick={handleLogout}
               className="mt-auto flex items-center gap-3 py-2 px-3 rounded-md text-red-600 hover:bg-red-50"
@@ -209,10 +223,7 @@ const DashboardLayout = () => {
         </aside>
 
         {/* Main Content */}
-        <main
-          className="flex-1 p-4  overflow-y-auto"
-          style={{ minWidth: 0 }} // prevents content from overflowing horizontally
-        >
+        <main className="flex-1 p-4 overflow-y-auto" style={{ minWidth: 0 }}>
           <Outlet />
         </main>
 

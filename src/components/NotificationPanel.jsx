@@ -1,8 +1,6 @@
 const NotificationPanel = () => {
   const notifications = [
-    { id: 1, text: "Your class has been approved", time: "2h ago" },
-    { id: 2, text: "New student enrolled", time: "1d ago" },
-    { id: 3, text: "Assignment submitted", time: "3d ago" },
+    { id: 1, text: "For now notification bar will not work.I will work on it later.", time: "0h ago" },
   ];
 
   return (

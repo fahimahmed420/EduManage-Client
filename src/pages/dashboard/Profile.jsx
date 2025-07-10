@@ -1,28 +1,77 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FiCopy, FiEdit, FiSave } from "react-icons/fi";
 import { AuthContext } from "../../contexts/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+const API = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
+  const [profile, setProfile] = useState(null);
 
-  
-  const [firstName, setFirstName] = useState(user?.displayName?.split(" ")[0] || "");
-  const [lastName, setLastName] = useState(user?.displayName?.split(" ")[1] || "");
-  const [email] = useState(user?.email || "");
-  const [phone, setPhone] = useState("+880 1000000000");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("+8801000000000");
   const [role, setRole] = useState("student");
+  const [bio, setBio] = useState("");
+  const [photo, setPhoto] = useState("");
   const [editMode, setEditMode] = useState(false);
 
-  const handleSave = () => {
-    //  Send updated values to DB here
-    setEditMode(false);
-    console.log("Saved:", { firstName, lastName, phone, role });
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${API}/users/${user.email}`);
+        const data = res.data;
+        setProfile(data);
+        setFirstName(data.firstName || user?.displayName?.split(" ")[0] || "");
+        setLastName(data.lastName || user?.displayName?.split(" ")[1] || "");
+        setEmail(data.email || user?.email || "");
+        setPhone(data.phone || "+8801000000000");
+        setRole(data.role || "student");
+        setBio(data.bio || "");
+        setPhoto(data.photo || user?.photoURL || "");
+      } catch (err) {
+        console.error("❌ Failed to load profile:", err);
+        toast.error("Failed to load profile.");
+      }
+    };
+
+    fetchProfile();
+  }, [user.email]);
+
+  const handleSave = async () => {
+    try {
+      const updatedFields = {
+        firstName,
+        lastName,
+        phone,
+        bio,
+        photo,
+      };
+
+      await axios.patch(`${API}/users/${profile._id}`, updatedFields);
+      toast.success("✅ Profile updated successfully!");
+      setEditMode(false);
+      setProfile((prev) => ({ ...prev, ...updatedFields }));
+    } catch (err) {
+      console.error("❌ Failed to save profile:", err);
+      toast.error("Failed to update profile.");
+    }
   };
+
+  if (!profile) {
+    return (
+      <div className="p-6 text-center text-gray-500">Loading profile...</div>
+    );
+  }
 
   return (
     <motion.div
-      className="bg-white rounded-3xl shadow-lg p-6 mx-auto h-full"
+      className="bg-white rounded-3xl shadow-lg p-6 mx-auto max-w-2xl"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
@@ -30,7 +79,7 @@ const Profile = () => {
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-blue-600">My Profile</h2>
+        <h2 className="text-2xl font-bold text-gray-800">My Profile</h2>
         <button
           onClick={() => (editMode ? handleSave() : setEditMode(true))}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition"
@@ -41,21 +90,27 @@ const Profile = () => {
       </div>
 
       {/* Avatar */}
-      <div className="flex flex-col items-center mb-8">
+      <div className="flex flex-col items-center mb-6">
         <img
-          src={user?.photoURL || "https://via.placeholder.com/150"}
+          src={photo || "https://i.ibb.co/9t9cYgW/avatar.png"}
           alt="Profile"
-          className="w-28 h-28 rounded-xl object-cover shadow-md"
+          className="w-24 h-24 rounded-full object-cover shadow-md"
         />
-        <button className="text-sm text-blue-500 mt-2 hover:underline">
-          Change Profile Image
-        </button>
+        {editMode && (
+          <input
+            type="text"
+            value={photo}
+            onChange={(e) => setPhoto(e.target.value)}
+            placeholder="Enter Photo URL"
+            className="mt-2 px-3 py-2 w-full rounded-md border bg-gray-50 text-sm outline-none"
+          />
+        )}
       </div>
 
       {/* Info Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* First Name */}
-        <div className="bg-gray-100 p-3 rounded-xl">
+        <div className="bg-gray-50 p-3 rounded-xl">
           <p className="text-xs text-gray-500">First Name</p>
           {editMode ? (
             <input
@@ -70,7 +125,7 @@ const Profile = () => {
         </div>
 
         {/* Last Name */}
-        <div className="bg-gray-100 p-3 rounded-xl">
+        <div className="bg-gray-50 p-3 rounded-xl">
           <p className="text-xs text-gray-500">Last Name</p>
           {editMode ? (
             <input
@@ -85,47 +140,45 @@ const Profile = () => {
         </div>
 
         {/* Email (Read-only) */}
-        <div className="bg-gray-100 p-3 rounded-xl flex justify-between items-center col-span-1 md:col-span-2">
-          <div>
-            <p className="text-xs text-gray-500">Email</p>
-            <p className="font-medium text-gray-800">{email}</p>
-          </div>
-          <FiCopy className="text-gray-500 cursor-pointer" />
+        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+          <p className="text-xs text-gray-500">Email</p>
+          <p className="font-medium text-gray-800">{email}</p>
         </div>
 
         {/* Phone Number */}
-        <div className="bg-gray-100 p-3 rounded-xl flex justify-between items-center col-span-1 md:col-span-2">
-          <div className="w-full">
-            <p className="text-xs text-gray-500">Phone Number</p>
-            {editMode ? (
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="bg-transparent w-full font-medium outline-none"
-              />
-            ) : (
-              <p className="font-medium text-gray-800">{phone}</p>
-            )}
-          </div>
-          <FiCopy className="text-gray-500 cursor-pointer" />
+        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+          <p className="text-xs text-gray-500">Phone</p>
+          {editMode ? (
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="bg-transparent w-full font-medium outline-none"
+            />
+          ) : (
+            <p className="font-medium text-gray-800">{phone}</p>
+          )}
         </div>
 
-        {/* Role */}
-        <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
+        {/* Role (Read-only) */}
+        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Role</p>
+          <p className="font-medium capitalize text-gray-800">{role}</p>
+        </div>
+
+        {/* Bio */}
+        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+          <p className="text-xs text-gray-500">Bio</p>
           {editMode ? (
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full bg-transparent font-medium outline-none"
-            >
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="admin">Admin</option>
-            </select>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={3}
+              placeholder="Write something about yourself..."
+              className="bg-transparent w-full font-medium outline-none resize-none"
+            />
           ) : (
-            <p className="font-medium capitalize text-gray-800">{role}</p>
+            <p className="font-medium text-gray-800">{bio || "No bio yet"}</p>
           )}
         </div>
       </div>

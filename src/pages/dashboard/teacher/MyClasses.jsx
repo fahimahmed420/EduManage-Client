@@ -10,7 +10,7 @@ const MyClasses = () => {
     const [loading, setLoading] = useState(true);
     const [editingClass, setEditingClass] = useState(null);
     const [updatedData, setUpdatedData] = useState({});
-    const [removingIds, setRemovingIds] = useState([]); // Track deleting classes
+    const [removingIds, setRemovingIds] = useState([]); 
     const navigate = useNavigate();
 
     const API = import.meta.env.VITE_API_URL;
@@ -26,6 +26,7 @@ const MyClasses = () => {
             .then((data) => {
                 const animatedData = data.map((cls) => ({ ...cls, appearing: true }));
                 setClasses(animatedData);
+                console.log(animatedData);
 
                 setTimeout(() => {
                     setClasses((prev) =>

@@ -3,13 +3,14 @@ import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 import AllClasses from "../pages/AllClasses";
+import ClassDetails from "../pages/ClassDetails";
 import Teach from "../pages/Teach";
 import Error from "../pages/Error";
+import PaymentPage from "../pages/PaymentPage";
 
 // Auth pages
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-
 
 
 // Dashboard pages (these will be nested by role)
@@ -28,7 +29,7 @@ import Profile from "../pages/dashboard/Profile";
 
 
 // Class Details Page (Private)
-// import ClassDetails from "../pages/ClassDetails";
+
 
 
 const router = createBrowserRouter([
@@ -39,7 +40,8 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "all-classes", element: <AllClasses /> },
       { path: "teach", element: <Teach /> },
-    //   { path: "class/:id", element: <ClassDetails /> },
+      { path: "all-classes/:id", element: <ClassDetails /> },
+      { path:"payment/:id" , element:<PaymentPage/>}
     ],
   },
   {
@@ -61,16 +63,16 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
-//       // Student routes
-//       { path: "student", element: <StudentDashboard /> },
-//       { path: "my-enroll-class", element: <MyEnrollClass /> },
-//       { path: "my-enroll-class/:id", element: <div>Enroll Class Details</div> },
+      //       // Student routes
+      //       { path: "student", element: <StudentDashboard /> },
+      //       { path: "my-enroll-class", element: <MyEnrollClass /> },
+      //       { path: "my-enroll-class/:id", element: <div>Enroll Class Details</div> },
 
-//       // Teacher routes
-//       { path: "teacher", element: <TeacherDashboard /> },
+      //       // Teacher routes
+      //       { path: "teacher", element: <TeacherDashboard /> },
       { path: "add-class", element: <AddClass /> },
       { path: "my-class", element: <MyClasses /> },
-//       { path: "my-class/:id", element: <div>My Class Details</div> },
+      //       { path: "my-class/:id", element: <div>My Class Details</div> },
 
       // Admin routes
       { path: "all-users", element: <AllUsers /> },
@@ -78,7 +80,7 @@ const router = createBrowserRouter([
       { path: "teacher-requests", element: <TeacherRequests /> },
 
       // Shared
-      { path: "profile", element: <Profile/> },
+      { path: "profile", element: <Profile /> },
     ],
   },
 ]);

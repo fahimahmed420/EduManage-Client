@@ -1,40 +1,24 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaUsers,
-  FaChalkboardTeacher,
-  FaClipboardList,
-  FaPlus,
-  FaBookOpen,
-  FaSignOutAlt,
-  FaAngleLeft,
-  FaAngleRight,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
+import {FaUser,FaUsers,FaChalkboardTeacher,FaClipboardList,FaPlus,FaBookOpen,FaSignOutAlt,FaAngleLeft,FaAngleRight,FaBars,FaTimes,} from "react-icons/fa";
 import Lottie from "lottie-react";
 import Swal from "sweetalert2";
-import axios from "axios"; // 👈 import axios
 import GraduationHat from "../assets/logo-animation.json";
-import defaultUser from "../assets/user.jpg";
 import { AuthContext } from "../contexts/AuthContext";
 import NotificationPanel from "../components/NotificationPanel";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API = "http://localhost:5000"; // 👈 Replace with your backend URL
-
 const DashboardLayout = () => {
-  const { user, signOutUser } = useContext(AuthContext);
-  const [menuOpen, setMenuOpen] = useState(false); // Mobile menu
+  const { user, userFromDB, signOutUser } = useContext(AuthContext);
+  const [menuOpen, setMenuOpen] = useState(false); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // Desktop sidebar collapsed state
-  const [profilePhoto, setProfilePhoto] = useState(defaultUser); // 👈 state for profile photo
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); 
   const dropdownRef = useRef();
   const navigate = useNavigate();
 
-  const role = user?.role || "student";
+  const role = userFromDB?.role || "student"; 
+  const profilePhoto = userFromDB?.photo || "https://i.ibb.co/9t9cYgW/avatar.png" ; 
 
   const handleLogout = () => {
     signOutUser()
@@ -64,24 +48,6 @@ const DashboardLayout = () => {
     ],
   };
 
-  // Fetch user profile photo from API
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (user?.email) {
-        try {
-          const res = await axios.get(`${API}/users/${user.email}`);
-          // Set photo from DB or fallback to Firebase or default
-          setProfilePhoto(res.data.photo || user.photoURL || defaultUser);
-        } catch (err) {
-          console.error("❌ Failed to fetch user profile:", err);
-          setProfilePhoto(user.photoURL || defaultUser);
-        }
-      }
-    };
-
-    fetchUserProfile();
-  }, [user?.email]);
-
   useEffect(() => {
     const handleOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -110,7 +76,7 @@ const DashboardLayout = () => {
             {user && (
               <div className="relative" ref={dropdownRef}>
                 <img
-                  src={profilePhoto} // 👈 use fetched photo
+                  src={profilePhoto} 
                   alt="Profile"
                   className="w-9 h-9 md:w-10 md:h-10 rounded-full border cursor-pointer object-cover"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -123,7 +89,7 @@ const DashboardLayout = () => {
                   }`}
                 >
                   <p className="px-3 py-2 text-gray-800 font-semibold truncate">
-                    {user.displayName}
+                    {userFromDB?.name || user.displayName || "User"}
                   </p>
                   <hr />
                   <button

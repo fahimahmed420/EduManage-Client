@@ -1,100 +1,124 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
-import {
-  loadStripe
-} from "@stripe/stripe-js";
+import { AuthContext } from "../contexts/AuthContext";
+import { useParams, useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   CardElement,
   useStripe,
-  useElements
+  useElements,
 } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// Load Stripe with your public key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const CheckoutForm = ({ classData }) => {
+const CheckoutForm = ({ classData, userFromDB }) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const [processing, setProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!stripe || !elements) {
-      return;
-    }
+  // Create payment intent on backend
+  useEffect(() => {
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/create-payment-intent`, {
+        amount: classData.price,
+      })
+      .then((res) => setClientSecret(res.data.clientSecret))
+      .catch((err) => console.error("Error creating payment intent:", err));
+  }, [classData.price]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
 
     setProcessing(true);
 
-    // Create PaymentIntent on the server
-    try {
-      const paymentIntentRes = await axios.post(
-        `${import.meta.env.VITE_API_URL}/create-payment-intent`,
-        {
-          amount: classData.price * 100, // amount in cents
-          classId: classData._id,
-          classTitle: classData.title,
-          // optionally user info if needed
-        }
-      );
+    const card = elements.getElement(CardElement);
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card,
+        billing_details: {
+          name: userFromDB.name,
+          email: userFromDB.email,
+        },
+      },
+    });
 
-      const clientSecret = paymentIntentRes.data.clientSecret;
-
-      // Confirm Card Payment with client secret
-      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          // billing_details: { name: "User Name" } // optionally add name/email here
-        }
+    if (result.error) {
+      console.error("Payment failed:", result.error);
+      alert(result.error.message);
+      setProcessing(false);
+    } else if (result.paymentIntent.status === "succeeded") {
+      // Save payment info to DB
+      await axios.post(`${import.meta.env.VITE_API_URL}/payments`, {
+        userEmail: userFromDB.email,
+        classId: classData._id,
+        transactionId: result.paymentIntent.id,
+        amount: classData.price,
+        date: new Date(),
       });
 
-      if (paymentResult.error) {
-        toast.error(paymentResult.error.message);
-        setProcessing(false);
-      } else if (paymentResult.paymentIntent.status === "succeeded") {
-        // Save payment info to DB
-        await axios.post(`${import.meta.env.VITE_API_URL}/payments`, {
-          paymentIntentId: paymentResult.paymentIntent.id,
-          classId: classData._id,
-          amount: classData.price,
-          status: "Paid",
-          date: new Date(),
-        });
-
-        toast.success("Payment successful! You are now enrolled.");
-        navigate("/dashboard/my-enroll-classes");
-      }
-    } catch (error) {
-      console.error("Payment failed:", error);
-      toast.error("Payment failed. Please try again.");
-      setProcessing(false);
+      // Redirect
+      navigate("/dashboard/my-enroll-classes");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded shadow">
-      <h2 className="text-xl font-semibold mb-4 text-center">Pay ${classData.price} for {classData.title}</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block mb-1 font-medium">Name</label>
+        <input
+          type="text"
+          value={userFromDB.name}
+          disabled
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 cursor-not-allowed"
+        />
+      </div>
 
-      <div className="mb-6 border p-3 rounded">
-        <CardElement options={{ hidePostalCode: true }} />
+      <div>
+        <label className="block mb-1 font-medium">Email</label>
+        <input
+          type="email"
+          value={userFromDB.email}
+          disabled
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1 font-medium">Card Information</label>
+        <div className="border border-gray-300 rounded-lg px-4 py-2">
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: "16px",
+                  color: "#32325d",
+                  "::placeholder": { color: "#a0aec0" },
+                },
+                invalid: { color: "#e53e3e" },
+              },
+            }}
+          />
+        </div>
       </div>
 
       <button
         type="submit"
         disabled={!stripe || processing}
-        className={`w-full py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition ${
-          processing ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 mt-4 font-semibold"
       >
-        {processing ? "Processing..." : `Pay $${classData.price}`}
+        {processing ? "Processing..." : "Pay Now"}
       </button>
     </form>
   );
 };
 
 const PaymentPage = () => {
+  const { userFromDB } = useContext(AuthContext);
   const { id } = useParams();
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -105,28 +129,52 @@ const PaymentPage = () => {
       .then((res) => setClassData(res.data))
       .catch((err) => {
         console.error("Failed to fetch class details:", err);
-        toast.error("Unable to load class details.");
+        setClassData(null);
       })
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+      <div className="flex justify-center items-center min-h-screen">
+        Loading...
       </div>
     );
   }
 
   if (!classData) {
     return (
-      <div className="text-center mt-10 text-red-500">Class not found.</div>
+      <div className="flex justify-center items-center min-h-screen">
+        Class not found.
+      </div>
     );
   }
 
   return (
     <Elements stripe={stripePromise}>
-      <CheckoutForm classData={classData} />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200">
+        <div className="flex flex-col md:flex-row rounded-2xl shadow-lg overflow-hidden">
+          {/* Left Side - Course Info */}
+          <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-8 flex flex-col justify-center items-center text-white w-full md:w-80">
+            <h2 className="text-lg font-medium">Total Amount:</h2>
+            <p className="text-4xl font-bold mt-2">${classData.price}</p>
+            <p className="mt-4 text-lg font-medium text-center">
+              Course: <span>{classData.title}</span>
+            </p>
+          </div>
+
+          {/* Right Side - Payment Form */}
+          <div className="bg-white p-8 w-full md:w-96">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+              Payment Page
+            </h2>
+            <CheckoutForm
+              classData={classData}
+              userFromDB={userFromDB}
+            />
+          </div>
+        </div>
+      </div>
     </Elements>
   );
 };

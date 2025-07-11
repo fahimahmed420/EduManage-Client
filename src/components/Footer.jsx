@@ -21,7 +21,7 @@ const Footer = () => {
 
     return (
         <>
-            <footer className="bg-blue-600 text-white mt-12 relative">
+            <footer className="bg-blue-600 text-white relative">
                 <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Logo & Description */}
                     <div>

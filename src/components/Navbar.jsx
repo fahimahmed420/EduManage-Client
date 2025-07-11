@@ -133,7 +133,7 @@ const Navbar = () => {
                 <p className="font-semibold text-gray-800">{user.displayName}</p>
                 <hr className="my-2 border-gray-300" />
                 <Link
-                  to="/dashboard"
+                  to="/dashboard/profile"
                   className="block py-2 px-2 rounded hover:bg-blue-100 text-gray-700 hover:text-blue-700"
                   onClick={() => setIsDropdownOpen(false)}
                 >

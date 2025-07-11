@@ -10,7 +10,6 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-// Load Stripe with your public key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = ({ classData, userFromDB }) => {
@@ -20,7 +19,6 @@ const CheckoutForm = ({ classData, userFromDB }) => {
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
 
-  // Create payment intent on backend
   useEffect(() => {
     axios
       .post(`${import.meta.env.VITE_API_URL}/create-payment-intent`, {
@@ -52,17 +50,24 @@ const CheckoutForm = ({ classData, userFromDB }) => {
       alert(result.error.message);
       setProcessing(false);
     } else if (result.paymentIntent.status === "succeeded") {
-      // Save payment info to DB
-      await axios.post(`${import.meta.env.VITE_API_URL}/payments`, {
-        userEmail: userFromDB.email,
-        classId: classData._id,
-        transactionId: result.paymentIntent.id,
-        amount: classData.price,
-        date: new Date(),
-      });
+      // Save enrollment info to DB
+      try {
+        await axios.post(`${import.meta.env.VITE_API_URL}/enrollments`, {
+          studentId: userFromDB._id, // assuming _id is from your AuthContext
+          classId: classData._id,
+          status: "paid",
+          transactionId: result.paymentIntent.id,
+          enrolledAt: new Date(),
+        });
 
-      // Redirect
-      navigate("/dashboard/my-enroll-classes");
+        alert("Payment successful & enrollment saved!");
+        navigate("/dashboard/my-enroll-classes");
+      } catch (err) {
+        console.error("Error saving enrollment:", err);
+        alert("Payment successful but failed to save enrollment.");
+      }
+
+      setProcessing(false);
     }
   };
 

@@ -13,9 +13,9 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 
 
-// Dashboard pages (these will be nested by role)
-// import StudentDashboard from "../pages/dashboard/student/StudentDashboard";
-// import MyEnrollClass from "../pages/dashboard/student/MyEnrollClass";
+// Dashboard pages (student,teacher,admin)
+import MyEnrollClass from "../pages/dashboard/student/MyEnrollClass";
+import EnrollClassDetails from "../pages/dashboard/student/EnrollClassDetails";
 
 // import TeacherDashboard from "../pages/dashboard/teacher/TeacherDashboard";
 import MyClasses from "../pages/dashboard/teacher/MyClasses";
@@ -24,11 +24,8 @@ import AddClass from "../pages/dashboard/teacher/AddClass";
 import AllUsers from "../pages/dashboard/admin/AllUsers";
 import AllClassAdmin from "../pages/dashboard/admin/AllClassAdmin";
 import TeacherRequests from "../pages/dashboard/admin/TeacherRequests";
+// shared
 import Profile from "../pages/dashboard/Profile";
-
-
-
-// Class Details Page (Private)
 
 
 
@@ -65,8 +62,8 @@ const router = createBrowserRouter([
     children: [
       //       // Student routes
       //       { path: "student", element: <StudentDashboard /> },
-      //       { path: "my-enroll-class", element: <MyEnrollClass /> },
-      //       { path: "my-enroll-class/:id", element: <div>Enroll Class Details</div> },
+            { path: "my-enroll-class", element: <MyEnrollClass /> },
+            { path: "my-enroll-class/:id", element: <EnrollClassDetails/> },
 
       //       // Teacher routes
       //       { path: "teacher", element: <TeacherDashboard /> },

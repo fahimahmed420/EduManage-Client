@@ -1,6 +1,6 @@
 import { useState, useRef, useContext, useEffect } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import {FaUser,FaUsers,FaChalkboardTeacher,FaClipboardList,FaPlus,FaBookOpen,FaSignOutAlt,FaAngleLeft,FaAngleRight,FaBars,FaTimes,} from "react-icons/fa";
+import { FaUser, FaUsers, FaChalkboardTeacher, FaClipboardList, FaPlus, FaBookOpen, FaSignOutAlt, FaAngleLeft, FaAngleRight, FaBars, FaTimes, } from "react-icons/fa";
 import Lottie from "lottie-react";
 import Swal from "sweetalert2";
 import GraduationHat from "../assets/logo-animation.json";
@@ -11,14 +11,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const DashboardLayout = () => {
   const { user, userFromDB, signOutUser } = useContext(AuthContext);
-  const [menuOpen, setMenuOpen] = useState(false); 
+  const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); 
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const dropdownRef = useRef();
   const navigate = useNavigate();
 
-  const role = userFromDB?.role || "student"; 
-  const profilePhoto = userFromDB?.photo || "https://i.ibb.co/9t9cYgW/avatar.png" ; 
+  const role = userFromDB?.role || "student";
+  const profilePhoto = userFromDB?.photo || "https://i.ibb.co/9t9cYgW/avatar.png";
 
   const handleLogout = () => {
     signOutUser()
@@ -38,13 +38,15 @@ const DashboardLayout = () => {
       { to: "/dashboard/teacher-requests", label: "Teachers", icon: <FaClipboardList /> },
     ],
     teacher: [
+      { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
       { to: "/dashboard/add-class", label: "Add Class", icon: <FaPlus /> },
       { to: "/dashboard/my-class", label: "My Classes", icon: <FaBookOpen /> },
-      { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
+
     ],
     student: [
-      { to: "/dashboard/my-enroll-class", label: "My Enrolled Classes", icon: <FaBookOpen /> },
       { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
+      { to: "/dashboard/my-enroll-classes", label: "My Enrolled Classes", icon: <FaBookOpen /> },
+
     ],
   };
 
@@ -76,17 +78,16 @@ const DashboardLayout = () => {
             {user && (
               <div className="relative" ref={dropdownRef}>
                 <img
-                  src={profilePhoto} 
+                  src={profilePhoto}
                   alt="Profile"
                   className="w-9 h-9 md:w-10 md:h-10 rounded-full border cursor-pointer object-cover"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 />
                 <div
-                  className={`absolute right-0 mt-2 w-44 md:w-48 bg-white border rounded-md shadow-lg z-30 transition-all duration-200 ${
-                    dropdownOpen
+                  className={`absolute right-0 mt-2 w-44 md:w-48 bg-white border rounded-md shadow-lg z-30 transition-all duration-200 ${dropdownOpen
                       ? "max-h-60 opacity-100"
                       : "max-h-0 opacity-0 pointer-events-none"
-                  }`}
+                    }`}
                 >
                   <p className="px-3 py-2 text-gray-800 font-semibold truncate">
                     {userFromDB?.name || user.displayName || "User"}
@@ -167,8 +168,7 @@ const DashboardLayout = () => {
                 key={idx}
                 to={item.to}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 py-2 px-3 rounded-md hover:bg-blue-50 transition ${
-                    isActive ? "bg-blue-100 font-semibold" : ""
+                  `flex items-center gap-3 py-2 px-3 rounded-md hover:bg-blue-50 transition ${isActive ? "bg-blue-100 font-semibold" : ""
                   }`
                 }
                 title={sidebarCollapsed ? item.label : undefined}

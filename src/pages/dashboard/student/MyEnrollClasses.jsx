@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router";
 
-const MyEnrollClass = () => {
+const MyEnrollClasses = () => {
     const { userFromDB } = useContext(AuthContext);
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -95,7 +95,7 @@ const MyEnrollClass = () => {
                                 </p>
                                 <button
                                     className="text-blue-600 font-medium hover:underline"
-                                    onClick={() => navigate(`/dashboard/my-enroll-class/${classItem._id}`)}
+                                    onClick={() => navigate(`/dashboard/my-enroll-classes/${classItem._id}`)}
                                 >
                                     Continue
                                 </button>
@@ -109,4 +109,4 @@ const MyEnrollClass = () => {
     );
 };
 
-export default MyEnrollClass;
+export default MyEnrollClasses;

@@ -14,8 +14,8 @@ import Register from "../pages/Register";
 
 
 // Dashboard pages (student,teacher,admin)
-import MyEnrollClass from "../pages/dashboard/student/MyEnrollClass";
 import EnrollClassDetails from "../pages/dashboard/student/EnrollClassDetails";
+import MyEnrollClasses from "../pages/dashboard/student/MyEnrollClasses";
 
 // import TeacherDashboard from "../pages/dashboard/teacher/TeacherDashboard";
 import MyClasses from "../pages/dashboard/teacher/MyClasses";
@@ -26,6 +26,7 @@ import AllClassAdmin from "../pages/dashboard/admin/AllClassAdmin";
 import TeacherRequests from "../pages/dashboard/admin/TeacherRequests";
 // shared
 import Profile from "../pages/dashboard/Profile";
+import MyClassDetails from "../pages/dashboard/teacher/MyClassDetails";
 
 
 
@@ -62,14 +63,14 @@ const router = createBrowserRouter([
     children: [
       //       // Student routes
       //       { path: "student", element: <StudentDashboard /> },
-            { path: "my-enroll-class", element: <MyEnrollClass /> },
-            { path: "my-enroll-class/:id", element: <EnrollClassDetails/> },
+            { path: "my-enroll-classes", element: <MyEnrollClasses/> },
+            { path: "my-enroll-classes/:id", element: <EnrollClassDetails/> },
 
       //       // Teacher routes
       //       { path: "teacher", element: <TeacherDashboard /> },
       { path: "add-class", element: <AddClass /> },
       { path: "my-class", element: <MyClasses /> },
-      //       { path: "my-class/:id", element: <div>My Class Details</div> },
+            { path: "my-class/:id", element: <MyClassDetails/> },
 
       // Admin routes
       { path: "all-users", element: <AllUsers /> },

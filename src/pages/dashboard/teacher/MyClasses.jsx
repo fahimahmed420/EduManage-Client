@@ -32,7 +32,7 @@ const MyClasses = () => {
                     setClasses((prev) =>
                         prev.map((cls) => ({ ...cls, appearing: false }))
                     );
-                }, 500); // Animation duration
+                }, 500);
                 setLoading(false);
             })
             .catch((err) => {
@@ -173,7 +173,7 @@ const MyClasses = () => {
                                 <div className="flex gap-2 mt-4 flex-wrap">
                                     {isActive ? (
                                         <button
-                                            onClick={() => navigate(`/class/${cls._id}`)}
+                                            onClick={() => navigate(`/dashboard/my-class/${cls._id}`)}
                                             className="px-3 py-1 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300 transition"
                                         >
                                             See Details

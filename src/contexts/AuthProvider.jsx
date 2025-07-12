@@ -17,17 +17,22 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(undefined); // Firebase user
-  const [userFromDB, setUserFromDB] = useState(undefined); // Backend user
+  const [userFromDB, setUserFromDB] = useState(undefined); // MongoDB user
 
   // Create user in Firebase
   const createUser = async (email, password, fullName = "", photoURL = "") => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       if (fullName || photoURL) {
-        await updateProfile(userCredential.user, { displayName: fullName, photoURL });
-        await reload(userCredential.user);
+        await updateProfile(auth.currentUser, {
+          displayName: fullName,
+          photoURL: photoURL,
+        });
+        await reload(auth.currentUser);
       }
-      setUser(auth.currentUser);
+      const currentUser = auth.currentUser;
+      setUser(currentUser);
+      await saveUserToDB(currentUser); // Save to MongoDB
       return userCredential;
     } catch (error) {
       console.error("Create user error:", error);
@@ -39,6 +44,7 @@ const AuthProvider = ({ children }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
+      await fetchUserFromDB(userCredential.user.email);
       return userCredential;
     } catch (error) {
       console.error("Sign in error:", error);
@@ -49,7 +55,9 @@ const AuthProvider = ({ children }) => {
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      setUser(result.user);
+      const googleUser = result.user;
+      setUser(googleUser);
+      await saveUserToDB(googleUser);
       return result;
     } catch (error) {
       console.error("Google sign-in error:", error);
@@ -61,7 +69,7 @@ const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
       setUser(null);
-      setUserFromDB(null); // Clear backend user too
+      setUserFromDB(null);
     } catch (error) {
       console.error("Sign out error:", error);
     }
@@ -75,31 +83,40 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Fetch backend user
-  const fetchUserFromDB = async (email) => {
+  // Save new user to MongoDB (only if not exists)
+  const saveUserToDB = async (firebaseUser) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${email}`);
-      if (res.ok) {
-        const backendUser = await res.json();
-        setUserFromDB(backendUser);
-      } else if (res.status === 404) {
-        console.log("User not found in DB, creating...");
-        // If user not found, create in DB
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${firebaseUser.email}`);
+      if (res.status === 404) {
         await fetch(`${import.meta.env.VITE_API_URL}/users`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: user.displayName || "Unnamed User",
-            email,
-            photo: user.photoURL || "https://i.ibb.co/9t9cYgW/avatar.png",
-            role: "student", // default role
+            name: firebaseUser.displayName || "Unnamed User",
+            email: firebaseUser.email,
+            photo: firebaseUser.photoURL || "https://i.ibb.co/9t9cYgW/avatar.png",
+            role: "student",
           }),
         });
-        // Fetch again
-        await fetchUserFromDB(email);
+      }
+      await fetchUserFromDB(firebaseUser.email);
+    } catch (err) {
+      console.error("Saving user to DB failed:", err);
+    }
+  };
+
+  // Get user from MongoDB
+  const fetchUserFromDB = async (email) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${email}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserFromDB(data);
+      } else {
+        setUserFromDB(null);
       }
     } catch (err) {
-      console.error("Error fetching backend user:", err);
+      console.error("Fetching backend user error:", err);
       setUserFromDB(null);
     }
   };
@@ -107,19 +124,17 @@ const AuthProvider = ({ children }) => {
   // Listen to Firebase Auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+      setUser(currentUser);
+      if (currentUser?.email) {
         await fetchUserFromDB(currentUser.email);
       } else {
-        setUser(null);
         setUserFromDB(null);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
-  // Loading indicator while checking auth
+  // Show loading while checking auth
   if (user === undefined) {
     return (
       <div className="text-center text-white text-xl py-10">
@@ -133,7 +148,7 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,         // Firebase user
-        userFromDB,   // Backend user
+        userFromDB,   // MongoDB user
         createUser,
         signInUser,
         signOutUser,

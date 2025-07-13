@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import TeachingAnimation from "../assets/inspire_teacher.json";
+import { motion } from "framer-motion";
 
 const InspireTeachers = () => {
   return (
@@ -17,13 +18,21 @@ const InspireTeachers = () => {
           />
         </div>
 
-        {/* Right: Text */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center">
+        {/* Right: Text with Animation */}
+        <motion.div
+          className="w-full md:w-1/2 flex flex-col justify-center"
+          initial={{ opacity: 0, y: 50 }} // Start hidden + lower
+          whileInView={{ opacity: 1, y: 0 }} // Animate to visible
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.4 }} // Trigger only once when 40% visible
+        >
           <h2 className="text-4xl font-bold text-gray-800 mb-4">
             Inspire Students. Share Your Knowledge.
           </h2>
           <p className="text-gray-600 text-lg mb-6">
-            Join EduManage as a teacher and impact thousands of learners. Teach live classes, share assignments, and grow your teaching career while helping students succeed.
+            Join EduManage as a teacher and impact thousands of learners. Teach
+            live classes, share assignments, and grow your teaching career while
+            helping students succeed.
           </p>
           <Link
             to="/teach"
@@ -31,7 +40,7 @@ const InspireTeachers = () => {
           >
             Start Teaching
           </Link>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

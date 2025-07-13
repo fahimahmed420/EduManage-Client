@@ -5,6 +5,8 @@ import InspireTeachers from '../components/InspireTeachers';
 import FAQ from '../components/FAQ';
 import BlogTips from '../components/BlogTips';
 import PopularClassesSection from '../components/PopularClassesSection';
+import FeedBacks from '../components/FeedBacks';
+import WebsiteStats from '../components/WebsiteStats';
 
 const Home = () => {
     return (
@@ -13,7 +15,9 @@ const Home = () => {
       <PartnersSlider/>
       <PopularClassesSection/>
       <InspireTeachers/>
+      <WebsiteStats/>
       <BlogTips/>
+      <FeedBacks/>
       <FAQ/>
       </>
     );

@@ -1,6 +1,5 @@
-// src/components/FAQ.jsx
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 const faqs = [
   {
@@ -39,22 +38,37 @@ const FAQ = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold text-center text-blue-600 mb-8">Frequently Asked Questions</h2>
+      <h2 className="text-3xl font-bold text-center text-blue-600 mb-8">
+        Frequently Asked Questions
+      </h2>
       <div className="space-y-4">
         {faqs.map((item, index) => (
-          <div key={index} className="border border-blue-100 rounded-lg shadow-sm transition-all duration-300 bg-white">
+          <div
+            key={index}
+            className={`border rounded-lg transition-all duration-300 ${
+              openIndex === index
+                ? "border-blue-400 shadow-lg bg-blue-50"
+                : "border-blue-100 bg-white hover:shadow-md"
+            }`}
+          >
             <button
               onClick={() => toggle(index)}
-              className="flex justify-between items-center w-full px-6 py-4 text-left text-lg font-medium text-blue-800 hover:bg-blue-50"
+              className="flex justify-between items-center w-full px-6 py-4 text-left text-lg font-medium text-blue-800 focus:outline-none"
             >
               <span>{item.question}</span>
-              {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
+              <FaChevronDown
+                className={`transform transition-transform duration-300 ${
+                  openIndex === index ? "rotate-180 text-blue-600" : ""
+                }`}
+              />
             </button>
-            {openIndex === index && (
-              <div className="px-6 pb-4 text-gray-700 animate-fade-in">
-                {item.answer}
-              </div>
-            )}
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                openIndex === index ? "max-h-40 py-2 px-6" : "max-h-0"
+              } text-gray-700`}
+            >
+              {item.answer}
+            </div>
           </div>
         ))}
       </div>

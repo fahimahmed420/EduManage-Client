@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 
 const blogPosts = [
   {
@@ -85,11 +85,14 @@ const BlogTips = () => {
                 className="w-full h-40 object-cover bg-gray-100 p-2"
               />
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-blue-800">{post.title}</h3>
+                <h3 className="text-lg font-semibold text-blue-800">
+                  {post.title}
+                </h3>
                 <p className="text-gray-600 mt-1 text-sm">{post.excerpt}</p>
                 <button
                   onClick={() => handleOpenPost(post)}
-                  className="inline-block mt-3 text-blue-600 hover:text-blue-800 font-medium transition">
+                  className="inline-block mt-3 text-blue-600 hover:text-blue-800 font-medium transition"
+                >
                   Read More →
                 </button>
               </div>
@@ -100,7 +103,9 @@ const BlogTips = () => {
 
       {/* Modal */}
       {openPost && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+        <div
+          className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50 px-4 transition-all duration-300"
+        >
           <div className="bg-white max-w-lg w-full p-6 rounded-lg shadow-lg relative animate-fadeIn max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setOpenPost(null)}
@@ -108,11 +113,11 @@ const BlogTips = () => {
             >
               &times;
             </button>
-          
-                <h2 className="text-2xl font-bold text-blue-700 mb-4">
-                  {openPost.title}
-                </h2>
-                <div className="text-sm">{openPost.details}</div>
+
+            <h2 className="text-2xl font-bold text-blue-700 mb-4">
+              {openPost.title}
+            </h2>
+            <div className="text-sm">{openPost.details}</div>
           </div>
         </div>
       )}

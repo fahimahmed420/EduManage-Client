@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaBookOpen } from "react-icons/fa";
 
 const blogPosts = [
   {
@@ -69,32 +70,45 @@ const BlogTips = () => {
   return (
     <section className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-blue-700 text-center mb-10">
-          📚 Blog & Learning Tips
+        <h2 className="text-3xl font-bold text-blue-700 text-center mb-10 flex items-center justify-center gap-2">
+          <FaBookOpen className="text-blue-700 w-8 h-8" />
+          Blog & Learning Tips
+
         </h2>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((post) => (
             <div
               key={post.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300"
+              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 flex flex-col"
             >
               <img
                 src={post.image}
                 alt={post.title}
                 className="w-full h-40 object-cover bg-gray-100 p-2"
               />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-blue-800">
-                  {post.title}
-                </h3>
-                <p className="text-gray-600 mt-1 text-sm">{post.excerpt}</p>
-                <button
-                  onClick={() => handleOpenPost(post)}
-                  className="inline-block mt-3 text-blue-600 hover:text-blue-800 font-medium transition"
-                >
-                  Read More →
-                </button>
+              <div className="p-4 flex flex-col justify-between flex-grow">
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-800">{post.title}</h3>
+                  <p className="text-gray-600 mt-1 text-sm">{post.excerpt}</p>
+                </div>
+                <div className="flex justify-center mt-4">
+                  <button
+                    onClick={() => handleOpenPost(post)}
+                    class="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-blue-700 transition duration-300 ease-out border-2 border-blue-700 rounded-full shadow-md group"
+                  >
+                    <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-700 group-hover:translate-x-0 ease">
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                      </svg>
+                    </span>
+                    <span class="absolute flex items-center justify-center w-full h-full text-blue-700 transition-all duration-300 transform group-hover:translate-x-full ease">
+                     Read More
+                    </span>
+                    <span class="relative invisible">Read More</span>
+                  </button>
+
+                </div>
               </div>
             </div>
           ))}
@@ -103,9 +117,7 @@ const BlogTips = () => {
 
       {/* Modal */}
       {openPost && (
-        <div
-          className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50 px-4 transition-all duration-300"
-        >
+        <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50 px-4 transition-all duration-300">
           <div className="bg-white max-w-lg w-full p-6 rounded-lg shadow-lg relative animate-fadeIn max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setOpenPost(null)}
@@ -113,7 +125,6 @@ const BlogTips = () => {
             >
               &times;
             </button>
-
             <h2 className="text-2xl font-bold text-blue-700 mb-4">
               {openPost.title}
             </h2>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaQuestionCircle } from "react-icons/fa";
 
 const faqs = [
   {
@@ -38,9 +38,11 @@ const FAQ = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold text-center text-blue-600 mb-8">
+      <h2 className="text-3xl font-bold text-center text-blue-600 mb-8 flex items-center justify-center gap-3">
+        <FaQuestionCircle className="w-8 h-8 text-blue-600" />
         Frequently Asked Questions
       </h2>
+
       <div className="space-y-4">
         {faqs.map((item, index) => (
           <div
@@ -53,14 +55,16 @@ const FAQ = () => {
           >
             <button
               onClick={() => toggle(index)}
-              className="flex justify-between items-center w-full px-6 py-4 text-left text-lg font-medium text-blue-800 focus:outline-none"
+              className="w-full px-6 py-4 text-left text-lg font-medium text-blue-800 focus:outline-none"
             >
-              <span>{item.question}</span>
-              <FaChevronDown
-                className={`transform transition-transform duration-300 ${
-                  openIndex === index ? "rotate-180 text-blue-600" : ""
-                }`}
-              />
+              <div className="flex justify-between items-center w-full">
+                <span>{item.question}</span>
+                <FaChevronDown
+                  className={`transition-transform duration-300 ${
+                    openIndex === index ? "rotate-180 text-blue-600" : ""
+                  }`}
+                />
+              </div>
             </button>
             <div
               className={`overflow-hidden transition-all duration-300 ${

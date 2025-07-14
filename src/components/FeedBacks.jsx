@@ -3,6 +3,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { FaQuoteRight } from "react-icons/fa"; // ✅ Relevant icon added
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -10,7 +11,6 @@ import "swiper/css/pagination";
 const FeedBacks = () => {
   const API = import.meta.env.VITE_API_URL;
 
-  // Fetch all data with TanStack Query
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["feedbacks"],
     queryFn: async () => {
@@ -24,7 +24,6 @@ const FeedBacks = () => {
       const users = usersRes.data;
       const classes = classesRes.data;
 
-      // Enrich feedback with user and class info
       return feedbackList.map((feedback) => {
         const student = users.find((user) => user._id === feedback.studentId);
         const classInfo = classes.find((cls) => cls._id === feedback.classId);
@@ -36,7 +35,7 @@ const FeedBacks = () => {
         };
       });
     },
-    staleTime: 1000 * 60 * 5, // cache for 5 min
+    staleTime: 1000 * 60 * 5,
     retry: 2,
   });
 
@@ -64,7 +63,11 @@ const FeedBacks = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-8">What Students Say</h2>
+      <h2 className="text-3xl font-bold text-blue-700 text-center mb-8 flex items-center justify-center gap-3">
+        <FaQuoteRight className="text-blue-700 w-8 h-8" />
+        What Students Say
+      </h2>
+
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}

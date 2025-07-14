@@ -165,7 +165,7 @@ const Navbar = () => {
           ) : (
             <div className="space-y-1">
               <Link
-                to="/dashboard"
+                to="/dashboard/profile"
                 className="block hover:text-blue-600"
                 onClick={() => setIsOpen(false)}
               >

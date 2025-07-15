@@ -6,6 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import GraduationHat from "../assets/logo-animation.json";
 import Lottie from "lottie-react";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const API = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
 
@@ -13,31 +14,31 @@ const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState("");
-  const navigate = useNavigate();
   const dropdownRef = useRef();
+  const navigate = useNavigate();
 
-  const DEFAULT_AVATAR = "https://i.ibb.co/ZzW3T9xN/memberdeals-summerfun-465x254.jpg";
+  const DEFAULT_AVATAR = "/src/assets/user.jpg";
 
-  // Fetch user profile photo from database
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (user?.email) {
-        try {
-          const res = await axios.get(`${API}/users/${user.email}`);
-          setProfilePhoto(res.data.photo);
-        } catch (err) {
-          console.error("❌ Failed to fetch user profile:", err);
-          setProfilePhoto(DEFAULT_AVATAR);
-        }
-      } else {
-        setProfilePhoto(DEFAULT_AVATAR);
-      }
-    };
+  // Fetch user profile photo
+  const {
+    data: userProfile,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["userProfile", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const res = await axios.get(`${API}/users/${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+    staleTime: 1000 * 60 * 5,
+    onError: (err) => {
+      console.error("❌ Failed to fetch user profile:", err);
+    },
+  });
 
-    fetchUserProfile();
-  }, [user?.email]);
-
+  const profilePhoto = userProfile?.photo || DEFAULT_AVATAR;
 
   const handleLogout = () => {
     signOutUser()
@@ -69,7 +70,6 @@ const Navbar = () => {
     </>
   );
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -79,6 +79,39 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Show loading or error in profile photo section on desktop
+  const renderProfileImage = () => {
+    if (isLoading) {
+      // You can return a spinner or placeholder during loading
+      return (
+        <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse" />
+      );
+    }
+
+    if (error) {
+      // Show default avatar if error
+      return (
+        <img
+          src={DEFAULT_AVATAR}
+          alt="profile"
+          className="w-10 h-10 rounded-full cursor-pointer relative z-10 object-cover"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        />
+      );
+    }
+
+    // Normal profile image
+    return (
+      <img
+        src={profilePhoto}
+        alt="profile"
+        className="w-10 h-10 rounded-full cursor-pointer relative z-10 object-cover"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        onError={(e) => (e.target.src = DEFAULT_AVATAR)}
+      />
+    );
+  };
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -113,13 +146,7 @@ const Navbar = () => {
             </Link>
           ) : (
             <div className="relative" ref={dropdownRef}>
-              <img
-                src={profilePhoto || DEFAULT_AVATAR} // use fallback
-                className="w-10 h-10 rounded-full cursor-pointer relative z-10 object-cover"
-                alt="profile"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onError={(e) => (e.target.src = DEFAULT_AVATAR)} // prevent broken image
-              />
+              {renderProfileImage()}
 
               {/* Slide-down dropdown */}
               <div

@@ -2,19 +2,17 @@ import React from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
-// Import your Lottie animation JSON files
-import SalDevAnimation from "../assets/slider_animations/SalDev.json";
+import { FaHandshake } from "react-icons/fa"; 
 import EmpCloudAnimation from "../assets/slider_animations/empCloud.json";
 import ReactAnimation from "../assets/slider_animations/react.json";
 import JsAnimation from "../assets/slider_animations/java.json";
 import ChatGPTAnimation from "../assets/slider_animations/chatgtp.json";
+import MongoDBAnimation from "../assets/slider_animations/mongo.json";
+import StripeAnimation from "../assets/slider_animations/stripe.json";
+import GithubAnimation from "../assets/slider_animations/Github.json";
+import NetlifyAnimation from "../assets/slider_animations/netlify.json";
 
 const partners = [
-  {
-    name: "SalDev",
-    description: "A leading freelancer company collaborating with EduManage for dynamic content solutions.",
-    animation: SalDevAnimation,
-  },
   {
     name: "EmpCloud",
     description: "MERN stack specialists who helped architect the EduManage platform.",
@@ -35,12 +33,33 @@ const partners = [
     description: "Integrated AI assistance for enhanced user interaction.",
     animation: ChatGPTAnimation,
   },
+  {
+    name: "MongoDB Atlas",
+    description: "Cloud-hosted NoSQL database powering our backend data layer.",
+    animation: MongoDBAnimation,
+  },
+  {
+    name: "Stripe",
+    description: "Secure and seamless payment processing for users worldwide.",
+    animation: StripeAnimation,
+  },
+  {
+    name: "GitHub",
+    description: "Collaborative version control for our source code management.",
+    animation: GithubAnimation,
+  },
+  {
+    name: "Netlify",
+    description: "Blazing fast deployment & hosting for modern web apps.",
+    animation: NetlifyAnimation,
+  },
 ];
 
 const PartnersSlider = () => {
   return (
-    <div className="w-full bg-gradient-to-b from-blue-50 to-white py-12 overflow-hidden">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+    <div className="w-full bg-gradient-to-b from-blue-50 to-white py-12 overflow-hidden mb-16">
+      <h2 className="text-3xl font-bold text-center text-blue-600 flex justify-center items-center gap-2 mb-12">
+        <FaHandshake className="text-4xl text-blue-600" /> 
         Our Partners & Collaborators
       </h2>
 
@@ -51,15 +70,15 @@ const PartnersSlider = () => {
           animate={{ x: ["0%", "-50%"] }}
           transition={{
             repeat: Infinity,
-            duration: 30,
+            duration: 40, // slowed down for more partners
             ease: "linear",
           }}
         >
           {/* Duplicate list for seamless looping */}
-          {[...partners, ...partners,...partners].map((partner, index) => (
+          {[...partners, ...partners].map((partner, index) => (
             <div
               key={index}
-              className="relative min-w-[200px] h-36 bg-white rounded-4xl shadow-md overflow-hidden group cursor-pointer my-2"
+              className="relative min-w-[200px] h-36 bg-white rounded-4xl shadow-md overflow-hidden group cursor-pointer my-2 hover:scale-105 transition-transform duration-300"
             >
               {/* Lottie Animation */}
               <div className="flex justify-center items-center h-full p-4">

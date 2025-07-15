@@ -62,7 +62,7 @@ const AllClassAdmin = () => {
 
   // Handle Progress button click
   const handleProgressClick = (id) => {
-    navigate(`/dashboard/class-progress/${id}`);
+    navigate(`/dashboard/my-classes/${id}`);
   };
 
   return (
@@ -97,7 +97,7 @@ const AllClassAdmin = () => {
                 {classes.map((cls) => (
                   <tr
                     key={cls._id}
-                    className="border-t hover:bg-gray-50 text-sm"
+                    className="border-t border-gray-300 hover:bg-gray-50 text-sm"
                   >
                     <td className="p-4 font-medium text-gray-800">
                       {cls.title}

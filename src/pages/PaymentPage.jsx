@@ -20,12 +20,17 @@ const CheckoutForm = ({ classData, userFromDB }) => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
+    if (!classData?.price) return;
+
     axios
       .post(`${import.meta.env.VITE_API_URL}/create-payment-intent`, {
         amount: classData.price,
       })
       .then((res) => setClientSecret(res.data.clientSecret))
-      .catch((err) => console.error("Error creating payment intent:", err));
+      .catch((err) => {
+        console.error("Error creating payment intent:", err);
+        alert("Failed to initiate payment. Please try again later.");
+      });
   }, [classData.price]);
 
   const handleSubmit = async (e) => {
@@ -49,11 +54,11 @@ const CheckoutForm = ({ classData, userFromDB }) => {
       console.error("Payment failed:", result.error);
       alert(result.error.message);
       setProcessing(false);
-    } else if (result.paymentIntent.status === "succeeded") {
+    } else if (result.paymentIntent?.status === "succeeded") {
       // Save enrollment info to DB
       try {
         await axios.post(`${import.meta.env.VITE_API_URL}/enrollments`, {
-          studentId: userFromDB._id, // assuming _id is from your AuthContext
+          studentId: userFromDB._id,
           classId: classData._id,
           status: "paid",
           transactionId: result.paymentIntent.id,
@@ -113,7 +118,7 @@ const CheckoutForm = ({ classData, userFromDB }) => {
 
       <button
         type="submit"
-        disabled={!stripe || processing}
+        disabled={!stripe || processing || !clientSecret}
         className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 mt-4 font-semibold"
       >
         {processing ? "Processing..." : "Pay Now"}
@@ -155,6 +160,24 @@ const PaymentPage = () => {
     );
   }
 
+  // Redirect or handle free enroll here if needed
+  if (!classData.price) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <h2 className="text-2xl mb-6">This course is free!</h2>
+        <button
+          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          onClick={() => {
+            // You can call enrollment API directly here for free courses
+            alert("Enroll logic for free courses goes here.");
+          }}
+        >
+          Enroll for Free
+        </button>
+      </div>
+    );
+  }
+
   return (
     <Elements stripe={stripePromise}>
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200">
@@ -173,10 +196,7 @@ const PaymentPage = () => {
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
               Payment Page
             </h2>
-            <CheckoutForm
-              classData={classData}
-              userFromDB={userFromDB}
-            />
+            <CheckoutForm classData={classData} userFromDB={userFromDB} />
           </div>
         </div>
       </div>

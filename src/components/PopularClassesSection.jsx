@@ -11,9 +11,9 @@ const fetchPopularClasses = async () => {
 };
 
 const gradientColors = [
-  "from-cyan-400 to-blue-500", // Card 1
-  "from-blue-400 to-indigo-500", // Card 2
-  "from-sky-500 to-blue-700", // Card 3
+  "from-cyan-400 to-blue-500",
+  "from-blue-400 to-indigo-500",
+  "from-sky-500 to-blue-700",
 ];
 
 const PopularClassesSection = () => {
@@ -49,25 +49,22 @@ const PopularClassesSection = () => {
     );
 
   return (
-    <div className="p-6">
-      {/* Headline */}
+    <div className="p-6 max-w-7xl mx-auto mb-16">
       <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-blue-600 flex items-center justify-center gap-2">
         <FaChalkboardTeacher className="text-blue-500" size={28} />
         Popular Classes
       </h2>
 
-      {/* Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {popularClasses.slice(0, 3).map((cls, index) => (
           <div
             key={cls._id}
-            className="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:ring-2 hover:ring-blue-300"
+            className="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 transform transition-transform duration-300 hover:scale-105 flex flex-col"
           >
-            {/* Top gradient */}
+            {/* Top gradient with avatar */}
             <div
               className={`h-28 rounded-t-2xl bg-gradient-to-r ${gradientColors[index]} flex justify-center items-center relative`}
             >
-              {/* Circular image */}
               <div className="absolute -bottom-14 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-white shadow-md flex justify-center items-center overflow-hidden border-4 border-white transition-all duration-300 hover:-translate-y-1">
                 <img
                   src={cls.image}
@@ -77,11 +74,9 @@ const PopularClassesSection = () => {
               </div>
             </div>
 
-            {/* Class details */}
-            <div className="pt-16 pb-4 px-4 text-center">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {cls.title}
-              </h3>
+            {/* Class content */}
+            <div className="flex flex-col pt-20 px-4 pb-4 flex-grow text-center">
+              <h3 className="text-lg font-semibold text-gray-800">{cls.title}</h3>
               <p
                 className="text-sm text-gray-500 mt-2 mb-4 line-clamp-3"
                 title={cls.description}
@@ -89,18 +84,18 @@ const PopularClassesSection = () => {
                 {cls.description?.slice(0, 100)}...
               </p>
 
-              {/* Enroll Button */}
-              <button
-                onClick={() => {
-                  navigate(`/all-classes/${cls._id}`);
-                }}
-                aria-label={`Enroll in ${cls.title}`}
-                className={`w-full py-2 rounded-full text-white bg-gradient-to-r ${gradientColors[index]} bg-[length:200%_200%] hover:bg-[position:100%_0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-500 ease-out`}
-              >
-                Enroll
-              </button>
+              {/* Enroll Button pinned to bottom */}
+              <div className="mt-auto">
+                <button
+                  onClick={() => navigate(`/all-classes/${cls._id}`)}
+                  className={`w-full py-2 rounded-full text-white bg-gradient-to-r ${gradientColors[index]} bg-[length:200%_200%] hover:bg-[position:100%_0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-500 ease-out cursor-pointer`}
+                >
+                  Enroll
+                </button>
+              </div>
             </div>
           </div>
+
         ))}
       </div>
     </div>

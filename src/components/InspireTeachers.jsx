@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import TeachingAnimation from "../assets/inspire_teacher.json";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const InspireTeachers = () => {
   return (
-    <div className="w-full bg-gradient-to-b from-white to-purple-50 py-16 px-6">
+    <div className="w-full py-16 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left: Animation */}
         <div className="w-full md:w-1/2 flex justify-center">

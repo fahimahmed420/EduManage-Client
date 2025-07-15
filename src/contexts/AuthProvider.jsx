@@ -12,139 +12,126 @@ import {
   reload,
 } from "firebase/auth";
 import { auth } from "../../firebase.init";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axiosSecure from "../hooks/axiosSecure";
 
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(undefined); // Firebase user
-  const [userFromDB, setUserFromDB] = useState(undefined); // MongoDB user
+  const [user, setUser] = useState(undefined);
+  const queryClient = useQueryClient();
 
-  // Create user in Firebase
-  const createUser = async (email, password, fullName = "", photoURL = "") => {
+  // ✅ JWT Request
+  const getJWT = async (email) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      if (fullName || photoURL) {
-        await updateProfile(auth.currentUser, {
-          displayName: fullName,
-          photoURL: photoURL,
-        });
-        await reload(auth.currentUser);
-      }
-      const currentUser = auth.currentUser;
-      setUser(currentUser);
-      await saveUserToDB(currentUser); // Save to MongoDB
-      return userCredential;
-    } catch (error) {
-      console.error("Create user error:", error);
-      throw error;
+      const res = await axiosSecure.post("/jwt", { email });
+      const { token } = res.data;
+      if (token) localStorage.setItem("access-token", token);
+    } catch (err) {
+      console.error("Failed to fetch JWT:", err);
     }
   };
 
-  const signInUser = async (email, password) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      setUser(userCredential.user);
-      await fetchUserFromDB(userCredential.user.email);
-      return userCredential;
-    } catch (error) {
-      console.error("Sign in error:", error);
-      throw error;
-    }
-  };
-
-  const signInWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const googleUser = result.user;
-      setUser(googleUser);
-      await saveUserToDB(googleUser);
-      return result;
-    } catch (error) {
-      console.error("Google sign-in error:", error);
-      throw error;
-    }
-  };
-
-  const signOutUser = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      setUserFromDB(null);
-    } catch (error) {
-      console.error("Sign out error:", error);
-    }
-  };
-
-  const resetPassword = async (email) => {
-    try {
-      await sendPasswordResetEmail(auth, email);
-    } catch (error) {
-      console.error("Reset password error:", error);
-    }
-  };
-
-  // Save new user to MongoDB (only if not exists)
+  // ✅ Save user to DB if not exists
   const saveUserToDB = async (firebaseUser) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${firebaseUser.email}`);
-      if (res.status === 404) {
-        await fetch(`${import.meta.env.VITE_API_URL}/users`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: firebaseUser.displayName || "Unnamed User",
-            email: firebaseUser.email,
-            photo: firebaseUser.photoURL || "https://i.ibb.co/9t9cYgW/avatar.png",
-            role: "student",
-          }),
-        });
-      }
-      await fetchUserFromDB(firebaseUser.email);
+      const res = await axiosSecure.get(`/users/${firebaseUser.email}`);
+      if (res.status === 200) return;
+
+      await axiosSecure.post("/users", {
+        name: firebaseUser.displayName || "Unnamed User",
+        email: firebaseUser.email,
+        photo: firebaseUser.photoURL || "https://i.ibb.co/9t9cYgW/avatar.png",
+        role: "student",
+      });
     } catch (err) {
-      console.error("Saving user to DB failed:", err);
+      console.error("Error saving user to DB:", err);
     }
   };
 
-  // Get user from MongoDB
-  const fetchUserFromDB = async (email) => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${email}`);
-      if (res.ok) {
-        const data = await res.json();
-        setUserFromDB(data);
-      } else {
-        setUserFromDB(null);
-      }
-    } catch (err) {
-      console.error("Fetching backend user error:", err);
-      setUserFromDB(null);
+  // ✅ Firebase auth registration
+  const createUser = async (email, password, fullName = "", photoURL = "") => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    if (fullName || photoURL) {
+      await updateProfile(auth.currentUser, {
+        displayName: fullName,
+        photoURL,
+      });
+      await reload(auth.currentUser);
     }
+    const currentUser = auth.currentUser;
+    setUser(currentUser);
+    await saveUserToDB(currentUser);
+    await getJWT(currentUser.email);
+    queryClient.invalidateQueries(["userFromDB"]);
+    return userCredential;
   };
 
-  // Listen to Firebase Auth state changes
+  // ✅ Login
+  const signInUser = async (email, password) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    setUser(userCredential.user);
+    await getJWT(userCredential.user.email);
+    queryClient.invalidateQueries(["userFromDB"]);
+    return userCredential;
+  };
+
+  // ✅ Google login
+  const signInWithGoogle = async () => {
+    const result = await signInWithPopup(auth, googleProvider);
+    const googleUser = result.user;
+    setUser(googleUser);
+    await saveUserToDB(googleUser);
+    await getJWT(googleUser.email);
+    queryClient.invalidateQueries(["userFromDB"]);
+    return result;
+  };
+
+  // ✅ Logout
+  const signOutUser = async () => {
+    await signOut(auth);
+    setUser(null);
+    localStorage.removeItem("access-token");
+    queryClient.invalidateQueries(["userFromDB"]);
+  };
+
+  // ✅ Password reset
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
+
+  // ✅ Sync Firebase auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser?.email) {
-        await fetchUserFromDB(currentUser.email);
+        await getJWT(currentUser.email);
+        queryClient.invalidateQueries(["userFromDB"]);
       } else {
-        setUserFromDB(null);
+        localStorage.removeItem("access-token");
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [queryClient]);
 
-  // Show loading while checking auth
+  // ✅ Fetch MongoDB user using TanStack Query
+  const {
+    data: userFromDB,
+    isLoading: userFromDBLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["userFromDB", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+  });
+
+  // ✅ Show loading until Firebase confirms auth state
   if (user === undefined) {
     return (
-      <div className="text-center text-white text-xl py-10 flex justify-center flex-col items-center">
-        <h2 className="my-16">Checking authentication...</h2>
-        <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-          <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-          <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-          <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-          <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-        </svg>
+      <div className="text-center text-xl py-10">
+        <h2 className="my-10">Checking authentication...</h2>
+        <progress className="progress w-56" />
       </div>
     );
   }
@@ -152,8 +139,9 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,         // Firebase user
-        userFromDB,   // MongoDB user
+        user,
+        userFromDB,
+        userFromDBLoading,
         createUser,
         signInUser,
         signOutUser,

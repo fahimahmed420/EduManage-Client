@@ -13,7 +13,6 @@ const AllUsers = () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/users?search=${query}`);
-      console.log("Fetched users:", res.data);
       setUsers(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Failed to fetch users:", err);

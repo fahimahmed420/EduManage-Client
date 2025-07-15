@@ -37,7 +37,8 @@ const FAQ = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
+    <div className="bg-gradient-to-b from-green-50 via-white to-blue-50">
+      <div className="max-w-5xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-bold text-center text-blue-600 mb-8 flex items-center justify-center gap-3">
         <FaQuestionCircle className="w-8 h-8 text-blue-600" />
         Frequently Asked Questions
@@ -76,6 +77,7 @@ const FAQ = () => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

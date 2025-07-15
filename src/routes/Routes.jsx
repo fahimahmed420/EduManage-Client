@@ -7,6 +7,10 @@ import ClassDetails from "../pages/ClassDetails";
 import Teach from "../pages/Teach";
 import Error from "../pages/Error";
 import PaymentPage from "../pages/PaymentPage";
+import AdminRoute from "./AdminRoute";
+import TeacherRoute from "./TeacherRoute";
+import StudentRoute from "./StudentRoute";
+import PrivateRoute from "./PrivateRoute";
 
 // Auth pages
 import Login from "../pages/Login";
@@ -30,6 +34,7 @@ import MyClassDetails from "../pages/dashboard/teacher/MyClassDetails";
 
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,8 +43,8 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "all-classes", element: <AllClasses /> },
       { path: "teach", element: <Teach /> },
-      { path: "all-classes/:id", element: <ClassDetails /> },
-      { path:"payment/:id" , element:<PaymentPage/>}
+      { path: "all-classes/:id", element: <PrivateRoute><ClassDetails /></PrivateRoute> },
+      { path:"payment/:id" , element:<PrivateRoute><PaymentPage/></PrivateRoute>}
     ],
   },
   {
@@ -56,31 +61,97 @@ const router = createBrowserRouter([
     element: <Register />,
   },
 
-  // Dashboard routes (Private)
-  {
-    path: "/dashboard",
-    element: <DashboardLayout />,
-    children: [
-      //       // Student routes
-      //       { path: "student", element: <StudentDashboard /> },
-            { path: "my-enroll-classes", element: <MyEnrollClasses/> },
-            { path: "my-enroll-classes/:id", element: <EnrollClassDetails/> },
+// Dashboard routes (Protected)
+{
+  path: "/dashboard",
+  element: (
+    <PrivateRoute>
+      <DashboardLayout />
+    </PrivateRoute>
+  ),
+  children: [
+    // Student routes
+    {
+      path: "my-enroll-classes",
+      element: (
+        <StudentRoute>
+          <MyEnrollClasses />
+        </StudentRoute>
+      ),
+    },
+    {
+      path: "my-enroll-classes/:id",
+      element: (
+        <StudentRoute>
+          <EnrollClassDetails />
+        </StudentRoute>
+      ),
+    },
 
-      //       // Teacher routes
-      //       { path: "teacher", element: <TeacherDashboard /> },
-      { path: "add-class", element: <AddClass /> },
-      { path: "my-class", element: <MyClasses /> },
-            { path: "my-class/:id", element: <MyClassDetails/> },
+    // Teacher routes
+    {
+      path: "add-class",
+      element: (
+        <TeacherRoute>
+          <AddClass />
+        </TeacherRoute>
+      ),
+    },
+    {
+      path: "my-classes",
+      element: (
+        <TeacherRoute>
+          <MyClasses />
+        </TeacherRoute>
+      ),
+    },
+    {
+      path: "my-classes/:id",
+      element: (
+        <TeacherRoute>
+          <MyClassDetails />
+        </TeacherRoute>
+      ),
+    },
 
-      // Admin routes
-      { path: "all-users", element: <AllUsers /> },
-      { path: "all-classes", element: <AllClassAdmin /> },
-      { path: "teacher-requests", element: <TeacherRequests /> },
+    // Admin routes
+    {
+      path: "all-users",
+      element: (
+        <AdminRoute>
+          <AllUsers />
+        </AdminRoute>
+      ),
+    },
+    {
+      path: "all-classes",
+      element: (
+        <AdminRoute>
+          <AllClassAdmin />
+        </AdminRoute>
+      ),
+    },
+    {
+      path: "teacher-requests",
+      element: (
+        <AdminRoute>
+          <TeacherRequests />
+        </AdminRoute>
+      ),
+    },
 
-      // Shared
-      { path: "profile", element: <Profile /> },
-    ],
-  },
+    // Shared (any authenticated user)
+    {
+      path: "profile",
+      element: (
+        <PrivateRoute>
+          <Profile />
+        </PrivateRoute>
+      ),
+    },
+  ],
+}
+
 ]);
 
 export default router;

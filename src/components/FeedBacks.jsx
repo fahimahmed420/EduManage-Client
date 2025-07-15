@@ -3,7 +3,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { FaQuoteRight } from "react-icons/fa"; // ✅ Relevant icon added
+import { FaQuoteRight } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -63,8 +63,8 @@ const FeedBacks = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold text-blue-700 text-center mb-8 flex items-center justify-center gap-3">
-        <FaQuoteRight className="text-blue-700 w-8 h-8" />
+      <h2 className="text-3xl font-bold text-blue-600 text-center mb-8 flex items-center justify-center gap-3">
+        <FaQuoteRight className="text-blue-600 w-8 h-8" />
         What Students Say
       </h2>
 

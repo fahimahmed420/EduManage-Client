@@ -1,21 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FiSearch } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+
+const API = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+
+const fetchClasses = async () => {
+  const res = await axios.get(`${API}/classes`);
+  return res.data;
+};
 
 const AllClasses = () => {
-  const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/classes`)
-      .then((res) => setClasses(res.data))
-      .catch((err) => console.error("Error fetching classes:", err))
-      .finally(() => setLoading(false));
-  }, []);
+  const {
+    data: classes = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["classes"],
+    queryFn: fetchClasses,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+    refetchInterval: 30000,
+  });
+
 
   const approvedClasses = classes.filter((cls) => cls.status === "approved");
 
@@ -41,8 +53,8 @@ const AllClasses = () => {
         <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
       </div>
 
-      {/* Skeleton Loader */}
-      {loading ? (
+      {/* Loading state */}
+      {isLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[...Array(8)].map((_, index) => (
             <div
@@ -59,6 +71,10 @@ const AllClasses = () => {
               </div>
             </div>
           ))}
+        </div>
+      ) : isError ? (
+        <div className="text-center text-red-600 text-lg py-20">
+          Error loading classes: {error.message}
         </div>
       ) : filteredClasses.length === 0 ? (
         <div className="text-center text-gray-500 text-lg py-20">
@@ -82,9 +98,7 @@ const AllClasses = () => {
                   <p className="text-sm text-gray-500 truncate">
                     By {cls.teacherName}
                   </p>
-                  <p className="text-sm text-gray-700 font-medium">
-                    ${cls.price}
-                  </p>
+                  <p className="text-sm text-gray-700 font-medium">${cls.price}</p>
                   <p className="text-sm text-gray-500 line-clamp-2">
                     {cls.description}
                   </p>

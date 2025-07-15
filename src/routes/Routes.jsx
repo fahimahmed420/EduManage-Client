@@ -20,6 +20,7 @@ import Register from "../pages/Register";
 // Dashboard pages (student,teacher,admin)
 import EnrollClassDetails from "../pages/dashboard/student/EnrollClassDetails";
 import MyEnrollClasses from "../pages/dashboard/student/MyEnrollClasses";
+import OrderPage from "../pages/dashboard/student/OrderPage";
 
 // import TeacherDashboard from "../pages/dashboard/teacher/TeacherDashboard";
 import MyClasses from "../pages/dashboard/teacher/MyClasses";
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
       { path: "all-classes", element: <AllClasses /> },
       { path: "teach", element: <Teach /> },
       { path: "all-classes/:id", element: <PrivateRoute><ClassDetails /></PrivateRoute> },
-      { path:"payment/:id" , element:<PrivateRoute><PaymentPage/></PrivateRoute>}
+      { path: "payment/:id", element: <PrivateRoute><PaymentPage /></PrivateRoute> }
     ],
   },
   {
@@ -61,96 +62,104 @@ const router = createBrowserRouter([
     element: <Register />,
   },
 
-// Dashboard routes (Protected)
-{
-  path: "/dashboard",
-  element: (
-    <PrivateRoute>
-      <DashboardLayout />
-    </PrivateRoute>
-  ),
-  children: [
-    // Student routes
-    {
-      path: "my-enroll-classes",
-      element: (
-        <StudentRoute>
-          <MyEnrollClasses />
-        </StudentRoute>
-      ),
-    },
-    {
-      path: "my-enroll-classes/:id",
-      element: (
-        <StudentRoute>
-          <EnrollClassDetails />
-        </StudentRoute>
-      ),
-    },
+  // Dashboard routes (Protected)
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      // Student routes
+      {
+        path: "my-enroll-classes",
+        element: (
+          <StudentRoute>
+            <MyEnrollClasses />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "my-enroll-classes/:id",
+        element: (
+          <StudentRoute>
+            <EnrollClassDetails />
+          </StudentRoute>
+        ),
+      },
+       {
+        path: "my-order",
+        element: (
+          <StudentRoute>
+            <OrderPage />
+          </StudentRoute>
+        ),
+      },
 
-    // Teacher routes
-    {
-      path: "add-class",
-      element: (
-        <TeacherRoute>
-          <AddClass />
-        </TeacherRoute>
-      ),
-    },
-    {
-      path: "my-classes",
-      element: (
-        <TeacherRoute>
-          <MyClasses />
-        </TeacherRoute>
-      ),
-    },
-    {
-      path: "my-classes/:id",
-      element: (
-        <TeacherRoute>
-          <MyClassDetails />
-        </TeacherRoute>
-      ),
-    },
+      // Teacher routes
+      {
+        path: "add-class",
+        element: (
+          <TeacherRoute>
+            <AddClass />
+          </TeacherRoute>
+        ),
+      },
+      {
+        path: "my-classes",
+        element: (
+          <TeacherRoute>
+            <MyClasses />
+          </TeacherRoute>
+        ),
+      },
+      {
+        path: "my-classes/:id",
+        element: (
+          <TeacherRoute>
+            <MyClassDetails />
+          </TeacherRoute>
+        ),
+      },
 
-    // Admin routes
-    {
-      path: "all-users",
-      element: (
-        <AdminRoute>
-          <AllUsers />
-        </AdminRoute>
-      ),
-    },
-    {
-      path: "all-classes",
-      element: (
-        <AdminRoute>
-          <AllClassAdmin />
-        </AdminRoute>
-      ),
-    },
-    {
-      path: "teacher-requests",
-      element: (
-        <AdminRoute>
-          <TeacherRequests />
-        </AdminRoute>
-      ),
-    },
+      // Admin routes
+      {
+        path: "all-users",
+        element: (
+          <AdminRoute>
+            <AllUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-classes",
+        element: (
+          <AdminRoute>
+            <AllClassAdmin />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "teacher-requests",
+        element: (
+          <AdminRoute>
+            <TeacherRequests />
+          </AdminRoute>
+        ),
+      },
 
-    // Shared (any authenticated user)
-    {
-      path: "profile",
-      element: (
-        <PrivateRoute>
-          <Profile />
-        </PrivateRoute>
-      ),
-    },
-  ],
-}
+      // Shared (any authenticated user)
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  }
 
 ]);
 

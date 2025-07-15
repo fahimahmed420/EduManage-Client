@@ -46,6 +46,7 @@ const DashboardLayout = () => {
     student: [
       { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
       { to: "/dashboard/my-enroll-classes", label: "My Enrolled Classes", icon: <FaBookOpen /> },
+      { to: "/dashboard/my-order", label: "My Orders", icon: <FaBookOpen /> },
 
     ],
   };

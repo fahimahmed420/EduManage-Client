@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Rating from "react-rating";
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { AuthContext } from "../../../contexts/AuthContext";
 
 const EnrollClassDetails = () => {
@@ -19,14 +20,12 @@ const EnrollClassDetails = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [feedbackData, setFeedbackData] = useState({ description: "", rating: 0 });
 
-  // Load assignments, submissions, and feedback
   useEffect(() => {
     if (!userFromDB?._id) return;
 
     const fetchData = async () => {
       try {
         setLoading(true);
-
         const [assignmentsRes, submissionsRes, feedbackCheckRes] = await Promise.all([
           axios.get(`${API}/assignments/${classId}`),
           axios.get(`${API}/submissions`, {
@@ -79,7 +78,7 @@ const EnrollClassDetails = () => {
       setSubmissionLinks((prev) => ({ ...prev, [assignmentId]: "" }));
       setStudentSubmissions((prev) => [
         ...prev,
-        { assignmentId }, // only assignmentId is needed for `hasSubmitted`
+        { assignmentId },
       ]);
     } catch (err) {
       toast.error(err.response?.data?.error || "Submission failed");
@@ -191,9 +190,8 @@ const EnrollClassDetails = () => {
                 onChange={(rate) =>
                   setFeedbackData((prev) => ({ ...prev, rating: rate }))
                 }
-                fullSymbol="★"
-                emptySymbol="☆"
-                className="text-yellow-500 text-2xl"
+                fullSymbol={<FaStar className="text-yellow-500 text-2xl" />}
+                emptySymbol={<FaRegStar className="text-gray-300 text-2xl" />}
               />
             </div>
             <div className="mb-4">

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaArrowUp,FaGraduationCap  } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaArrowUp, FaGraduationCap } from "react-icons/fa";
 
 import { useEffect, useState } from "react";
 

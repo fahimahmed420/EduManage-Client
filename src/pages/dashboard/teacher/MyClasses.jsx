@@ -22,7 +22,7 @@ const MyClasses = () => {
     const { data: classes = [], isLoading, refetch } = useQuery({
         queryKey: ["myClasses", user?.email],
         queryFn: async () => {
-            const res = await axios.get(`${API}/classes?teacherEmail=${encodeURIComponent(user.email)}`);
+            const res = await axios.get(`${API}/classes?teacherEmail=${(user.email)}`);
             return res.data;
         },
         enabled: !!user?.email,

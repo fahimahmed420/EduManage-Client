@@ -9,6 +9,8 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -24,14 +26,14 @@ const CheckoutForm = ({ classData, userFromDB }) => {
 
     axios
       .post(`${import.meta.env.VITE_API_URL}/create-payment-intent`, {
-        amount: classData.price,
+        amount: classData?.price,
       })
       .then((res) => setClientSecret(res.data.clientSecret))
       .catch((err) => {
         console.error("Error creating payment intent:", err);
-        alert("Failed to initiate payment. Please try again later.");
+        toast.error("Failed to initiate payment.");
       });
-  }, [classData.price]);
+  }, [classData?.price]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,11 +54,22 @@ const CheckoutForm = ({ classData, userFromDB }) => {
 
     if (result.error) {
       console.error("Payment failed:", result.error);
-      alert(result.error.message);
+      toast.error(result.error.message);
       setProcessing(false);
     } else if (result.paymentIntent?.status === "succeeded") {
-      // Save enrollment info to DB
       try {
+        // Save payment info to DB
+        await axios.post(`${import.meta.env.VITE_API_URL}/payments`, {
+          email: userFromDB.email,
+          transactionId: result.paymentIntent.id,
+          amount: classData.price,
+          classId: classData._id,
+          studentId: userFromDB._id,
+          status: "paid",
+          paidAt: new Date(),
+        });
+
+        // Save enrollment info to DB
         await axios.post(`${import.meta.env.VITE_API_URL}/enrollments`, {
           studentId: userFromDB._id,
           classId: classData._id,
@@ -65,14 +78,16 @@ const CheckoutForm = ({ classData, userFromDB }) => {
           enrolledAt: new Date(),
         });
 
-        alert("Payment successful & enrollment saved!");
-        navigate("/dashboard/my-enroll-classes");
+        toast.success("Payment successful & enrollment saved!");
+        setTimeout(() => {
+          navigate("/dashboard/my-enroll-classes");
+        }, 3000);
       } catch (err) {
-        console.error("Error saving enrollment:", err);
-        alert("Payment successful but failed to save enrollment.");
+        console.error("Error saving payment/enrollment:", err);
+        toast.warning("Payment succeeded, but saving failed.");
+      } finally {
+        setProcessing(false);
       }
-
-      setProcessing(false);
     }
   };
 
@@ -128,23 +143,34 @@ const CheckoutForm = ({ classData, userFromDB }) => {
 };
 
 const PaymentPage = () => {
-  const { userFromDB } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
-  const [classData, setClassData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [userFromDB, setUserFromDB] = useState(null);
+
+  const {
+    data: classData,
+    isLoading: classLoading,
+    isError: classError,
+  } = useQuery({
+    queryKey: ["class", id],
+    queryFn: async () => {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/classes/${id}`);
+      return res.data;
+    },
+  });
 
   useEffect(() => {
+    if (!user?.email) return;
     axios
-      .get(`${import.meta.env.VITE_API_URL}/classes/${id}`)
-      .then((res) => setClassData(res.data))
+      .get(`${import.meta.env.VITE_API_URL}/users/${user.email}`)
+      .then((res) => setUserFromDB(res.data))
       .catch((err) => {
-        console.error("Failed to fetch class details:", err);
-        setClassData(null);
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+        console.error("Failed to fetch user from DB:", err);
+        toast.error("Failed to fetch user data.");
+      });
+  }, [user?.email]);
 
-  if (loading) {
+  if (classLoading || !userFromDB) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         Loading...
@@ -152,7 +178,7 @@ const PaymentPage = () => {
     );
   }
 
-  if (!classData) {
+  if (classError || !classData) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         Class not found.
@@ -160,7 +186,6 @@ const PaymentPage = () => {
     );
   }
 
-  // Redirect or handle free enroll here if needed
   if (!classData.price) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen">
@@ -168,8 +193,7 @@ const PaymentPage = () => {
         <button
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
           onClick={() => {
-            // You can call enrollment API directly here for free courses
-            alert("Enroll logic for free courses goes here.");
+            toast.success("Enroll logic for free courses goes here.");
           }}
         >
           Enroll for Free

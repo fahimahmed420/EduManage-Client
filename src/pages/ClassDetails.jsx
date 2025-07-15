@@ -1,8 +1,6 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom"; // fix import here
 import { useQuery } from "@tanstack/react-query";
 
 const API = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
@@ -54,22 +52,6 @@ const ClassDetails = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 animate-fade-in">
-      {/* SEO */}
-      <Helmet>
-        <title>
-          {classData?.title
-            ? `${classData.title} | EduManage`
-            : "Class Details | EduManage"}
-        </title>
-        <meta
-          name="description"
-          content={
-            classData?.description?.slice(0, 150) ||
-            "View course details and enroll today."
-          }
-        />
-      </Helmet>
-
       {/* Banner Image */}
       <div className="relative rounded-lg overflow-hidden mb-6 shadow h-48">
         {classData?.image ? (

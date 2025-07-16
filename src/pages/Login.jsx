@@ -45,23 +45,6 @@ const saveUserToDB = async (user) => {
   }
 };
 
-const getJwtToken = async (email) => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/jwt`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await res.json();
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-    }
-  } catch (err) {
-    console.error("JWT fetch error:", err.message);
-  }
-};
-
 export default function Login() {
   const { signInUser, signInWithGoogle, resetPassword } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -81,7 +64,6 @@ export default function Login() {
     try {
       setLoading(true);
       await signInUser(email, password);
-      await getJwtToken(email);
       toast.success("Welcome to EduManage!");
       navigate("/");
     } catch (error) {
@@ -98,7 +80,6 @@ export default function Login() {
       const user = result?.user;
       if (user) {
         await saveUserToDB(user);
-        await getJwtToken(user.email);
       }
       toast.success("Signed in with Google!");
       navigate("/");

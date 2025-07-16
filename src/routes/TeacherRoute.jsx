@@ -10,7 +10,7 @@ const TeacherRoute = ({ children }) => {
     return <div className="min-h-screen flex justify-center items-center">Loading...</div>;
   }
 
-  if (user && userFromDB?.role === "teacher") return children;
+  if (user && userFromDB?.role === "teacher" || user && userFromDB?.role === "admin") return children;
 
   return <Navigate to="/login" state={{ from: location }} replace />;
 };

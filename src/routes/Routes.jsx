@@ -9,32 +9,27 @@ import Error from "../pages/Error";
 import PaymentPage from "../pages/PaymentPage";
 import AdminRoute from "./AdminRoute";
 import TeacherRoute from "./TeacherRoute";
-import StudentRoute from "./StudentRoute";
 import PrivateRoute from "./PrivateRoute";
 
 // Auth pages
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 
-
 // Dashboard pages (student,teacher,admin)
 import EnrollClassDetails from "../pages/dashboard/student/EnrollClassDetails";
 import MyEnrollClasses from "../pages/dashboard/student/MyEnrollClasses";
 import OrderPage from "../pages/dashboard/student/OrderPage";
 
-// import TeacherDashboard from "../pages/dashboard/teacher/TeacherDashboard";
 import MyClasses from "../pages/dashboard/teacher/MyClasses";
 import AddClass from "../pages/dashboard/teacher/AddClass";
+import MyClassDetails from "../pages/dashboard/teacher/MyClassDetails";
 
 import AllUsers from "../pages/dashboard/admin/AllUsers";
 import AllClassAdmin from "../pages/dashboard/admin/AllClassAdmin";
 import TeacherRequests from "../pages/dashboard/admin/TeacherRequests";
+
 // shared
 import Profile from "../pages/dashboard/Profile";
-import MyClassDetails from "../pages/dashboard/teacher/MyClassDetails";
-
-
-
 
 const router = createBrowserRouter([
   {
@@ -43,7 +38,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "all-classes", element: <AllClasses /> },
-      { path: "teach", element: <Teach /> },
+      { path: "teach", element: <PrivateRoute><Teach /></PrivateRoute> },
       { path: "all-classes/:id", element: <PrivateRoute><ClassDetails /></PrivateRoute> },
       { path: "payment/:id", element: <PrivateRoute><PaymentPage /></PrivateRoute> }
     ],
@@ -52,7 +47,6 @@ const router = createBrowserRouter([
     path: "*",
     element: <Error />,
   },
-  // Auth routes (NOT inside MainLayout)
   {
     path: "/login",
     element: <Login />,
@@ -61,8 +55,6 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
-
-  // Dashboard routes (Protected)
   {
     path: "/dashboard",
     element: (
@@ -71,29 +63,29 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // Student routes
+      // Student routes converted to PrivateRoute
       {
         path: "my-enroll-classes",
         element: (
-          <StudentRoute>
+          <PrivateRoute>
             <MyEnrollClasses />
-          </StudentRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "my-enroll-classes/:id",
         element: (
-          <StudentRoute>
+          <PrivateRoute>
             <EnrollClassDetails />
-          </StudentRoute>
+          </PrivateRoute>
         ),
       },
-       {
+      {
         path: "my-order",
         element: (
-          <StudentRoute>
+          <PrivateRoute>
             <OrderPage />
-          </StudentRoute>
+          </PrivateRoute>
         ),
       },
 
@@ -149,7 +141,7 @@ const router = createBrowserRouter([
         ),
       },
 
-      // Shared (any authenticated user)
+      // Shared route
       {
         path: "profile",
         element: (
@@ -160,7 +152,6 @@ const router = createBrowserRouter([
       },
     ],
   }
-
 ]);
 
 export default router;

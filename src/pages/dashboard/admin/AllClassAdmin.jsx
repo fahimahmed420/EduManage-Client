@@ -3,28 +3,46 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
+const LIMIT = 8; // Set your limit per page here
+
 const AllClassAdmin = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
+  const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
-  // Fetch all classes
+  // Fetch paginated classes whenever page changes
   useEffect(() => {
+    setLoading(true);
     axios
-      .get(`${API}/classes`)
+      .get(`${API}/classes`, {
+        params: { page, limit: LIMIT, all: false }, // adjust params as needed
+      })
       .then((res) => {
-        setClasses(res.data);
+        // If your API returns an array (old), convert it to { classes, total }
+        // But your server code shows { classes, total } object, so:
+        const data = res.data;
+        if (Array.isArray(data)) {
+          // fallback if API returns array only
+          setClasses(data);
+          setTotalPages(1);
+        } else {
+          setClasses(data.classes || []);
+          setTotalPages(Math.ceil((data.total || 0) / LIMIT));
+        }
         setLoading(false);
+        setError(null);
       })
       .catch((err) => {
         console.error(err);
         setError("Failed to fetch classes.");
         setLoading(false);
       });
-  }, [API]);
+  }, [API, page]);
 
   // Approve / Reject Action
   const handleAction = (id, action) => {
@@ -60,10 +78,13 @@ const AllClassAdmin = () => {
     });
   };
 
-  // Handle Progress button click
+  // Navigate to progress page
   const handleProgressClick = (id) => {
     navigate(`/dashboard/my-classes/${id}`);
   };
+
+  const handlePrevPage = () => setPage((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () => setPage((prev) => Math.min(prev + 1, totalPages));
 
   return (
     <div className="p-4 md:p-8">
@@ -73,9 +94,7 @@ const AllClassAdmin = () => {
         <div className="text-center py-6 text-gray-500">Loading classes...</div>
       )}
 
-      {error && (
-        <div className="text-center py-6 text-red-500">{error}</div>
-      )}
+      {error && <div className="text-center py-6 text-red-500">{error}</div>}
 
       {!loading && !error && (
         <>
@@ -123,9 +142,7 @@ const AllClassAdmin = () => {
                       />
                     </td>
                     <td className="p-4 text-gray-600">{cls.teacherEmail}</td>
-                    <td className="p-4 text-gray-600 truncate">
-                      {cls.description}
-                    </td>
+                    <td className="p-4 text-gray-600 truncate">{cls.description}</td>
                     <td className="p-4">
                       <button
                         onClick={() => handleAction(cls._id, "approved")}
@@ -240,6 +257,42 @@ const AllClassAdmin = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination Controls with page numbers */}
+          <div className="flex justify-center mt-6 gap-2 flex-wrap">
+            <button
+              onClick={handlePrevPage}
+              disabled={page === 1}
+              className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            >
+              Previous
+            </button>
+
+            {[...Array(totalPages)].map((_, i) => {
+              const pageNumber = i + 1;
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => setPage(pageNumber)}
+                  className={`px-3 py-1 rounded ${
+                    pageNumber === page
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            <button
+              onClick={handleNextPage}
+              disabled={page === totalPages}
+              className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
         </>
       )}

@@ -5,35 +5,40 @@ import { FiSearch } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 
 const API = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+const LIMIT = 8;
 
-const fetchClasses = async () => {
-  const res = await axios.get(`${API}/classes`);
-  return res.data;
+const fetchClasses = async ({ queryKey }) => {
+  const [, page, searchTerm] = queryKey;
+  const res = await axios.get(`${API}/classes`, {
+    params: {
+      page,
+      limit: LIMIT,
+      search: searchTerm,
+    },
+  });
+  return res.data; // contains: { classes, total }
 };
 
 const AllClasses = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   const {
-    data: classes = [],
+    data,
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: ["classes"],
+    queryKey: ["classes", page, searchTerm],
     queryFn: fetchClasses,
+    keepPreviousData: true,
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true,
-    refetchInterval: 30000,
   });
 
+  const totalPages = data?.total ? Math.ceil(data.total / LIMIT) : 1;
 
-  const approvedClasses = classes.filter((cls) => cls.status === "approved");
-
-  const filteredClasses = approvedClasses.filter((cls) =>
-    cls.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const approvedClasses = data?.classes?.filter((cls) => cls.status === "approved") || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -41,22 +46,25 @@ const AllClasses = () => {
         Approved Classes
       </h2>
 
-      {/* Search Bar with Icon */}
+      {/* Search Bar */}
       <div className="relative mb-6 w-full sm:w-1/2">
         <input
           type="text"
           placeholder="Search classes by name..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setPage(1); // reset to page 1 on new search
+            setSearchTerm(e.target.value);
+          }}
           className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
       </div>
 
-      {/* Loading state */}
+      {/* Loading */}
       {isLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {[...Array(8)].map((_, index) => (
+          {[...Array(LIMIT)].map((_, index) => (
             <div
               key={index}
               className="animate-pulse bg-gray-100 rounded-xl overflow-hidden shadow flex flex-col"
@@ -76,46 +84,83 @@ const AllClasses = () => {
         <div className="text-center text-red-600 text-lg py-20">
           Error loading classes: {error.message}
         </div>
-      ) : filteredClasses.length === 0 ? (
+      ) : approvedClasses.length === 0 ? (
         <div className="text-center text-gray-500 text-lg py-20">
-          No classes found for "<span className="font-medium">{searchTerm}</span>"
+          No classes found
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {filteredClasses.map((cls) => (
-            <div
-              key={cls._id}
-              className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col"
-            >
-              <img
-                src={cls.image || "https://via.placeholder.com/400x250"}
-                alt={cls.title}
-                className="h-40 w-full object-cover"
-              />
-              <div className="p-4 flex flex-col flex-grow">
-                <div className="space-y-2 mb-4">
-                  <h3 className="text-lg font-semibold truncate">{cls.title}</h3>
-                  <p className="text-sm text-gray-500 truncate">
-                    By {cls.teacherName}
-                  </p>
-                  <p className="text-sm text-gray-700 font-medium">${cls.price}</p>
-                  <p className="text-sm text-gray-500 line-clamp-2">
-                    {cls.description}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {cls.totalEnrollment} students enrolled
-                  </p>
+        <>
+          {/* Class Cards */}
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {approvedClasses.map((cls) => (
+              <div
+                key={cls._id}
+                className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col"
+              >
+                <img
+                  src={cls.image || "https://via.placeholder.com/400x250"}
+                  alt={cls.title}
+                  className="h-40 w-full object-cover"
+                />
+                <div className="p-4 flex flex-col flex-grow">
+                  <div className="space-y-2 mb-4">
+                    <h3 className="text-lg font-semibold truncate">{cls.title}</h3>
+                    <p className="text-sm text-gray-500 truncate">
+                      By {cls.teacherName}
+                    </p>
+                    <p className="text-sm text-gray-700 font-medium">${cls.price}</p>
+                    <p className="text-sm text-gray-500 line-clamp-2">
+                      {cls.description}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {cls.totalEnrollment} students enrolled
+                    </p>
+                  </div>
+                  <button
+                    className="mt-auto w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition"
+                    onClick={() => navigate(`/all-classes/${cls._id}`)}
+                  >
+                    Enroll
+                  </button>
                 </div>
-                <button
-                  className="mt-auto w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition"
-                  onClick={() => navigate(`/all-classes/${cls._id}`)}
-                >
-                  Enroll
-                </button>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-40 gap-2 flex-wrap">
+            <button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            >
+              Previous
+            </button>
+
+            {[...Array(totalPages).keys()].map((num) => {
+              const pageNum = num + 1;
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => setPage(pageNum)}
+                  className={`px-4 py-2 rounded hover:bg-blue-500 hover:text-white ${
+                    page === pageNum ? "bg-blue-600 text-white" : "bg-gray-200"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+
+            <button
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={page === totalPages}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

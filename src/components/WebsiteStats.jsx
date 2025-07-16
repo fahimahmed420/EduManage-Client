@@ -6,7 +6,6 @@ import {
   FaChalkboardTeacher,
   FaUserGraduate,
   FaUserTie,
-  FaChartBar,
 } from "react-icons/fa";
 import { GiTeacher } from "react-icons/gi";
 import { motion } from "framer-motion";
@@ -57,24 +56,24 @@ const WebsiteStats = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  // Fetch classes
+  // Fetch classes (supports paginated response)
   const classesQuery = useQuery({
     queryKey: ["classes"],
     queryFn: async () => {
       const res = await axios.get(`${API}/classes`);
-      return res.data;
+      return res.data; // ✅ Must return { classes: [], total: number }
     },
     staleTime: 1000 * 60 * 5,
   });
 
+  // Extract data safely
+  const allClasses = classesQuery.data?.classes || []; // <-- Important!
   const totalUsers = usersQuery.data?.length || 0;
-  const totalClasses = classesQuery.data?.length || 0;
-  const totalEnrollments = classesQuery.data
-    ? classesQuery.data.reduce(
-        (sum, cls) => sum + (cls.totalEnrollment || 0),
-        0
-      )
-    : 0;
+  const totalClasses = allClasses.length;
+  const totalEnrollments = allClasses.reduce(
+    (sum, cls) => sum + (cls.totalEnrollment || 0),
+    0
+  );
   const totalTeachers = usersQuery.data
     ? usersQuery.data.filter((user) => user.role === "teacher").length
     : 0;
@@ -122,7 +121,7 @@ const WebsiteStats = () => {
     <div className="max-w-6xl mx-auto p-6 pt-16">
       {/* Section Heading */}
       <h2 className="text-3xl font-bold text-center text-blue-600 flex items-center justify-center gap-2">
-        <GiTeacher  className="text-blue-600" size={28} />
+        <GiTeacher className="text-blue-600" size={28} />
         Join EduManage
       </h2>
 

@@ -12,6 +12,7 @@ import {
   Path,
 } from "@react-pdf/renderer";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { FaFileInvoice } from "react-icons/fa";
 
 // Your API fetcher
 const fetchPayments = async (email) => {
@@ -69,14 +70,13 @@ const GraduationCapIcon = () => (
     height={40}
     viewBox="0 0 640 512"
     fill="black"
-    >
+  >
     <Path d="M622.34 153.16L327.82 6.73a24 24 0 0 0-20.9 0L17.66 153.16a12 12 0 0 0 0 21.33l96.9 48.46v61.38a23.86 23.86 0 0 0-14.11 22.16v41.48a23.88 23.88 0 0 0 12.42 20.94L215.31 440a24 24 0 0 0 23.56 0l162.44-91.42a24 24 0 0 0 12.12-20.94v-41.48a23.86 23.86 0 0 0-14.11-22.16v-61.38l96.9-48.46a12 12 0 0 0 0-21.34zM288 312a24 24 0 1 1 24-24 24 24 0 0 1-24 24z"/>
   </Svg>
 );
 
 // PDF Document component
 const InvoiceDocument = ({ payment, user }) => {
-  // Convert amount safely
   const amountNumber = Number(payment.amount);
   const displayAmount = isNaN(amountNumber) ? 0 : amountNumber;
 
@@ -143,7 +143,9 @@ const OrderPage = () => {
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Your Orders</h2>
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+        <FaFileInvoice className="text-blue-600" /> Your Orders
+      </h2>
       <div className="space-y-4">
         {payments.map((payment) => (
           <div
@@ -169,14 +171,26 @@ const OrderPage = () => {
               style={{
                 marginTop: 8,
                 padding: "8px 16px",
-                backgroundColor: "#4f46e5",
+                backgroundColor: "#2563eb",
                 color: "white",
                 borderRadius: 6,
                 textDecoration: "none",
-                display: "inline-block",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
               }}
             >
-              {({ loading }) => (loading ? "Preparing document..." : "Download Invoice")}
+              {({ loading }) =>
+                loading ? (
+                  <>
+                    <FaFileInvoice /> Preparing...
+                  </>
+                ) : (
+                  <>
+                    <FaFileInvoice /> Download Invoice
+                  </>
+                )
+              }
             </PDFDownloadLink>
           </div>
         ))}

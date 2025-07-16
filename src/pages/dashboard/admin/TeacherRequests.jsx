@@ -9,20 +9,20 @@ const TeacherRequests = () => {
   const queryClient = useQueryClient();
 
   // ✅ Fetch teacher requests with auto refetch every 5 seconds
- const {
-  data: requests = [],
-  isLoading,
-  isError,
-  error,
-} = useQuery({
-  queryKey: ["teacherRequests"],
-  queryFn: async () => {
-    const res = await axios.get(`${API}/teacherRequests`);
-    return res.data;
-  },
-  refetchInterval: 5000,
-  refetchIntervalInBackground: false, //only if tab is focused!
-});
+  const {
+    data: requests = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["teacherRequests"],
+    queryFn: async () => {
+      const res = await axios.get(`${API}/teacherRequests`);
+      return res.data;
+    },
+    refetchInterval: 10000,
+    refetchIntervalInBackground: false,
+  });
 
 
   // Mutation to update request status
@@ -128,31 +128,36 @@ const TeacherRequests = () => {
           {requests.map((r, i) => (
             <tr
               key={r._id}
-              className={`text-gray-800 text-xs sm:text-sm ${
-                i % 2 === 0 ? "bg-white" : "bg-gray-50"
-              } hover:bg-gray-100 transition-colors`}
+              className={`text-gray-800 text-xs sm:text-sm ${i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 transition-colors`}
             >
+
               <td className="py-2 px-4 font-semibold">{r.name}</td>
               <td className="hidden sm:table-cell py-2 px-4">
                 <img
                   src={r.photo || "/default-avatar.png"}
-                  onError={(e) => (e.target.src = "/default-avatar.png")}
                   alt={r.name}
+                  onError={(e) => {
+                    e.target.onerror = null; // ⛔ prevent infinite fallback loop
+                    e.target.src = "/default-avatar.png";
+                    console.log("Photo URL:", r);
+
+                  }}
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-300"
                 />
+
               </td>
               <td className="py-2 px-4">{r.experienceLevel}</td>
               <td className="hidden md:table-cell py-2 px-4">{r.title}</td>
               <td className="hidden lg:table-cell py-2 px-4">{r.category}</td>
               <td className="py-2 px-4">
                 <span
-                  className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                    r.status === "pending"
+                  className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${r.status === "pending"
                       ? "bg-yellow-100 text-yellow-800"
                       : r.status === "accepted"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
                 >
                   {r.status.charAt(0).toUpperCase() + r.status.slice(1)}
                 </span>

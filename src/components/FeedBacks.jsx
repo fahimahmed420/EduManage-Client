@@ -17,7 +17,8 @@ const FeedBacks = () => {
       const [feedbackRes, usersRes, classesRes] = await Promise.all([
         axios.get(`${API}/feedback`),
         axios.get(`${API}/users`),
-        axios.get(`${API}/classes`),
+        // Fetch all classes without pagination for correct matching
+        axios.get(`${API}/classes?all=true`),
       ]);
 
       const feedbackList = feedbackRes.data;
@@ -84,7 +85,9 @@ const FeedBacks = () => {
         {data.map((fb, index) => (
           <SwiperSlide key={fb._id}>
             <div
-              className={`bg-gradient-to-br ${cardColors[index % cardColors.length]} rounded-xl shadow-lg p-6 m-6 flex flex-col items-center text-center hover:shadow-2xl transition-transform duration-300 hover:scale-105`}
+              className={`bg-gradient-to-br ${
+                cardColors[index % cardColors.length]
+              } rounded-xl shadow-lg p-6 m-6 flex flex-col items-center text-center hover:shadow-2xl transition-transform duration-300 hover:scale-105`}
             >
               <img
                 src={fb.student?.photo || "/default-avatar.png"}

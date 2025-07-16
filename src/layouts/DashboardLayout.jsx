@@ -1,6 +1,20 @@
 import { useState, useRef, useContext, useEffect } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { FaUser, FaUsers, FaChalkboardTeacher, FaClipboardList, FaPlus, FaBookOpen, FaSignOutAlt, FaAngleLeft, FaAngleRight, FaBars, FaTimes, } from "react-icons/fa";
+import {
+  FaUser,
+  FaUsers,
+  FaChalkboardTeacher,
+  FaClipboardList,
+  FaPlus,
+  FaBookOpen,
+  FaSignOutAlt,
+  FaAngleLeft,
+  FaAngleRight,
+  FaBars,
+  FaTimes,
+  FaCog,
+  FaFileInvoice
+} from "react-icons/fa";
 import Lottie from "lottie-react";
 import Swal from "sweetalert2";
 import GraduationHat from "../assets/logo-animation.json";
@@ -41,13 +55,11 @@ const DashboardLayout = () => {
       { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
       { to: "/dashboard/add-class", label: "Add Class", icon: <FaPlus /> },
       { to: "/dashboard/my-classes", label: "My Classes", icon: <FaBookOpen /> },
-
     ],
     student: [
       { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> },
       { to: "/dashboard/my-enroll-classes", label: "My Enrolled Classes", icon: <FaBookOpen /> },
-      { to: "/dashboard/my-order", label: "My Orders", icon: <FaBookOpen /> },
-
+      { to: "/dashboard/my-order", label: "My Orders", icon: <FaFileInvoice /> },
     ],
   };
 
@@ -68,11 +80,23 @@ const DashboardLayout = () => {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
             to="/"
-            className="flex items-center gap-2 text-lg md:text-xl font-bold text-blue-600"
+            className="group relative flex items-center gap-2 text-lg md:text-xl font-bold text-blue-600"
           >
             <Lottie className="w-10 md:w-12" animationData={GraduationHat} loop />
             EduManage
+
+            {/* Tooltip */}
+            <span
+              className="absolute -bottom-8 left-1/2 transform -translate-x-1/2
+               bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0
+               group-hover:opacity-100 group-hover:translate-y-1
+               transition-all duration-300"
+            >
+              Click to go home
+            </span>
           </Link>
+
+          <h1 className="text-lg md:text-xl font-bold text-gray-600">Dashboard</h1>
 
           {/* Desktop profile */}
           <div className="hidden md:flex items-center gap-4">
@@ -84,22 +108,52 @@ const DashboardLayout = () => {
                   className="w-9 h-9 md:w-10 md:h-10 rounded-full border cursor-pointer object-cover"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 />
+
+                {/* Dropdown */}
                 <div
-                  className={`absolute right-0 mt-2 w-44 md:w-48 bg-white border rounded-md shadow-lg z-30 transition-all duration-200 ${dropdownOpen
-                      ? "max-h-60 opacity-100"
-                      : "max-h-0 opacity-0 pointer-events-none"
-                    }`}
+                  className={`absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur-md border border-gray-200 rounded-xl shadow-lg z-30 transition-all duration-300 origin-top-right transform
+                    ${dropdownOpen
+                      ? "scale-100 opacity-100 translate-y-0"
+                      : "scale-95 opacity-0 pointer-events-none -translate-y-2"}
+                  `}
                 >
-                  <p className="px-3 py-2 text-gray-800 font-semibold truncate">
-                    {userFromDB?.name || user.displayName || "User"}
-                  </p>
-                  <hr />
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
-                  >
-                    Logout
-                  </button>
+                  {/* Arrow */}
+                  <div className="absolute top-0 right-5 -translate-y-1/2 w-3 h-3 bg-white border-t border-l border-gray-200 rotate-45"></div>
+
+                  {/* User Info */}
+                  <div className="px-4 py-3 border-b border-gray-200">
+                    <p className="font-semibold text-gray-800 truncate">
+                      {userFromDB?.name || user.displayName || "User"}
+                    </p>
+                    <p className="text-sm text-gray-500 truncate">
+                      {user?.email || "No Email"}
+                    </p>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="flex flex-col py-2">
+                    <NavLink
+                      to="/dashboard/profile"
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition rounded-md"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <FaUser className="inline mr-2" /> Profile
+                    </NavLink>
+                    <NavLink
+                      to="/dashboard/settings"
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition rounded-md"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <FaCog className="inline mr-2" /> Settings
+                    </NavLink>
+                    <hr className="my-1" />
+                    <button
+                      onClick={handleLogout}
+                      className="px-4 py-2 text-left text-red-600 hover:bg-red-50 hover:text-red-700 transition rounded-md"
+                    >
+                      <FaSignOutAlt className="inline mr-2" /> Logout
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

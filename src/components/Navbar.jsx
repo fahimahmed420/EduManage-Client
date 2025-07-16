@@ -1,6 +1,8 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { 
+  FaBars, FaTimes, FaSignOutAlt, FaUser, FaChalkboardTeacher, FaHome, FaBookOpen, FaPlusCircle 
+} from "react-icons/fa";
 import Swal from "sweetalert2";
 import { AuthContext } from "../contexts/AuthContext";
 import GraduationHat from "../assets/logo-animation.json";
@@ -19,7 +21,6 @@ const Navbar = () => {
 
   const DEFAULT_AVATAR = "/src/assets/user.jpg";
 
-  // Fetch user profile photo
   const {
     data: userProfile,
     error,
@@ -44,6 +45,7 @@ const Navbar = () => {
     signOutUser()
       .then(() => {
         setIsDropdownOpen(false);
+        setIsOpen(false);
         Swal.fire("Logged out!", "", "success");
         navigate("/");
       })
@@ -53,18 +55,30 @@ const Navbar = () => {
   const navItems = (
     <>
       <li>
-        <NavLink to="/" className="hover:text-blue-500">
-          Home
+        <NavLink
+          to="/"
+          className="flex items-center gap-2 hover:text-blue-600"
+          onClick={() => setIsOpen(false)}
+        >
+          <FaHome /> Home
         </NavLink>
       </li>
       <li>
-        <NavLink to="/all-classes" className="hover:text-blue-500">
-          All Classes
+        <NavLink
+          to="/all-classes"
+          className="flex items-center gap-2 hover:text-blue-600"
+          onClick={() => setIsOpen(false)}
+        >
+          <FaBookOpen /> All Classes
         </NavLink>
       </li>
       <li>
-        <NavLink to="/teach" className="hover:text-blue-500">
-          Teach on EduManage
+        <NavLink
+          to="/teach"
+          className="flex items-center gap-2 hover:text-blue-600"
+          onClick={() => setIsOpen(false)}
+        >
+          <FaChalkboardTeacher /> Teach on EduManage
         </NavLink>
       </li>
     </>
@@ -80,33 +94,16 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Show loading or error in profile photo section on desktop
   const renderProfileImage = () => {
     if (isLoading) {
-      // You can return a spinner or placeholder during loading
-      return (
-        <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse" />
-      );
+      return <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse" />;
     }
 
-    if (error) {
-      // Show default avatar if error
-      return (
-        <img
-          src={DEFAULT_AVATAR}
-          alt="profile"
-          className="w-10 h-10 rounded-full cursor-pointer relative z-10 object-cover"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        />
-      );
-    }
-
-    // Normal profile image
     return (
       <img
         src={profilePhoto}
         alt="profile"
-        className="w-10 h-10 rounded-full cursor-pointer relative z-10 object-cover"
+        className="w-10 h-10 rounded-full cursor-pointer object-cover"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         onError={(e) => (e.target.src = DEFAULT_AVATAR)}
       />
@@ -116,12 +113,12 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo + Name */}
+        {/* Logo */}
         <Link
           to="/"
           className="flex items-center gap-2 text-xl font-bold text-blue-600"
         >
-          <Lottie className="w-12" animationData={GraduationHat} loop={true} />
+          <Lottie className="w-10" animationData={GraduationHat} loop />
           EduManage
         </Link>
 
@@ -131,16 +128,16 @@ const Navbar = () => {
         </ul>
 
         {/* Mobile toggle */}
-        <div className="md:hidden text-xl" onClick={() => setIsOpen(!isOpen)}>
+        <div className="md:hidden text-2xl" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <FaTimes /> : <FaBars />}
         </div>
 
-        {/* Auth buttons (Desktop) */}
+        {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-4">
           {!user ? (
             <Link
               to="/login"
-              className="px-4 py-1 border border-blue-600 rounded hover:bg-blue-600 hover:text-white transition"
+              className="px-4 py-1 rounded bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:brightness-110 transition"
             >
               Sign In
             </Link>
@@ -148,68 +145,77 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               {renderProfileImage()}
 
-              {/* Slide-down dropdown */}
+              {/* Desktop Dropdown */}
               <div
-                className={`absolute right-0 mt-2 w-48 bg-gray-100 border border-gray-300 shadow-lg rounded-md p-3 z-20 overflow-hidden transition-[max-height,opacity,transform] duration-300 ease-in-out
+                className={`absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl z-20 border
+                  transition-all duration-300 ease-in-out
                   ${isDropdownOpen
-                    ? "max-h-60 opacity-100 translate-y-0"
-                    : "max-h-0 opacity-0 -translate-y-2 pointer-events-none"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-2 pointer-events-none"
                   }
                 `}
               >
-                <p className="font-semibold text-gray-800">{user.displayName}</p>
-                <hr className="my-2 border-gray-300" />
-                <Link
-                  to="/dashboard/profile"
-                  className="block py-2 px-2 rounded hover:bg-blue-100 text-gray-700 hover:text-blue-700"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left py-1 px-2 rounded hover:bg-red-100 text-gray-700 hover:text-red-600"
-                >
-                  Logout
-                </button>
+                <div className="px-4 py-3 border-b">
+                  <p className="font-semibold">{user.displayName || "User"}</p>
+                  <p className="text-sm text-gray-500">{user.email || ""}</p>
+                </div>
+                <div className="flex flex-col">
+                  <Link
+                    to="/dashboard/profile"
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <FaUser /> Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-red-600"
+                  >
+                    <FaSignOutAlt /> Logout
+                  </button>
+                </div>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Stylish Mobile Menu */}
       {isOpen && (
-        <ul className="md:hidden flex flex-col gap-3 px-4 pb-4 text-base font-medium bg-white">
-          {navItems}
-          {!user ? (
-            <Link
-              to="/login"
-              className="w-full border border-blue-600 rounded py-1 text-center"
-            >
-              Sign In
-            </Link>
-          ) : (
-            <div className="space-y-1">
+        <div className="md:hidden rounded-b-xl shadow-lg bg-white px-6 py-4 animate-slide-down">
+          <ul className="flex flex-col gap-4 text-base font-medium text-gray-700">
+            {navItems}
+          </ul>
+          <div className="mt-4">
+            {!user ? (
               <Link
-                to="/dashboard/profile"
-                className="block hover:text-blue-600"
+                to="/login"
+                className="block w-full text-center py-2 rounded bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:brightness-110 transition"
                 onClick={() => setIsOpen(false)}
               >
-                Dashboard
+                <FaUser className="inline mr-2" /> Sign In
               </Link>
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLogout();
-                }}
-                className="block w-full text-left hover:text-red-600"
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </ul>
+            ) : (
+              <div className="space-y-2">
+                <Link
+                  to="/dashboard/profile"
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded bg-gray-100 hover:bg-gray-200 transition"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FaUser /> Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded bg-red-500 text-white hover:bg-red-600 transition"
+                >
+                  <FaSignOutAlt /> Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </nav>
   );

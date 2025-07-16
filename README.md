@@ -4,6 +4,9 @@ EduManage is a full-stack MERN educational platform that allows students and tea
 
 🌐 **Live Site**: [https://edumanage-d7a0d.web.app/](https://edumanage-d7a0d.web.app/)
 
+Admin email: admin123@gmail.com
+Admin password: Admin123
+
 ## ✨ Features
 
 ### 🔐 Authentication

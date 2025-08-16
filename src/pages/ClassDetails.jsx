@@ -51,7 +51,7 @@ const ClassDetails = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-4 py-10 animate-fade-in">
       {/* Banner Image */}
       <div className="relative rounded-lg overflow-hidden mb-6 shadow h-48">
         {classData?.image ? (

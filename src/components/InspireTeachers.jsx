@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 
 const InspireTeachers = () => {
   return (
-    <div className="w-full py-16 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+    <div className="w-full py-16 px-4">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left: Animation */}
         <div className="w-full md:w-1/2 flex justify-center">
           <Lottie

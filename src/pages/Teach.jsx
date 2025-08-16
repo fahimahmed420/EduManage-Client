@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 const CustomSuccessToast = ({ name }) => (
@@ -13,7 +14,7 @@ const CustomSuccessToast = ({ name }) => (
     <div>
       <p className="font-semibold text-green-600">Request Submitted!</p>
       <p className="text-sm text-gray-600">
-        {name}, we’ll review your application soon.
+        {name}, we'll review your application soon.
       </p>
     </div>
   </div>
@@ -22,51 +23,37 @@ const CustomSuccessToast = ({ name }) => (
 const Teach = () => {
   const { user, userFromDB } = useContext(AuthContext);
 
-  const [formData, setFormData] = useState({
-    name: user?.displayName || "",
-    email: user?.email || "",
-    photo: "", 
-    experienceLevel: "",
-    title: "",
-    category: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const [submitting, setSubmitting] = useState(false);
+  const photo = watch("photo");
 
-  //  Update formData when userFromDB loads
+  // Prefill values from context
   useEffect(() => {
+    if (user) {
+      setValue("name", user.displayName);
+      setValue("email", user.email);
+    }
     if (userFromDB) {
-      setFormData((prev) => ({
-        ...prev,
-        photo: userFromDB.photo || "https://i.ibb.co/9t9cYgW/avatar.png",
-      }));
+      setValue("photo", userFromDB.photo || "https://i.ibb.co/9t9cYgW/avatar.png");
     }
-  }, [userFromDB]);
+  }, [user, userFromDB, setValue]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { name, email, experienceLevel, title, category } = formData;
-    if (!name || !email || !experienceLevel || !title || !category) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-
-    setSubmitting(true);
+  const onSubmit = async (data) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/teacherRequests`, formData);
-      toast.success(<CustomSuccessToast name={formData.name} />, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/teacherRequests`, data);
+      toast.success(<CustomSuccessToast name={data.name} />, {
         icon: false,
         closeButton: false,
         className: "bg-white shadow-md rounded-lg p-4 animate-slide-in",
       });
-      // Reset the form
-      setFormData({
+      reset({
         name: user?.displayName || "",
         email: user?.email || "",
         photo: userFromDB?.photo || "",
@@ -76,8 +63,6 @@ const Teach = () => {
       });
     } catch (err) {
       toast.error("Failed to submit. Please try again.");
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -92,7 +77,7 @@ const Teach = () => {
       </p>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="space-y-5 sm:space-y-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm"
       >
         {/* Name */}
@@ -100,19 +85,17 @@ const Teach = () => {
           <label className="block font-medium mb-1">Name</label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
             placeholder="Full Name"
-            required
+            {...register("name", { required: true })}
+            className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
           />
+          {errors.name && <p className="text-red-500 text-sm mt-1">Name is required</p>}
         </div>
 
-        {/* Profile Picture */}
+        {/* Profile Picture Preview */}
         <div className="flex items-center gap-3">
           <img
-            src={formData.photo || "https://i.ibb.co/9t9cYgW/avatar.png"}
+            src={photo || "https://i.ibb.co/9t9cYgW/avatar.png"}
             className="w-12 h-12 rounded-full border object-cover"
             alt="Profile"
           />
@@ -124,11 +107,9 @@ const Teach = () => {
           <label className="block font-medium mb-1">Email</label>
           <input
             type="email"
-            name="email"
             readOnly
-            value={formData.email}
+            {...register("email", { required: true })}
             className="w-full px-4 py-2 rounded-md bg-gray-100 text-gray-500 border border-gray-200 cursor-not-allowed"
-            required
           />
         </div>
 
@@ -136,17 +117,17 @@ const Teach = () => {
         <div>
           <label className="block font-medium mb-1">Experience Level</label>
           <select
-            name="experienceLevel"
-            value={formData.experienceLevel}
-            onChange={handleChange}
+            {...register("experienceLevel", { required: true })}
             className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
-            required
           >
             <option value="">Select Level</option>
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             <option value="Expert">Expert</option>
           </select>
+          {errors.experienceLevel && (
+            <p className="text-red-500 text-sm mt-1">Experience level is required</p>
+          )}
         </div>
 
         {/* Title */}
@@ -154,24 +135,19 @@ const Teach = () => {
           <label className="block font-medium mb-1">Title</label>
           <input
             type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
             placeholder="e.g., Expert in Data Science"
-            required
+            {...register("title", { required: true })}
+            className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
           />
+          {errors.title && <p className="text-red-500 text-sm mt-1">Title is required</p>}
         </div>
 
         {/* Category */}
         <div>
           <label className="block font-medium mb-1">Category</label>
           <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
+            {...register("category", { required: true })}
             className="w-full px-4 py-2 rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring focus:ring-blue-200 shadow-sm transition"
-            required
           >
             <option value="">Select Category</option>
             <option value="Development">Development</option>
@@ -180,19 +156,25 @@ const Teach = () => {
             <option value="Business">Business</option>
             <option value="AI & Data">AI & Data</option>
           </select>
+          {errors.category && (
+            <p className="text-red-500 text-sm mt-1">Category is required</p>
+          )}
         </div>
+
+        {/* Hidden photo input */}
+        <input type="hidden" {...register("photo")} />
 
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={submitting}
+          disabled={isSubmitting}
           className={`w-full py-3 rounded-md text-white font-semibold transition ${
-            submitting
+            isSubmitting
               ? "bg-blue-300 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
           }`}
         >
-          {submitting ? "Submitting..." : "Submit for Review"}
+          {isSubmitting ? "Submitting..." : "Submit for Review"}
         </button>
       </form>
     </div>

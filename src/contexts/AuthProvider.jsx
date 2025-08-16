@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
-import {createUserWithEmailAndPassword,onAuthStateChanged,signInWithEmailAndPassword,
+import GraduationHat from "../assets/logo-animation.json";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
@@ -11,46 +15,50 @@ import {createUserWithEmailAndPassword,onAuthStateChanged,signInWithEmailAndPass
 import { auth } from "../../firebase.init";
 import { useQuery } from "@tanstack/react-query";
 import axiosSecure from "../hooks/axiosSecure";
+import Lottie from "lottie-react";
 
+// Initialize Google Provider
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(undefined);
+  const [user, setUser] = useState(undefined); // undefined = loading, null = not logged in
 
-  // ✅ Save user to DB if not exists
+  // ✅ Save user to MongoDB if not already present
   const saveUserToDB = async (firebaseUser) => {
     try {
-      const res = await axiosSecure.get(`/users/${firebaseUser.email}`);
+      const { email, displayName, photoURL } = firebaseUser;
+      const res = await axiosSecure.get(`/users/${email}`);
       if (res.status === 200) return;
 
       await axiosSecure.post("/users", {
-        name: firebaseUser.displayName || "Unnamed User",
-        email: firebaseUser.email,
-        photo: firebaseUser.photoURL || "https://i.ibb.co/9t9cYgW/avatar.png",
+        name: displayName || "Unnamed User",
+        email,
+        photo: photoURL || "https://i.ibb.co/9t9cYgW/avatar.png",
         role: "student",
       });
     } catch (err) {
-      console.error("Error saving user to DB:", err);
+      console.error("❌ Error saving user to DB:", err);
     }
   };
 
-  // ✅ Firebase auth registration
+  // ✅ Register user
   const createUser = async (email, password, fullName = "", photoURL = "") => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+    // Optional profile update
     if (fullName || photoURL) {
-      await updateProfile(auth.currentUser, {
-        displayName: fullName,
-        photoURL,
-      });
+      await updateProfile(auth.currentUser, { displayName: fullName, photoURL });
       await reload(auth.currentUser);
     }
+
     const currentUser = auth.currentUser;
     setUser(currentUser);
     await saveUserToDB(currentUser);
+
     return userCredential;
   };
 
-  // ✅ Login
+  // ✅ Email/password login
   const signInUser = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     setUser(userCredential.user);
@@ -72,22 +80,22 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // ✅ Password reset
+  // ✅ Reset password
   const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-  // ✅ Sync Firebase auth state
+  // ✅ Sync auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      setUser(currentUser || null);
     });
     return () => unsubscribe();
   }, []);
 
-  // ✅ Fetch MongoDB user using TanStack Query
+  // ✅ Fetch MongoDB user using TanStack Query (only if logged in)
   const {
     data: userFromDB,
     isLoading: userFromDBLoading,
-    isError,
+    isError: userFromDBError,
   } = useQuery({
     queryKey: ["userFromDB", user?.email],
     enabled: !!user?.email,
@@ -97,12 +105,15 @@ const AuthProvider = ({ children }) => {
     },
   });
 
-  // ✅ Show loading until Firebase confirms auth state
+  // ✅ Auth loading state (important for PrivateRoute + layout rendering)
   if (user === undefined) {
     return (
-      <div className="text-center text-xl py-10">
-        <h2 className="my-10"><span className="loading loading-spinner text-info"></span>Checking authentication<span className="loading loading-spinner text-info"></span></h2>
-        <progress className="progress w-56" />
+      <div className="text-center text-xl py-10 min-h-screen flex flex-col justify-center items-center">
+        {/* <h2 className="mb-4 flex items-center gap-2">
+          Checking authentication
+        </h2>
+        <progress className="progress w-56" /> */}
+        <Lottie className="w-50" animationData={GraduationHat} loop />
       </div>
     );
   }
@@ -113,6 +124,7 @@ const AuthProvider = ({ children }) => {
         user,
         userFromDB,
         userFromDBLoading,
+        userFromDBError,
         createUser,
         signInUser,
         signOutUser,

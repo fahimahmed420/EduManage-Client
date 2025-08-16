@@ -67,12 +67,12 @@ const FreeResources = () => {
 
   return (
     <section className="py-16 px-4 md:px-10">
-      <div className="max-w-6xl mx-auto text-center">
+      <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold mb-4 text-blue-600 flex items-center justify-center gap-2">
           <FaDownload className="text-blue-600" />
           Free Resources & Downloads
         </h2>
-        <p className="text-gray-600 mb-10">
+        <p className="text-gray-600">
           Download helpful study PDFs for free and boost your skills.
         </p>
         <Slider {...settings}>

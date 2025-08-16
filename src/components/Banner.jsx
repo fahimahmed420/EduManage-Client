@@ -36,7 +36,7 @@ const Banner = () => {
 
   return (
     <div className="relative w-full bg-gradient-to-b from-white to-blue-50  overflow-hidden py-32">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
         {/* Left Section */}
         <div className="flex flex-col items-center lg:items-start gap-4 text-center lg:text-left">
           <div className="flex items-center gap-3">
@@ -59,7 +59,7 @@ const Banner = () => {
         </div>
 
         {/* Right Section: Circular Cards */}
-        <div className="relative w-72 h-72">
+        <div className="relative w-60 h-60 md:w-72 md:h-72">
           <motion.div
             className="absolute inset-0"
             animate={{ rotate: 360 }}

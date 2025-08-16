@@ -118,7 +118,7 @@ const WebsiteStats = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-6 pt-16">
+    <div className="max-w-7xl mx-auto p-4 pt-16">
       {/* Section Heading */}
       <h2 className="text-3xl font-bold text-center text-blue-600 flex items-center justify-center gap-2">
         <GiTeacher className="text-blue-600" size={28} />

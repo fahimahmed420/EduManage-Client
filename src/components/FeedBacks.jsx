@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import { FaQuoteRight } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -17,7 +17,6 @@ const FeedBacks = () => {
       const [feedbackRes, usersRes, classesRes] = await Promise.all([
         axios.get(`${API}/feedback`),
         axios.get(`${API}/users`),
-        // Fetch all classes without pagination for correct matching
         axios.get(`${API}/classes?all=true`),
       ]);
 
@@ -63,69 +62,74 @@ const FeedBacks = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold text-blue-600 text-center mb-8 flex items-center justify-center gap-3">
         <FaQuoteRight className="text-blue-600 w-8 h-8" />
         What Students Say
       </h2>
 
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={30}
+        modules={[Navigation, Autoplay]}
+        spaceBetween={20}
         slidesPerView={1}
         autoplay={{ delay: 4000 }}
-        navigation
-        pagination={{ clickable: true }}
         breakpoints={{
+          640: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
-        className="feedback-carousel"
-      >
+        className="feedback-carousel">
         {data.map((fb, index) => (
           <SwiperSlide key={fb._id}>
             <div
-              className={`bg-gradient-to-br ${
-                cardColors[index % cardColors.length]
-              } rounded-xl shadow-lg p-6 m-6 flex flex-col items-center text-center hover:shadow-2xl transition-transform duration-300 hover:scale-105`}
-            >
-              <img
-                src={fb.student?.photo || "/default-avatar.png"}
-                alt={fb.student?.name || "Anonymous"}
-                className="w-20 h-20 rounded-full object-cover border-4 border-blue-400 mb-4"
-                loading="lazy"
-              />
-              <h3 className="text-lg font-semibold text-gray-800">
-                {fb.student?.name || "Anonymous"}
-              </h3>
-              <p className="text-sm text-blue-600 font-medium mb-2">
-                {fb.classInfo?.title || "Unknown Class"}
-              </p>
-              <p className="text-gray-700 italic mb-3">
-                “
-                {fb.description.length > 100
-                  ? `${fb.description.slice(0, 100)}...`
-                  : fb.description}
-                ”
-              </p>
-              <div className="flex justify-center gap-1">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <svg
-                    key={i}
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill={i < fb.rating ? "orange" : "gray"}
-                    className="w-5 h-5"
-                  >
-                    <path d="M9.049 2.927a.75.75 0 011.402 0l1.286 3.95h4.156a.75.75 0 01.442 1.353l-3.362 2.445 1.287 3.95a.75.75 0 01-1.155.853L10 13.348l-3.363 2.445a.75.75 0 01-1.155-.853l1.287-3.95-3.362-2.445a.75.75 0 01.442-1.353h4.156l1.286-3.95z" />
-                  </svg>
-                ))}
+              className={`bg-gradient-to-br ${cardColors[index % cardColors.length]
+                } rounded-2xl p-6 m-4 flex flex-col items-center text-center shadow-lg shadow-[rgba(0,0,0,0.12)]
+                 hover:shadow-2xl hover:shadow-[rgba(0,0,0,0.18)] transition-all duration-500 hover:scale-105
+                  min-h-[310px] justify-between`}>
+              {/* Top Section */}
+              <div>
+                <img
+                  src={fb.student?.photo || "/default-avatar.png"}
+                  alt={fb.student?.name || "Anonymous"}
+                  className="w-20 h-20 rounded-full object-cover border-4 border-blue-400 mb-4 mx-auto"
+                  loading="lazy"
+                />
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {fb.student?.name || "Anonymous"}
+                </h3>
+                <p className="text-sm text-blue-600 font-medium mb-2">
+                  {fb.classInfo?.title || "Unknown Class"}
+                </p>
+                <p className="text-gray-700 italic">
+                  “
+                  {fb.description.length > 100
+                    ? `${fb.description.slice(0, 100)}...`
+                    : fb.description}
+                  ”
+                </p>
               </div>
-              <p className="text-xs text-gray-600 mt-2">
-                {fb.createdAt
-                  ? new Date(fb.createdAt).toLocaleDateString()
-                  : "Date Unknown"}
-              </p>
+
+              {/* Bottom Section */}
+              <div className="mt-4">
+                <div className="flex justify-center gap-1">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <svg
+                      key={i}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill={i < fb.rating ? "orange" : "gray"}
+                      className="w-5 h-5"
+                    >
+                      <path d="M9.049 2.927a.75.75 0 011.402 0l1.286 3.95h4.156a.75.75 0 01.442 1.353l-3.362 2.445 1.287 3.95a.75.75 0 01-1.155.853L10 13.348l-3.363 2.445a.75.75 0 01-1.155-.853l1.287-3.95-3.362-2.445a.75.75 0 01.442-1.353h4.156l1.286-3.95z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  {fb.createdAt
+                    ? new Date(fb.createdAt).toLocaleDateString()
+                    : "Date Unknown"}
+                </p>
+              </div>
             </div>
           </SwiperSlide>
         ))}

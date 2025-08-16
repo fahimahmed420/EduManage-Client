@@ -161,7 +161,7 @@ const Navbar = () => {
           {!user ? (
             <Link
               to="/login"
-              className="px-4 py-1 rounded bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:brightness-110 transition"
+              className="px-4 py-1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:brightness-110 transition"
             >
               Sign In
             </Link>
@@ -171,7 +171,7 @@ const Navbar = () => {
 
               {/* Desktop Dropdown */}
               <div
-                className={`absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl z-20 border
+                className={`absolute right-0 mt-3 w-56  bg-white rounded-xl shadow-xl z-20 border border-gray-200
                   transition-all duration-300 ease-in-out
                   ${
                     isDropdownOpen
@@ -180,7 +180,7 @@ const Navbar = () => {
                   }
                 `}
               >
-                <div className="px-4 py-3 border-b">
+                <div className="px-4 py-3 border-b border-gray-200">
                   <p className="font-semibold">{user.displayName || "User"}</p>
                   <p className="text-sm text-gray-500">{user.email || ""}</p>
                 </div>
@@ -194,7 +194,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-red-600"
+                    className="flex items-center gap-2 px-4 py-2 rounded-b-xl hover:bg-red-50 cursor-pointer text-red-600"
                   >
                     <FaSignOutAlt /> Logout
                   </button>
@@ -207,7 +207,7 @@ const Navbar = () => {
 
       {/* Stylish Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden rounded-b-xl shadow-lg bg-white px-6 py-4 animate-slide-down">
+        <div className="md:hidden shadow-lg bg-white px-6 py-4 animate-slide-down">
           <ul className="flex flex-col gap-4 text-base font-medium text-gray-700">
             {navItems}
           </ul>

@@ -10,11 +10,11 @@ const PopularClassesSkeleton = () => {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 max-w-7xl mx-auto">
-        {[1, 2, 3].map((item) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
+        {[1, 2, 3, 4].map((item) => (
           <div
             key={item}
-            className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl p-6 flex flex-col items-center shadow-md"
+            className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl p-6 flex flex-col items-center shadow-md h-full"
           >
             {/* Circle image skeleton */}
             <div className="w-24 h-24 bg-gray-300 animate-pulse rounded-full mb-4"></div>

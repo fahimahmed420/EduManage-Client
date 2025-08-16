@@ -83,7 +83,9 @@ const ClassDetails = () => {
             label="Price"
             value={classData?.price ? `$${classData.price}` : "Free"}
           />
-          <DetailRow label="Duration" value={classData?.duration || "N/A"} />
+          <DetailRow
+            label="Duration"
+            value={`${classData?.duration || "N/A"} weeks`}/>
           <DetailRow label="Level" value={classData?.level || "Beginner"} />
           <DetailRow label="Schedule" value={classData?.schedule || "To Be Announced"} />
           <DetailRow

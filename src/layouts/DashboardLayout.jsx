@@ -111,14 +111,10 @@ const DashboardLayout = () => {
 
                 {/* Dropdown */}
                 <div
-                  className={`absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur-md border border-gray-200 rounded-xl shadow-lg z-30 transition-all duration-300 origin-top-right transform
+                  className={`absolute right-0 mt-4 w-48 bg-white/80 backdrop-blur-md border border-gray-200 rounded-xl shadow-lg z-30 transition-all duration-300 origin-top-right transform
                     ${dropdownOpen
                       ? "scale-100 opacity-100 translate-y-0"
-                      : "scale-95 opacity-0 pointer-events-none -translate-y-2"}
-                  `}
-                >
-                  {/* Arrow */}
-                  <div className="absolute top-0 right-5 -translate-y-1/2 w-3 h-3 bg-white border-t border-l border-gray-200 rotate-45"></div>
+                      : "scale-95 opacity-0 pointer-events-none -translate-y-2"}`}>
 
                   {/* User Info */}
                   <div className="px-4 py-3 border-b border-gray-200">
@@ -131,25 +127,24 @@ const DashboardLayout = () => {
                   </div>
 
                   {/* Menu Items */}
-                  <div className="flex flex-col py-2">
+                  <div className="flex flex-col">
                     <NavLink
                       to="/dashboard/profile"
-                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition rounded-md"
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
                       onClick={() => setDropdownOpen(false)}
                     >
                       <FaUser className="inline mr-2" /> Profile
                     </NavLink>
                     <NavLink
                       to="/dashboard/settings"
-                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition rounded-md"
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
                       onClick={() => setDropdownOpen(false)}
                     >
                       <FaCog className="inline mr-2" /> Settings
                     </NavLink>
-                    <hr className="my-1" />
                     <button
                       onClick={handleLogout}
-                      className="px-4 py-2 text-left text-red-600 hover:bg-red-50 hover:text-red-700 transition rounded-md"
+                      className="px-4 py-2 text-left text-red-600 hover:bg-red-50 hover:text-red-700 transition rounded-b-xl"
                     >
                       <FaSignOutAlt className="inline mr-2" /> Logout
                     </button>
@@ -170,7 +165,7 @@ const DashboardLayout = () => {
 
         {/* Mobile Dropdown */}
         {menuOpen && (
-          <div className="md:hidden bg-white border-t">
+          <div className="md:hidden bg-white border-t border-gray-200">
             <ul className="px-4 py-2 space-y-2">
               {dashboardLinks[role].map((item, idx) => (
                 <li key={idx}>
@@ -190,7 +185,7 @@ const DashboardLayout = () => {
                     setMenuOpen(false);
                     handleLogout();
                   }}
-                  className="w-full text-left py-2 px-2 text-red-600 hover:bg-red-50"
+                  className="w-full text-left py-2 px-2 text-red-600 hover:bg-red-50 rounded-md cursor-pointer"
                 >
                   <FaSignOutAlt className="inline mr-2" />
                   Logout

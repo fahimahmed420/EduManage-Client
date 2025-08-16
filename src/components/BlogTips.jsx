@@ -93,19 +93,13 @@ const BlogTips = () => {
                   <p className="text-gray-600 mt-1 text-sm">{post.excerpt}</p>
                 </div>
                 <div className="flex justify-center mt-4">
+                 
                   <button
                     onClick={() => handleOpenPost(post)}
-                    className="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-blue-700 transition duration-300 ease-out border-2 border-blue-700 rounded-full shadow-md group"
+                    rel="noopener noreferrer"
+                    className="inline-block cursor-pointer bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:translate-y-2 px-4 py-2 rounded-full transition"
                   >
-                    <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-700 group-hover:translate-x-0 ease">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                      </svg>
-                    </span>
-                    <span className="absolute flex items-center justify-center w-full h-full text-blue-700 transition-all duration-300 transform group-hover:translate-x-full ease">
-                     Read More
-                    </span>
-                    <span className="relative invisible">Read More</span>
+                    Read More
                   </button>
 
                 </div>
@@ -117,7 +111,7 @@ const BlogTips = () => {
 
       {/* Modal */}
       {openPost && (
-        <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50 px-4 transition-all duration-300">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4 transition-all duration-300">
           <div className="bg-white max-w-lg w-full p-6 rounded-lg shadow-lg relative animate-fadeIn max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setOpenPost(null)}

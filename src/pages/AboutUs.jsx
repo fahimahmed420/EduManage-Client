@@ -120,7 +120,7 @@ const AboutUs = () => {
                     </p>
                     <Link
                         to="/all-classes"
-                        className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-blue-100 transition"
+                        className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-full shadow-md hover:bg-blue-100 transition"
                     >
                         Get Started
                     </Link>

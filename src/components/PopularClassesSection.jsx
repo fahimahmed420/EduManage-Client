@@ -34,7 +34,7 @@ const PopularClassesSection = () => {
   });
 
   if (isLoading)
-    return <PopularClassesSkeleton/>;
+    return <PopularClassesSkeleton />;
 
   if (isError)
     return (
@@ -56,11 +56,12 @@ const PopularClassesSection = () => {
         Popular Classes
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {popularClasses.slice(0, 3).map((cls, index) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {popularClasses.map((cls, index) => (
           <div
             key={cls._id}
-            className={`relative shadow-lg hover:shadow-2xl rounded-2xl overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col bg-gradient-to-r ${gradientColors[index]} text-white`}
+            className={`relative shadow-lg hover:shadow-2xl rounded-2xl overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col h-full bg-gradient-to-r ${gradientColors[index % gradientColors.length]
+              } text-white`}
           >
             {/* Avatar */}
             <div className="flex justify-center items-center mt-6">
@@ -96,6 +97,7 @@ const PopularClassesSection = () => {
           </div>
         ))}
       </div>
+
     </div>
   );
 };

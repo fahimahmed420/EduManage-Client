@@ -88,7 +88,7 @@ const FreeResources = () => {
                   href={item.file}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block text-sm text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-full transition"
+                  className="inline-block cursor-progress bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:translate-y-2 px-4 py-2 rounded-full transition"
                 >
                   Download PDF
                 </a>

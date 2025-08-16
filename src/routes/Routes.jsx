@@ -10,6 +10,7 @@ import PaymentPage from "../pages/PaymentPage";
 import AdminRoute from "./AdminRoute";
 import TeacherRoute from "./TeacherRoute";
 import PrivateRoute from "./PrivateRoute";
+import AboutUs from "../pages/AboutUs";
 
 // Auth pages
 import Login from "../pages/Login";
@@ -31,6 +32,7 @@ import TeacherRequests from "../pages/dashboard/admin/TeacherRequests";
 // shared
 import Profile from "../pages/dashboard/Profile";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,6 +40,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "all-classes", element: <AllClasses /> },
+      { path: "about", element: <AboutUs /> },
       { path: "teach", element: <PrivateRoute><Teach /></PrivateRoute> },
       { path: "all-classes/:id", element: <PrivateRoute><ClassDetails /></PrivateRoute> },
       { path: "payment/:id", element: <PrivateRoute><PaymentPage /></PrivateRoute> }

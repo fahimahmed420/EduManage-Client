@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import CountUp from "react-countup";
 import Lottie from "lottie-react";
 import onlineClass from "../assets/Online Class.json";
+import JoinEduManageSkeleton from "./JoinEduManageSkeleton";
 
 const StatCard = ({ icon: Icon, title, count, color, onHover, isBlurred }) => (
   <motion.div
@@ -79,7 +80,7 @@ const WebsiteStats = () => {
     : 0;
 
   if (usersQuery.isLoading || classesQuery.isLoading) {
-    return <div className="text-center py-10">Loading stats...</div>;
+    return <JoinEduManageSkeleton/>;
   }
 
   if (usersQuery.isError || classesQuery.isError) {

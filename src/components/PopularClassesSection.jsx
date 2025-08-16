@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { FaChalkboardTeacher } from "react-icons/fa";
+import PopularClassesSkeleton from "./PopularClassesSkeleton";
 
 const fetchPopularClasses = async () => {
   const API = import.meta.env.VITE_API_URL;
@@ -33,7 +34,7 @@ const PopularClassesSection = () => {
   });
 
   if (isLoading)
-    return <div className="p-6 text-center">Loading popular classes...</div>;
+    return <PopularClassesSkeleton/>;
 
   if (isError)
     return (

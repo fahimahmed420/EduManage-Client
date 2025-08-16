@@ -7,6 +7,7 @@ import { FaQuoteRight } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import TestimonialsSkeleton from "./TestimonialsSkeleton";
 
 const FeedBacks = () => {
   const API = import.meta.env.VITE_API_URL;
@@ -46,7 +47,7 @@ const FeedBacks = () => {
   ];
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading feedbacks...</div>;
+    return <TestimonialsSkeleton/>;
   }
 
   if (isError) {

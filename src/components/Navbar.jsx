@@ -1,7 +1,15 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
-import { 
-  FaBars, FaTimes, FaSignOutAlt, FaUser, FaChalkboardTeacher, FaHome, FaBookOpen, FaPlusCircle 
+import {
+  FaBars,
+  FaTimes,
+  FaSignOutAlt,
+  FaUser,
+  FaChalkboardTeacher,
+  FaHome,
+  FaBookOpen,
+  FaPlusCircle,
+  FaInfoCircle,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { AuthContext } from "../contexts/AuthContext";
@@ -60,7 +68,7 @@ const Navbar = () => {
           className="flex items-center gap-2 hover:text-blue-600"
           onClick={() => setIsOpen(false)}
         >
-          <FaHome /> Home
+          <FaHome className="md:hidden lg:flex"/> Home
         </NavLink>
       </li>
       <li>
@@ -69,16 +77,31 @@ const Navbar = () => {
           className="flex items-center gap-2 hover:text-blue-600"
           onClick={() => setIsOpen(false)}
         >
-          <FaBookOpen /> All Classes
+          <FaBookOpen className="md:hidden lg:flex"/> All Classes
         </NavLink>
       </li>
+
+      {/* Show only for logged-in users */}
+      {user && (
+        <li>
+          <NavLink
+            to="/teach"
+            className="flex items-center gap-2 hover:text-blue-600"
+            onClick={() => setIsOpen(false)}
+          >
+            <FaChalkboardTeacher className="md:hidden lg:flex"/> Teach on EduManage
+          </NavLink>
+        </li>
+      )}
+
+      {/* Always visible */}
       <li>
         <NavLink
-          to="/teach"
+          to="/about"
           className="flex items-center gap-2 hover:text-blue-600"
           onClick={() => setIsOpen(false)}
         >
-          <FaChalkboardTeacher /> Teach on EduManage
+          <FaInfoCircle className="md:hidden lg:flex"/> About Us
         </NavLink>
       </li>
     </>
@@ -91,7 +114,8 @@ const Navbar = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const renderProfileImage = () => {
@@ -149,9 +173,10 @@ const Navbar = () => {
               <div
                 className={`absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl z-20 border
                   transition-all duration-300 ease-in-out
-                  ${isDropdownOpen
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-2 pointer-events-none"
+                  ${
+                    isDropdownOpen
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 -translate-y-2 pointer-events-none"
                   }
                 `}
               >

@@ -68,8 +68,8 @@ const BlogTips = () => {
   };
 
   return (
-    <section className=" py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section className=" py-12">
+      <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-blue-600 text-center mb-10 flex items-center justify-center gap-2">
           <FaBookOpen className="text-blue-600 w-8 h-8" />
           Blog & Learning Tips

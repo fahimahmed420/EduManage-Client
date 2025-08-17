@@ -41,8 +41,9 @@ const AllClasses = () => {
   const approvedClasses = data?.classes?.filter((cls) => cls.status === "approved") || [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6 text-center md:text-left">
+    <section className="bg-gradient-to-b from-white to-blue-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold mb-6 text-center md:text-left text-blue-500">
         Approved Classes
       </h2>
 
@@ -163,6 +164,7 @@ const AllClasses = () => {
         </>
       )}
     </div>
+    </section>
   );
 };
 

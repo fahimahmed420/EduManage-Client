@@ -8,13 +8,16 @@ import PopularClassesSection from '../components/PopularClassesSection';
 import FeedBacks from '../components/FeedBacks';
 import WebsiteStats from '../components/WebsiteStats';
 import FreeResources from '../components/FreeResources';
+import CareerInvestSection from '../components/CareerInvestSection';
 
 const Home = () => {
   return (
     <>
+      {/* Inspire → Show offerings → Prove credibility → Build trust → Add value → Reassure. */}
       <Banner />
       <PartnersSlider />
-      <div className='bg-gradient-to-b from-white to-orange-50'>
+      <div className='bg-gradient-to-b from-white via-blue-50 to-orange-50'>
+        <CareerInvestSection />
         <PopularClassesSection />
         <FeedBacks />
       </div>

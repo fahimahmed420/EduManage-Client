@@ -75,7 +75,13 @@ const MyClassDetails = () => {
   };
 
   if (!classInfo) {
-    return <div className="text-center mt-10 text-lg">Loading class info...</div>;
+    return <div className="flex justify-center items-center min-h-1/2">
+      <div className="flex gap-x-2">
+        <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+        <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+        <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+      </div>
+    </div>;
   }
 
   return (

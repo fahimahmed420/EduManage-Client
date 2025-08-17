@@ -28,7 +28,7 @@ const ClassDetails = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-60">
+      <div className="flex justify-center items-center min-h-screen">
         <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
       </div>
     );
@@ -85,7 +85,7 @@ const ClassDetails = () => {
           />
           <DetailRow
             label="Duration"
-            value={`${classData?.duration || "N/A"} weeks`}/>
+            value={`${classData?.duration || "N/A"} weeks`} />
           <DetailRow label="Level" value={classData?.level || "Beginner"} />
           <DetailRow label="Schedule" value={classData?.schedule || "To Be Announced"} />
           <DetailRow

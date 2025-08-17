@@ -56,8 +56,8 @@ const AllClassAdmin = () => {
         action === "approved"
           ? "#16a34a"
           : action === "rejected"
-          ? "#dc2626"
-          : "#3b82f6",
+            ? "#dc2626"
+            : "#3b82f6",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -91,7 +91,13 @@ const AllClassAdmin = () => {
       <h1 className="text-2xl md:text-3xl font-bold mb-6">All Classes</h1>
 
       {loading && (
-        <div className="text-center py-6 text-gray-500">Loading classes...</div>
+        <div className="flex justify-center items-center min-h-1/2">
+          <div className="flex gap-x-2">
+            <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+            <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+            <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+          </div>
+        </div>
       )}
 
       {error && <div className="text-center py-6 text-red-500">{error}</div>}
@@ -121,15 +127,14 @@ const AllClassAdmin = () => {
                     <td className="p-4 font-medium text-gray-800">
                       {cls.title}
                       <span
-                        className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
-                          cls.status === "approved"
+                        className={`ml-2 text-xs px-2 py-0.5 rounded-full ${cls.status === "approved"
                             ? "bg-green-100 text-green-600"
                             : cls.status === "rejected"
-                            ? "bg-red-100 text-red-600"
-                            : cls.status === "in progress"
-                            ? "bg-blue-100 text-blue-600"
-                            : "bg-gray-100 text-gray-500"
-                        }`}
+                              ? "bg-red-100 text-red-600"
+                              : cls.status === "in progress"
+                                ? "bg-blue-100 text-blue-600"
+                                : "bg-gray-100 text-gray-500"
+                          }`}
                       >
                         {cls.status}
                       </span>
@@ -147,11 +152,10 @@ const AllClassAdmin = () => {
                       <button
                         onClick={() => handleAction(cls._id, "approved")}
                         disabled={cls.status === "approved"}
-                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${
-                          cls.status === "approved"
+                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${cls.status === "approved"
                             ? "bg-green-300 cursor-not-allowed"
                             : "bg-green-500 hover:bg-green-600"
-                        }`}
+                          }`}
                       >
                         Approve
                       </button>
@@ -160,11 +164,10 @@ const AllClassAdmin = () => {
                       <button
                         onClick={() => handleAction(cls._id, "rejected")}
                         disabled={cls.status === "rejected"}
-                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${
-                          cls.status === "rejected"
+                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${cls.status === "rejected"
                             ? "bg-red-300 cursor-not-allowed"
                             : "bg-red-500 hover:bg-red-600"
-                        }`}
+                          }`}
                       >
                         Reject
                       </button>
@@ -173,11 +176,10 @@ const AllClassAdmin = () => {
                       <button
                         onClick={() => handleProgressClick(cls._id)}
                         disabled={cls.status !== "approved"}
-                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${
-                          cls.status !== "approved"
+                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${cls.status !== "approved"
                             ? "bg-blue-300 cursor-not-allowed"
                             : "bg-blue-500 hover:bg-blue-600"
-                        }`}
+                          }`}
                       >
                         Progress
                       </button>
@@ -198,15 +200,14 @@ const AllClassAdmin = () => {
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="font-semibold text-lg">{cls.title}</h2>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full ${
-                      cls.status === "approved"
+                    className={`text-xs px-2 py-0.5 rounded-full ${cls.status === "approved"
                         ? "bg-green-100 text-green-600"
                         : cls.status === "rejected"
-                        ? "bg-red-100 text-red-600"
-                        : cls.status === "in progress"
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
+                          ? "bg-red-100 text-red-600"
+                          : cls.status === "in progress"
+                            ? "bg-blue-100 text-blue-600"
+                            : "bg-gray-100 text-gray-500"
+                      }`}
                   >
                     {cls.status}
                   </span>
@@ -224,33 +225,30 @@ const AllClassAdmin = () => {
                   <button
                     onClick={() => handleAction(cls._id, "approved")}
                     disabled={cls.status === "approved"}
-                    className={`flex-1 px-3 py-1 rounded-md text-white text-sm font-medium ${
-                      cls.status === "approved"
+                    className={`flex-1 px-3 py-1 rounded-md text-white text-sm font-medium ${cls.status === "approved"
                         ? "bg-green-300 cursor-not-allowed"
                         : "bg-green-500 hover:bg-green-600"
-                    }`}
+                      }`}
                   >
                     Approve
                   </button>
                   <button
                     onClick={() => handleAction(cls._id, "rejected")}
                     disabled={cls.status === "rejected"}
-                    className={`flex-1 px-3 py-1 rounded-md text-white text-sm font-medium ${
-                      cls.status === "rejected"
+                    className={`flex-1 px-3 py-1 rounded-md text-white text-sm font-medium ${cls.status === "rejected"
                         ? "bg-red-300 cursor-not-allowed"
                         : "bg-red-500 hover:bg-red-600"
-                    }`}
+                      }`}
                   >
                     Reject
                   </button>
                   <button
                     onClick={() => handleProgressClick(cls._id)}
                     disabled={cls.status !== "approved"}
-                    className={`flex-1 px-3 py-1 rounded-md text-white text-sm font-medium ${
-                      cls.status !== "approved"
+                    className={`flex-1 px-3 py-1 rounded-md text-white text-sm font-medium ${cls.status !== "approved"
                         ? "bg-blue-300 cursor-not-allowed"
                         : "bg-blue-500 hover:bg-blue-600"
-                    }`}
+                      }`}
                   >
                     Progress
                   </button>
@@ -275,11 +273,10 @@ const AllClassAdmin = () => {
                 <button
                   key={pageNumber}
                   onClick={() => setPage(pageNumber)}
-                  className={`px-3 py-1 rounded ${
-                    pageNumber === page
+                  className={`px-3 py-1 rounded ${pageNumber === page
                       ? "bg-blue-600 text-white"
                       : "bg-gray-200 hover:bg-gray-300"
-                  }`}
+                    }`}
                 >
                   {pageNumber}
                 </button>

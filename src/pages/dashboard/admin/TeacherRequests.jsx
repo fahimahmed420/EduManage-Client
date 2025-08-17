@@ -8,7 +8,7 @@ const TeacherRequests = () => {
   const API = import.meta.env.VITE_API_URL;
   const queryClient = useQueryClient();
 
-  // ✅ Fetch teacher requests with auto refetch every 5 seconds
+  //  Fetch teacher requests with auto refetch every 5 seconds
   const {
     data: requests = [],
     isLoading,
@@ -96,7 +96,13 @@ const TeacherRequests = () => {
   };
 
   if (isLoading) {
-    return <div className="p-6 text-center text-gray-500">Loading requests...</div>;
+    return <div className="flex justify-center items-center min-h-1/2">
+      <div className="flex gap-x-2">
+        <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+        <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+        <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+      </div>
+    </div>;
   }
 
   if (isError) {
@@ -153,10 +159,10 @@ const TeacherRequests = () => {
               <td className="py-2 px-4">
                 <span
                   className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${r.status === "pending"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : r.status === "accepted"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : r.status === "accepted"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
                     }`}
                 >
                   {r.status.charAt(0).toUpperCase() + r.status.slice(1)}

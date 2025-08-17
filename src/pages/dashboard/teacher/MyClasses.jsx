@@ -100,8 +100,12 @@ const MyClasses = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <p className="text-lg font-semibold animate-pulse">Loading classes...</p>
+      <div className="flex justify-center items-center min-h-1/2">
+        <div className="flex gap-x-2">
+          <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+          <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+          <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+        </div>
       </div>
     );
   }
@@ -144,9 +148,9 @@ const MyClasses = () => {
                 <p
                   className={`text-sm px-2 py-1 w-fit rounded-full
                       ${isActive
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                      }
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
+                    }
                   `}
                 >
                   {isActive ? "Active" : "Pending"}
@@ -219,9 +223,8 @@ const MyClasses = () => {
             <button
               key={pageNum}
               onClick={() => setPage(pageNum)}
-              className={`px-4 py-2 rounded hover:bg-blue-500 hover:text-white ${
-                page === pageNum ? "bg-blue-600 text-white" : "bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded hover:bg-blue-500 hover:text-white ${page === pageNum ? "bg-blue-600 text-white" : "bg-gray-200"
+                }`}
             >
               {pageNum}
             </button>

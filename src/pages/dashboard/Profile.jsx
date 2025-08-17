@@ -54,7 +54,7 @@ const Profile = () => {
       };
 
       await axios.patch(`${API}/users/${profile._id}`, updatedFields);
-      toast.success("✅ Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       setEditMode(false);
       setProfile((prev) => ({ ...prev, ...updatedFields }));
     } catch (err) {
@@ -65,13 +65,19 @@ const Profile = () => {
 
   if (!profile) {
     return (
-      <div className="p-6 text-center text-gray-500">Loading profile...</div>
+      <div className="flex justify-center items-center min-h-1/2">
+        <div className="flex gap-x-2">
+          <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+          <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+          <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+        </div>
+      </div>
     );
   }
 
   return (
     <motion.div
-      className="bg-white rounded-3xl shadow-lg p-6 mx-auto max-w-2xl"
+      className="bg-white rounded-3xl shadow-lg p-4 mx-auto max-w-7xl"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}

@@ -71,7 +71,7 @@ const GraduationCapIcon = () => (
     viewBox="0 0 640 512"
     fill="black"
   >
-    <Path d="M622.34 153.16L327.82 6.73a24 24 0 0 0-20.9 0L17.66 153.16a12 12 0 0 0 0 21.33l96.9 48.46v61.38a23.86 23.86 0 0 0-14.11 22.16v41.48a23.88 23.88 0 0 0 12.42 20.94L215.31 440a24 24 0 0 0 23.56 0l162.44-91.42a24 24 0 0 0 12.12-20.94v-41.48a23.86 23.86 0 0 0-14.11-22.16v-61.38l96.9-48.46a12 12 0 0 0 0-21.34zM288 312a24 24 0 1 1 24-24 24 24 0 0 1-24 24z"/>
+    <Path d="M622.34 153.16L327.82 6.73a24 24 0 0 0-20.9 0L17.66 153.16a12 12 0 0 0 0 21.33l96.9 48.46v61.38a23.86 23.86 0 0 0-14.11 22.16v41.48a23.88 23.88 0 0 0 12.42 20.94L215.31 440a24 24 0 0 0 23.56 0l162.44-91.42a24 24 0 0 0 12.12-20.94v-41.48a23.86 23.86 0 0 0-14.11-22.16v-61.38l96.9-48.46a12 12 0 0 0 0-21.34zM288 312a24 24 0 1 1 24-24 24 24 0 0 1-24 24z" />
   </Svg>
 );
 
@@ -136,7 +136,13 @@ const OrderPage = () => {
     enabled: !!user?.email,
   });
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (isLoading) return <div className="flex justify-center items-center min-h-1/2">
+    <div className="flex gap-x-2">
+      <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+      <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+      <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+    </div>
+  </div>;
   if (isError) return <p className="text-center mt-10">Error loading payments.</p>;
   if (payments.length === 0)
     return <p className="text-center mt-10">No payments found.</p>;

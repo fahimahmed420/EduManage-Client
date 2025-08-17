@@ -97,8 +97,12 @@ const AddClass = () => {
 
   if (!userData) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <p className="text-lg font-semibold">Loading user data...</p>
+      <div className="flex justify-center items-center min-h-1/2">
+        <div className="flex gap-x-2">
+          <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+          <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+          <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+        </div>
       </div>
     );
   }
@@ -208,11 +212,10 @@ const AddClass = () => {
                   type="button"
                   key={day}
                   onClick={() => toggleDay(day)}
-                  className={`px-3 py-1 rounded-full text-sm border ${
-                    selectedDays.includes(day)
+                  className={`px-3 py-1 rounded-full text-sm border ${selectedDays.includes(day)
                       ? "bg-blue-600 text-white"
                       : "bg-white text-gray-700 border-gray-300"
-                  }`}
+                    }`}
                 >
                   {day}
                 </button>
@@ -261,9 +264,8 @@ const AddClass = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`px-5 py-2 rounded-md text-white transition ${
-                isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
-              }`}
+              className={`px-5 py-2 rounded-md text-white transition ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                }`}
             >
               {isSubmitting ? "Submitting..." : "Add Class"}
             </button>
@@ -284,9 +286,8 @@ const InputField = ({ id, label, type = "text", register, required = false, erro
       type={type}
       disabled={disabled}
       {...register(id, required ? { required: `${label} is required`, ...validation } : {})}
-      className={`w-full px-3 py-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 ${
-        errors?.[id] ? "focus:ring-red-500" : "focus:ring-blue-400"
-      } ${disabled ? "bg-gray-200 cursor-not-allowed" : ""}`}
+      className={`w-full px-3 py-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 ${errors?.[id] ? "focus:ring-red-500" : "focus:ring-blue-400"
+        } ${disabled ? "bg-gray-200 cursor-not-allowed" : ""}`}
     />
     {errors?.[id] && <p className="text-red-500 text-sm mt-1">{errors[id].message}</p>}
   </div>

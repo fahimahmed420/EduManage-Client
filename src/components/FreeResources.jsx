@@ -66,7 +66,7 @@ const FreeResources = () => {
   };
 
   return (
-    <section className="py-16 px-4 md:px-10">
+    <section className="py-16">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold mb-4 text-blue-600 flex items-center justify-center gap-2">
           <FaDownload className="text-blue-600" />
@@ -77,7 +77,7 @@ const FreeResources = () => {
         </p>
         <Slider {...settings}>
           {resources.map((item, index) => (
-            <div key={index} className="p-3 py-10">
+            <div key={index} className="py-10 p-4">
               <div className="group bg-gray-50 border border-gray-200 p-6 rounded-xl shadow-md transition-transform transform hover:-translate-y-3 hover:rotate-1 hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
                 <HiOutlineDocumentText className={`text-4xl mb-4 ${item.iconColor}`} />
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">

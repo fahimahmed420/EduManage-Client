@@ -25,14 +25,14 @@ const CareerInvestSection = () => {
 
     return (
         <section className="pt-10 pb-28">
-            <div className="max-w-7xl mx-auto px-4 text-center">
+            <div className="max-w-7xl mx-auto px-4 text-center ">
                 <h2 className="text-3xl font-bold text-blue-600 text-center mb-8 flex items-center justify-center gap-3">
                     <FaChartLine className="text-blue-600 w-8 h-8" />
                     Invest in your career
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                     {items.map((item, idx) => (
-                        <div key={idx} className="flex flex-col items-start">
+                        <div key={idx} className="flex flex-col items-center">
                             {item.icon}
                             <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                             <p className="text-gray-600">{item.description}</p>

@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 
 const InspireTeachers = () => {
   return (
-    <div className="w-full py-16 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+    <div className="py-16">
+      <div className="max-w-7xl px-4 mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left: Animation */}
         <div className="w-full md:w-1/2 flex justify-center">
           <Lottie
@@ -27,20 +27,22 @@ const InspireTeachers = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.4 }} // Trigger only once when 40% visible
         >
-          <h2 className="text-4xl font-bold text-blue-600 mb-4">
+          <h2 className="text-4xl font-bold text-blue-600 mb-4 text-center md:text-end">
             Inspire Students. Share Your Knowledge.
           </h2>
-          <p className="text-gray-600 text-lg mb-6">
+          <p className="text-gray-600 text-lg mb-6 text-center md:text-end">
             Join EduManage as a teacher and impact thousands of learners. Teach
             live classes, share assignments, and grow your teaching career while
             helping students succeed.
           </p>
-          <Link
+          <div className="flex justify-center md:justify-end">
+            <Link
             to="/teach"
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold transition duration-300 w-fit"
           >
             Start Teaching
           </Link>
+          </div>
         </motion.div>
       </div>
     </div>

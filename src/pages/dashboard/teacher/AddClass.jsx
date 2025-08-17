@@ -60,12 +60,14 @@ const AddClass = () => {
 
     const payload = {
       ...data,
+      price: parseInt(data.price, 10),
       teacherName: userData.name,
       teacherEmail: userData.email,
       teacherId: userData._id,
       schedule,
       status: "pending",
     };
+
 
     try {
       const res = await fetch(`${API}/classes`, {
@@ -213,8 +215,8 @@ const AddClass = () => {
                   key={day}
                   onClick={() => toggleDay(day)}
                   className={`px-3 py-1 rounded-full text-sm border ${selectedDays.includes(day)
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-700 border-gray-300"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 border-gray-300"
                     }`}
                 >
                   {day}

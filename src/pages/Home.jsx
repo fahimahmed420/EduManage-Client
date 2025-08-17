@@ -6,7 +6,6 @@ import FAQ from '../components/FAQ';
 import BlogTips from '../components/BlogTips';
 import PopularClassesSection from '../components/PopularClassesSection';
 import FeedBacks from '../components/FeedBacks';
-import WebsiteStats from '../components/WebsiteStats';
 import FreeResources from '../components/FreeResources';
 import CareerInvestSection from '../components/CareerInvestSection';
 
@@ -22,7 +21,6 @@ const Home = () => {
         <FeedBacks />
       </div>
       <div className='bg-gradient-to-b from-orange-50 via-white to-purple-50'>
-        <WebsiteStats />
         <InspireTeachers />
       </div>
       <div className='bg-gradient-to-b from-purple-50 via-white to-green-50'>

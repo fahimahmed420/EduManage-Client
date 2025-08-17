@@ -18,6 +18,7 @@ const StatCard = ({ icon: Icon, title, count, color }) => (
     }}
     whileHover={{ scale: 1.05 }}
   >
+    {/* Show icon on small to md and xl+ screens only, hide on lg */}
     <Icon className="text-4xl lg:hidden xl:flex" style={{ color: color[2] }} />
     <div>
       <h3 className="text-lg md:text-xl font-bold" style={{ color: color[3] }}>
@@ -42,7 +43,7 @@ const Dashboard = () => {
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axios.get(`${API}/users`);
-      return res.data;
+      return Array.isArray(res.data) ? res.data : [];
     },
   });
 
@@ -50,7 +51,8 @@ const Dashboard = () => {
     queryKey: ["classes"],
     queryFn: async () => {
       const res = await axios.get(`${API}/classes`);
-      return res.data.classes;
+      const data = res.data;
+      return Array.isArray(data?.classes) ? data.classes : [];
     },
   });
 
@@ -70,8 +72,8 @@ const Dashboard = () => {
     );
   }
 
-  const users = usersQuery.data;
-  const classes = classesQuery.data;
+  const users = Array.isArray(usersQuery.data) ? usersQuery.data : [];
+  const classes = Array.isArray(classesQuery.data) ? classesQuery.data : [];
 
   const totalUsers = users.length;
   const totalTeachers = users.filter((u) => u.role === "teacher").length;

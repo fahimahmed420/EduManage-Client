@@ -85,10 +85,10 @@ const Profile = () => {
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">My Profile</h2>
+        <h2 className="text-2xl font-bold text-blue-500">My Profile</h2>
         <button
           onClick={() => (editMode ? handleSave() : setEditMode(true))}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition"
+          className="flex items-center gap-2 bg-blue-500 text-white cursor-pointer px-4 py-1 rounded-full hover:bg-blue-700 transition"
         >
           {editMode ? <FiSave /> : <FiEdit />}
           {editMode ? "Save" : "Edit"}
@@ -108,7 +108,7 @@ const Profile = () => {
             value={photo}
             onChange={(e) => setPhoto(e.target.value)}
             placeholder="Enter Photo URL"
-            className="mt-2 px-3 py-2 w-full rounded-md border bg-gray-50 text-sm outline-none"
+            className="mt-2 px-3 py-2 w-full rounded-md border bg-gray-100 text-sm outline-none"
           />
         )}
       </div>
@@ -116,7 +116,7 @@ const Profile = () => {
       {/* Info Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* First Name */}
-        <div className="bg-gray-50 p-3 rounded-xl">
+        <div className="bg-gray-100 p-3 rounded-xl">
           <p className="text-xs text-gray-500">First Name</p>
           {editMode ? (
             <input
@@ -131,7 +131,7 @@ const Profile = () => {
         </div>
 
         {/* Last Name */}
-        <div className="bg-gray-50 p-3 rounded-xl">
+        <div className="bg-gray-100 p-3 rounded-xl">
           <p className="text-xs text-gray-500">Last Name</p>
           {editMode ? (
             <input
@@ -146,13 +146,13 @@ const Profile = () => {
         </div>
 
         {/* Email (Read-only) */}
-        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+        <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Email</p>
           <p className="font-medium text-gray-800">{email}</p>
         </div>
 
         {/* Phone Number */}
-        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+        <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Phone</p>
           {editMode ? (
             <input
@@ -167,13 +167,13 @@ const Profile = () => {
         </div>
 
         {/* Role (Read-only) */}
-        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+        <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Role</p>
           <p className="font-medium capitalize text-gray-800">{role}</p>
         </div>
 
         {/* Bio */}
-        <div className="bg-gray-50 p-3 rounded-xl col-span-1 md:col-span-2">
+        <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Bio</p>
           {editMode ? (
             <textarea

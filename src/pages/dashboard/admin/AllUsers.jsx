@@ -51,7 +51,7 @@ const AllUsers = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-700">Users</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 text-blue-500">Users</h1>
 
       {/* Softer Search Bar */}
       <div className="relative w-full md:w-1/2 mb-6">

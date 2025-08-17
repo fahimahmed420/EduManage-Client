@@ -62,8 +62,8 @@ const MyEnrollClasses = () => {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">My Enrolled Classes</h1>
+    <div className="max-w-7xl p-4 mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-blue-500">My Enrolled Classes</h1>
       {classes.length === 0 ? (
         <p className="text-gray-600">You haven't enrolled in any classes yet.</p>
       ) : (

@@ -148,9 +148,9 @@ const OrderPage = () => {
     return <p className="text-center mt-10">No payments found.</p>;
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-        <FaFileInvoice className="text-blue-600" /> Your Orders
+    <div className="max-w-7xl p-4 mx-auto">
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-500">
+        <FaFileInvoice className="text-blue-500" /> Your Orders
       </h2>
       <div className="space-y-4">
         {payments.map((payment) => (

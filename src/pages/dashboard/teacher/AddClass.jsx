@@ -110,7 +110,7 @@ const AddClass = () => {
   return (
     <div className="min-h-screen flex justify-center items-start bg-gray-50 p-4">
       <main className="w-full max-w-lg bg-white p-6 rounded-md shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Add Class</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center text-blue-500">Add Class</h1>
 
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           {/* Title */}

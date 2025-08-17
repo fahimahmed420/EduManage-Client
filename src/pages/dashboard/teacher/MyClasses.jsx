@@ -128,7 +128,7 @@ const MyClasses = () => {
 
   return (
     <div className="min-h-screen bg-white p-6">
-      <h1 className="text-3xl font-bold mb-8">My Classes</h1>
+      <h1 className="text-3xl font-bold mb-8 text-blue-500">My Classes</h1>
 
       <div className="space-y-6">
         {classes.map((cls) => {

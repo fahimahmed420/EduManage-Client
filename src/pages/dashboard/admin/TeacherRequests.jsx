@@ -115,7 +115,7 @@ const TeacherRequests = () => {
 
   return (
     <div className="p-4 sm:p-6 overflow-x-auto">
-      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-800">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-blue-500">
         Teacher Requests
       </h2>
       <table className="min-w-full border-collapse">

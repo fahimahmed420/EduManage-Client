@@ -109,11 +109,17 @@ const EnrollClassDetails = () => {
     }
   };
 
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
+  if (loading) return <div className="flex justify-center items-center min-h-1/2">
+    <div className="flex gap-x-2">
+      <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+      <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+      <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+    </div>
+  </div>;
 
   return (
-    <div className="p-6 relative">
-      <h1 className="text-3xl font-bold mb-6">Class Assignments</h1>
+    <div className="max-w-7xl p-4 mx-auto relative">
+      <h1 className="text-3xl font-bold mb-6 text-blue-500">Class Assignments</h1>
 
       <button
         className="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
@@ -124,7 +130,7 @@ const EnrollClassDetails = () => {
       </button>
 
       {assignments.length === 0 ? (
-        <p>No assignments found for this class.</p>
+        <p>No assignments has been assigned for this class yet.</p>
       ) : (
         <table className="table-auto w-full border">
           <thead className="bg-gray-100">

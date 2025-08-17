@@ -12,15 +12,15 @@ const AboutUs = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7 }}
-                    className="text-4xl md:text-5xl font-bold text-blue-500"
+                    className="text-4xl md:text-5xl font-bold text-blue-600"
                 >
                     About Us
                 </motion.h1>
                 <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto">
                     We are a comprehensive <span className="font-semibold">full-stack e-learning platform</span>
-                    offering courses in <span className="text-blue-500">Web Development</span>,
-                    <span className="text-blue-500"> UI/UX Design</span>, and
-                    <span className="text-blue-500"> Artificial Intelligence</span>.
+                    offering courses in <span className="text-blue-600">Web Development</span>,
+                    <span className="text-blue-600"> UI/UX Design</span>, and
+                    <span className="text-blue-600"> Artificial Intelligence</span>.
                     Our mission is to deliver a smooth and engaging learning experience
                     that empowers students and instructors worldwide.
                 </p>
@@ -34,7 +34,7 @@ const AboutUs = () => {
                     transition={{ duration: 0.7 }}
                     className="bg-white rounded-2xl shadow-lg p-8"
                 >
-                    <h2 className="text-2xl font-bold text-blue-500 mb-4">Our Mission</h2>
+                    <h2 className="text-2xl font-bold text-blue-600 mb-4">Our Mission</h2>
                     <p>
                         To provide learners with high-quality, accessible education
                         that blends cutting-edge technology with practical, hands-on knowledge.
@@ -48,7 +48,7 @@ const AboutUs = () => {
                     transition={{ duration: 0.7 }}
                     className="bg-white rounded-2xl shadow-lg p-8"
                 >
-                    <h2 className="text-2xl font-bold text-blue-500 mb-4">Our Vision</h2>
+                    <h2 className="text-2xl font-bold text-blue-600 mb-4">Our Vision</h2>
                     <p>
                         To become the global hub for digital learning where anyone can
                         master skills, track real-time progress, and collaborate with mentors,
@@ -59,38 +59,38 @@ const AboutUs = () => {
 
             {/* Features */}
             <section className="max-w-7xl mx-auto px-4 py-16">
-                <h2 className="text-3xl font-bold text-center text-blue-500 mb-10">
+                <h2 className="text-3xl font-bold text-center text-blue-600 mb-10">
                     What Makes Us Unique
                 </h2>
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     {[
                         {
-                            icon: <FaLock className="text-blue-500 text-4xl mb-4" />,
+                            icon: <FaLock className="text-blue-600 text-4xl mb-4" />,
                             title: "Secure Authentication",
                             desc: "Advanced security with role-based access for students and instructors.",
                         },
                         {
-                            icon: <FaChalkboardTeacher className="text-blue-500 text-4xl mb-4" />,
+                            icon: <FaChalkboardTeacher className="text-blue-600 text-4xl mb-4" />,
                             title: "Course Management",
                             desc: "Easily manage, update, and publish courses with modern tools.",
                         },
                         {
-                            icon: <FaChartLine className="text-blue-500 text-4xl mb-4" />,
+                            icon: <FaChartLine className="text-blue-600 text-4xl mb-4" />,
                             title: "Real-Time Tracking",
                             desc: "Track progress and performance instantly with interactive dashboards.",
                         },
                         {
-                            icon: <FaUsers className="text-blue-500 text-4xl mb-4" />,
+                            icon: <FaUsers className="text-blue-600 text-4xl mb-4" />,
                             title: "Community Learning",
                             desc: "Engage with peers and instructors to enhance collaboration.",
                         },
                         {
-                            icon: <FaBookOpen className="text-blue-500 text-4xl mb-4" />,
+                            icon: <FaBookOpen className="text-blue-600 text-4xl mb-4" />,
                             title: "Diverse Courses",
                             desc: "From web development to AI, explore a wide range of skills.",
                         },
                         {
-                            icon: <FaCertificate className="text-blue-500 text-4xl mb-4" />,
+                            icon: <FaCertificate className="text-blue-600 text-4xl mb-4" />,
                             title: "Course Completion Certificate",
                             desc: "Receive a verified certificate upon completing the course to showcase your achievement.",
                         },
@@ -120,7 +120,7 @@ const AboutUs = () => {
                     </p>
                     <Link
                         to="/all-classes"
-                        className="bg-white text-blue-500 font-semibold px-6 py-3 rounded-full shadow-md hover:bg-blue-100 transition"
+                        className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-full shadow-md hover:bg-blue-100 transition"
                     >
                         Get Started
                     </Link>

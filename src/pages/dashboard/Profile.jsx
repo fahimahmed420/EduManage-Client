@@ -85,7 +85,7 @@ const Profile = () => {
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-blue-500">My Profile</h2>
+        <h2 className="text-2xl font-bold text-blue-600">My Profile</h2>
         <button
           onClick={() => (editMode ? handleSave() : setEditMode(true))}
           className="flex items-center gap-2 bg-blue-500 text-white cursor-pointer px-4 py-1 rounded-full hover:bg-blue-700 transition"

@@ -149,8 +149,8 @@ const OrderPage = () => {
 
   return (
     <div className="max-w-7xl p-4 mx-auto">
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-500">
-        <FaFileInvoice className="text-blue-500" /> Your Orders
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-600">
+        <FaFileInvoice className="text-blue-600" /> Your Orders
       </h2>
       <div className="space-y-4">
         {payments.map((payment) => (

@@ -86,8 +86,8 @@ const MyClassDetails = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-blue-500">{classInfo.title}</h1>
-      <p className="text-blue-500 text-sm mt-1">{classInfo.section || "Section 1"}</p>
+      <h1 className="text-3xl font-bold text-blue-600">{classInfo.title}</h1>
+      <p className="text-blue-600 text-sm mt-1">{classInfo.section || "Section 1"}</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <div className="border border-gray-300 p-4 rounded-lg bg-white shadow">

@@ -10,7 +10,7 @@ const resources = [
     title: "React Cheatsheet",
     description: "Quick reference for React basics and hooks.",
     file: "/resources/React_Cheatsheet.pdf",
-    iconColor: "text-blue-500",
+    iconColor: "text-blue-600",
   },
   {
     title: "JS Interview Questions",

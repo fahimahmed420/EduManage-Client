@@ -52,7 +52,7 @@ const PopularClassesSection = () => {
   return (
     <div className="p-4 max-w-7xl mx-auto mb-16">
       <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-blue-600 flex items-center justify-center gap-2">
-        <FaChalkboardTeacher className="text-blue-500" size={28} />
+        <FaChalkboardTeacher className="text-blue-600" size={28} />
         Popular Classes
       </h2>
 

@@ -7,7 +7,7 @@ const AdminRoute = ({ children }) => {
   const location = useLocation();
 
   if (user === undefined || userFromDB === undefined) {
-    return <div className="min-h-screen flex justify-center items-center text-2xl text-blue-500">Checking Authentication...</div>;
+    return <div className="min-h-screen flex justify-center items-center text-2xl text-blue-600">Checking Authentication...</div>;
   }
 
   if (user && userFromDB?.role === "admin") return children;

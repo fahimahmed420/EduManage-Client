@@ -119,7 +119,7 @@ const EnrollClassDetails = () => {
 
   return (
     <div className="max-w-7xl p-4 mx-auto relative">
-      <h1 className="text-3xl font-bold mb-6 text-blue-500">Class Assignments</h1>
+      <h1 className="text-3xl font-bold mb-6 text-blue-600">Class Assignments</h1>
 
       <button
         className="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"

@@ -27,7 +27,7 @@ const InspireTeachers = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.4 }} // Trigger only once when 40% visible
         >
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">
+          <h2 className="text-4xl font-bold text-blue-600 mb-4">
             Inspire Students. Share Your Knowledge.
           </h2>
           <p className="text-gray-600 text-lg mb-6">

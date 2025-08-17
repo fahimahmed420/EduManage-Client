@@ -88,7 +88,7 @@ const AllClassAdmin = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-blue-500">All Classes</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-blue-600">All Classes</h1>
       {loading && (
         <div className="flex justify-center items-center min-h-1/2">
           <div className="flex gap-x-2">

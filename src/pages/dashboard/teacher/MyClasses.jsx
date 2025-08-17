@@ -127,7 +127,7 @@ const MyClasses = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white p-4 mx-auto max-w-7xl rounded-xl">
       <h1 className="text-3xl font-bold mb-8 text-blue-600">My Classes</h1>
 
       <div className="space-y-6">

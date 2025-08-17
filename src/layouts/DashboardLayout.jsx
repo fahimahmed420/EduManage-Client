@@ -96,7 +96,7 @@ const DashboardLayout = () => {
             </span>
           </Link>
 
-          <h1 className="text-lg md:text-xl font-bold text-gray-600">Dashboard</h1>
+          <Link to={"/dashboard"}><h1 className="text-lg md:text-xl font-bold text-gray-600">Dashboard</h1></Link>
 
           {/* Desktop profile */}
           <div className="hidden md:flex items-center gap-4">

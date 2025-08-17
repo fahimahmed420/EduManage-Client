@@ -62,7 +62,7 @@ const WebsiteStats = () => {
     queryKey: ["classes"],
     queryFn: async () => {
       const res = await axios.get(`${API}/classes`);
-      return res.data; // ✅ Must return { classes: [], total: number }
+      return res.data; //  Must return { classes: [], total: number }
     },
     staleTime: 1000 * 60 * 5,
   });

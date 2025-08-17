@@ -16,7 +16,10 @@ import AboutUs from "../pages/AboutUs";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 
-// Dashboard pages (student,teacher,admin)
+// Dashboard main page
+import Dashboard from "../pages/dashboard/Dashboard";
+
+// Dashboard pages (student, teacher, admin)
 import EnrollClassDetails from "../pages/dashboard/student/EnrollClassDetails";
 import MyEnrollClasses from "../pages/dashboard/student/MyEnrollClasses";
 import OrderPage from "../pages/dashboard/student/OrderPage";
@@ -32,7 +35,6 @@ import TeacherRequests from "../pages/dashboard/admin/TeacherRequests";
 // shared
 import Profile from "../pages/dashboard/Profile";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,21 +45,12 @@ const router = createBrowserRouter([
       { path: "about", element: <AboutUs /> },
       { path: "teach", element: <PrivateRoute><Teach /></PrivateRoute> },
       { path: "all-classes/:id", element: <PrivateRoute><ClassDetails /></PrivateRoute> },
-      { path: "payment/:id", element: <PrivateRoute><PaymentPage /></PrivateRoute> }
+      { path: "payment/:id", element: <PrivateRoute><PaymentPage /></PrivateRoute> },
     ],
   },
-  {
-    path: "*",
-    element: <Error />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
+  { path: "*", element: <Error /> },
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
   {
     path: "/dashboard",
     element: (
@@ -66,95 +59,28 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // Student routes converted to PrivateRoute
-      {
-        path: "my-enroll-classes",
-        element: (
-          <PrivateRoute>
-            <MyEnrollClasses />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "my-enroll-classes/:id",
-        element: (
-          <PrivateRoute>
-            <EnrollClassDetails />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "my-order",
-        element: (
-          <PrivateRoute>
-            <OrderPage />
-          </PrivateRoute>
-        ),
-      },
+      // Default dashboard page
+      { index: true, element: <Dashboard /> },
+
+      // Student routes
+      { path: "my-enroll-classes", element: <MyEnrollClasses /> },
+      { path: "my-enroll-classes/:id", element: <EnrollClassDetails /> },
+      { path: "my-order", element: <OrderPage /> },
 
       // Teacher routes
-      {
-        path: "add-class",
-        element: (
-          <TeacherRoute>
-            <AddClass />
-          </TeacherRoute>
-        ),
-      },
-      {
-        path: "my-classes",
-        element: (
-          <TeacherRoute>
-            <MyClasses />
-          </TeacherRoute>
-        ),
-      },
-      {
-        path: "my-classes/:id",
-        element: (
-          <TeacherRoute>
-            <MyClassDetails />
-          </TeacherRoute>
-        ),
-      },
+      { path: "add-class", element: <TeacherRoute><AddClass /></TeacherRoute> },
+      { path: "my-classes", element: <TeacherRoute><MyClasses /></TeacherRoute> },
+      { path: "my-classes/:id", element: <TeacherRoute><MyClassDetails /></TeacherRoute> },
 
       // Admin routes
-      {
-        path: "all-users",
-        element: (
-          <AdminRoute>
-            <AllUsers />
-          </AdminRoute>
-        ),
-      },
-      {
-        path: "all-classes",
-        element: (
-          <AdminRoute>
-            <AllClassAdmin />
-          </AdminRoute>
-        ),
-      },
-      {
-        path: "teacher-requests",
-        element: (
-          <AdminRoute>
-            <TeacherRequests />
-          </AdminRoute>
-        ),
-      },
+      { path: "all-users", element: <AdminRoute><AllUsers /></AdminRoute> },
+      { path: "all-classes", element: <AdminRoute><AllClassAdmin /></AdminRoute> },
+      { path: "teacher-requests", element: <AdminRoute><TeacherRequests /></AdminRoute> },
 
       // Shared route
-      {
-        path: "profile",
-        element: (
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
-        ),
-      },
+      { path: "profile", element: <Profile /> },
     ],
-  }
+  },
 ]);
 
 export default router;

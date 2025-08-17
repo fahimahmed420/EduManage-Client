@@ -200,7 +200,7 @@ const Navbar = () => {
                 </div>
                 <div className="flex flex-col">
                   <Link
-                    to="/dashboard/profile"
+                    to="/dashboard"
                     className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsDropdownOpen(false)}
                   >
@@ -238,7 +238,7 @@ const Navbar = () => {
             ) : (
               <div className="space-y-2">
                 <Link
-                  to="/dashboard/profile"
+                  to="/dashboard"
                   className="flex items-center justify-center gap-2 w-full py-2 rounded bg-gray-100 hover:bg-gray-200 transition"
                   onClick={() => setIsOpen(false)}
                 >

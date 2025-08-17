@@ -8,7 +8,6 @@ import {
   FaChalkboardTeacher,
   FaHome,
   FaBookOpen,
-  FaPlusCircle,
   FaInfoCircle,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -59,6 +58,21 @@ const Navbar = () => {
       })
       .catch((err) => console.error(err));
   };
+  // theme button
+  // const themebutton = (
+  //   <>
+  //     <label class="relative inline-flex items-center cursor-pointer">
+  //       <input class="sr-only peer" type="checkbox" />
+  //       <div
+  //         class="w-20 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-300 peer-checked:from-gray-400
+  //          peer-checked:to-gray-700 transition-all duration-500 after:content-['☀️'] after:absolute after:top-1
+  //           after:left-1 after:bg-white after:rounded-full after:h-8 after:w-8 after:flex after:items-center
+  //            after:justify-center after:transition-all after:duration-500 peer-checked:after:translate-x-10
+  //             peer-checked:after:content-['🌙'] after:shadow-md after:text-lg"
+  //       ></div>
+  //     </label>
+  //   </>
+  // )
 
   const navItems = (
     <>
@@ -68,7 +82,7 @@ const Navbar = () => {
           className="flex items-center gap-2 hover:text-blue-600"
           onClick={() => setIsOpen(false)}
         >
-          <FaHome className="md:hidden lg:flex"/> Home
+          <FaHome className="md:hidden lg:flex" /> Home
         </NavLink>
       </li>
       <li>
@@ -77,7 +91,7 @@ const Navbar = () => {
           className="flex items-center gap-2 hover:text-blue-600"
           onClick={() => setIsOpen(false)}
         >
-          <FaBookOpen className="md:hidden lg:flex"/> All Classes
+          <FaBookOpen className="md:hidden lg:flex" /> All Classes
         </NavLink>
       </li>
 
@@ -89,7 +103,7 @@ const Navbar = () => {
             className="flex items-center gap-2 hover:text-blue-600"
             onClick={() => setIsOpen(false)}
           >
-            <FaChalkboardTeacher className="md:hidden lg:flex"/> Teach on EduManage
+            <FaChalkboardTeacher className="md:hidden lg:flex" /> Teach on EduManage
           </NavLink>
         </li>
       )}
@@ -101,7 +115,7 @@ const Navbar = () => {
           className="flex items-center gap-2 hover:text-blue-600"
           onClick={() => setIsOpen(false)}
         >
-          <FaInfoCircle className="md:hidden lg:flex"/> About Us
+          <FaInfoCircle className="md:hidden lg:flex" /> About Us
         </NavLink>
       </li>
     </>
@@ -158,6 +172,7 @@ const Navbar = () => {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-4">
+          {/* {themebutton} */}
           {!user ? (
             <Link
               to="/login"
@@ -173,10 +188,9 @@ const Navbar = () => {
               <div
                 className={`absolute right-0 mt-3 w-56  bg-white rounded-xl shadow-xl z-20 border border-gray-200
                   transition-all duration-300 ease-in-out
-                  ${
-                    isDropdownOpen
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
+                  ${isDropdownOpen
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-2 pointer-events-none"
                   }
                 `}
               >
@@ -208,9 +222,10 @@ const Navbar = () => {
       {/* Stylish Mobile Menu */}
       {isOpen && (
         <div className="md:hidden shadow-lg bg-white px-6 py-4 animate-slide-down">
-          <ul className="flex flex-col gap-4 text-base font-medium text-gray-700">
+          <ul className="flex flex-col gap-4 text-base font-medium text-gray-700 mb-4">
             {navItems}
           </ul>
+          {/* {themebutton} */}
           <div className="mt-4">
             {!user ? (
               <Link

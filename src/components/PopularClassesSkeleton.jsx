@@ -14,7 +14,7 @@ const PopularClassesSkeleton = () => {
         {[1, 2, 3, 4].map((item) => (
           <div
             key={item}
-            className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl p-6 flex flex-col items-center shadow-md h-full"
+            className="bg-gray-300 rounded-2xl p-6 flex flex-col items-center shadow-md h-full"
           >
             {/* Circle image skeleton */}
             <div className="w-24 h-24 bg-gray-300 animate-pulse rounded-full mb-4"></div>

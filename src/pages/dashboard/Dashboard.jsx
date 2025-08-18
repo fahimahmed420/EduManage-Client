@@ -130,9 +130,9 @@ const Dashboard = () => {
 
         {/* Recent Users */}
         <div>
-          <h3 className="text-xl font-bold mb-4 text-gray-700">
+          <h2 className="text-xl font-bold mb-4 text-gray-700">
             Recent Users
-          </h3>
+          </h2>
           <div className="bg-white shadow-lg rounded-xl p-6">
             <ul className="divide-y divide-gray-200">
               {recentUsers.map((user, idx) => (
@@ -156,9 +156,9 @@ const Dashboard = () => {
 
         {/* Top Classes */}
         <div>
-          <h3 className="text-xl font-bold mb-4 text-gray-700">
+          <h2 className="text-xl font-bold mb-4 text-gray-700">
             Top Classes by Enrollment
-          </h3>
+          </h2>
           <div className="bg-white shadow-lg rounded-xl p-6">
             <ul className="divide-y divide-gray-200">
               {topClasses.map((cls, idx) => (

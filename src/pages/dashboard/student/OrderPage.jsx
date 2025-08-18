@@ -8,11 +8,11 @@ import {
   Document,
   StyleSheet,
   PDFDownloadLink,
-  Svg,
-  Path,
+  Image,
 } from "@react-pdf/renderer";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { FaFileInvoice } from "react-icons/fa";
+import GraduationCapImg from "../../../assets/graduation-cap-svgrepo-com.svg";
 
 // Your API fetcher
 const fetchPayments = async (email) => {
@@ -57,23 +57,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  logoIcon: {
+  logoImage: {
     width: 40,
     height: 40,
   },
 });
 
-// Inline SVG for FaGraduationCap icon (simplified)
-const GraduationCapIcon = () => (
-  <Svg
-    width={40}
-    height={40}
-    viewBox="0 0 640 512"
-    fill="black"
-  >
-    <Path d="M622.34 153.16L327.82 6.73a24 24 0 0 0-20.9 0L17.66 153.16a12 12 0 0 0 0 21.33l96.9 48.46v61.38a23.86 23.86 0 0 0-14.11 22.16v41.48a23.88 23.88 0 0 0 12.42 20.94L215.31 440a24 24 0 0 0 23.56 0l162.44-91.42a24 24 0 0 0 12.12-20.94v-41.48a23.86 23.86 0 0 0-14.11-22.16v-61.38l96.9-48.46a12 12 0 0 0 0-21.34zM288 312a24 24 0 1 1 24-24 24 24 0 0 1-24 24z" />
-  </Svg>
-);
+// Graduation cap image (replace with your local path if you have a PNG/SVG)
+
 
 // PDF Document component
 const InvoiceDocument = ({ payment, user }) => {
@@ -84,7 +75,7 @@ const InvoiceDocument = ({ payment, user }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.logoContainer}>
-          <GraduationCapIcon />
+          <Image src={GraduationCapImg} style={styles.logoImage} />
         </View>
 
         <Text style={styles.header}>Invoice</Text>
@@ -136,22 +127,28 @@ const OrderPage = () => {
     enabled: !!user?.email,
   });
 
-  if (isLoading) return <div className="flex justify-center items-center min-h-1/2">
-    <div className="flex gap-x-2">
-      <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
-      <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
-      <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
-    </div>
-  </div>;
-  if (isError) return <p className="text-center mt-10">Error loading payments.</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-1/2">
+        <div className="flex gap-x-2">
+          <div className="w-5 h-5 bg-[#d991c2] animate-pulse rounded-full"></div>
+          <div className="w-5 h-5 bg-[#9869b8] animate-bounce rounded-full"></div>
+          <div className="w-5 h-5 bg-[#6756cc] animate-pulse rounded-full"></div>
+        </div>
+      </div>
+    );
+
+  if (isError)
+    return <p className="text-center mt-10">Error loading payments.</p>;
+
   if (payments.length === 0)
     return <p className="text-center mt-10">No payments found.</p>;
 
   return (
     <div className="max-w-7xl p-4 mx-auto">
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-600">
-        <FaFileInvoice className="text-blue-600" /> Your Orders
-      </h2>
+      <h1 className="text-2xl font-bold mb-10 flex items-center gap-2 text-blue-600">
+        Your Orders
+      </h1>
       <div className="space-y-4">
         {payments.map((payment) => (
           <div

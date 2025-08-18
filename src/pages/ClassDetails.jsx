@@ -51,7 +51,8 @@ const ClassDetails = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 animate-fade-in">
+    <div className="section-0 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-10 animate-fade-in">
       {/* Banner Image */}
       <div className="relative rounded-lg overflow-hidden mb-6 shadow h-48">
         {classData?.image ? (
@@ -66,15 +67,15 @@ const ClassDetails = () => {
           </div>
         )}
         <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold mb-2">
             {classData?.title || "Untitled Class"}
-          </h1>
+          </h2>
         </div>
       </div>
 
       {/* Course Details */}
       <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
-        <div className="bg-gray-50 p-4 font-semibold text-lg border-b border-gray-200">
+        <div className="bg-theme text-theme p-4 font-semibold text-lg border-b border-gray-200">
           Course Details
         </div>
         <div className="divide-y divide-gray-200">
@@ -123,6 +124,7 @@ const ClassDetails = () => {
           </button>
         )}
       </div>
+    </div>
     </div>
   );
 };

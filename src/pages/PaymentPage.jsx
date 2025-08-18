@@ -94,27 +94,27 @@ const CheckoutForm = ({ classData, userFromDB }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block mb-1 font-medium">Name</label>
+        <label className="block mb-1 text-theme font-medium">Name</label>
         <input
           type="text"
           value={userFromDB.name}
           disabled
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 cursor-not-allowed"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-theme text-theme cursor-not-allowed"
         />
       </div>
 
       <div>
-        <label className="block mb-1 font-medium">Email</label>
+        <label className="block mb-1 text-theme font-medium">Email</label>
         <input
           type="email"
           value={userFromDB.email}
           disabled
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 cursor-not-allowed"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-theme text-theme cursor-not-allowed"
         />
       </div>
 
       <div>
-        <label className="block mb-1 font-medium">Card Information</label>
+        <label className="block mb-1 text-theme font-medium">Card Information</label>
         <div className="border border-gray-300 rounded-lg px-4 py-2">
           <CardElement
             options={{
@@ -204,19 +204,19 @@ const PaymentPage = () => {
 
   return (
     <Elements stripe={stripePromise}>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200">
-        <div className="flex flex-col md:flex-row rounded-2xl shadow-lg overflow-hidden">
+      <div className="min-h-screen flex items-center justify-center section-0">
+        <div className="flex flex-col md:flex-row rounded-2xl shadow-2xl overflow-hidden">
           {/* Left Side - Course Info */}
           <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-8 flex flex-col justify-center items-center text-white w-full md:w-80">
-            <h2 className="text-lg font-medium">Total Amount:</h2>
-            <p className="text-4xl font-bold mt-2">${classData.price}</p>
-            <p className="mt-4 text-lg font-medium text-center">
+            <h3 className="text-lg font-medium">Total Amount:</h3>
+            <h3 className="text-4xl font-bold mt-2">${classData.price}</h3>
+            <h3 className="mt-4 text-lg font-medium text-center">
               Course: <span>{classData.title}</span>
-            </p>
+            </h3>
           </div>
 
           {/* Right Side - Payment Form */}
-          <div className="bg-white p-8 w-full md:w-96">
+          <div className="bg-theme p-8 w-full md:w-96">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
               Payment Page
             </h2>

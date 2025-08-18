@@ -77,7 +77,7 @@ const Profile = () => {
 
   return (
     <motion.div
-      className="bg-white rounded-3xl shadow-lg p-4 mx-auto max-w-7xl"
+      className="bg-theme rounded-3xl my-12 shadow-2xl p-4 md:p-6 lg:p-10 xl:p-16 mx-auto max-w-7xl"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
@@ -85,7 +85,7 @@ const Profile = () => {
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-blue-600">My Profile</h2>
+        <h2 className="text-2xl font-bold text-theme">My Profile</h2>
         <button
           onClick={() => (editMode ? handleSave() : setEditMode(true))}
           className="flex items-center gap-2 bg-blue-500 text-white cursor-pointer px-4 py-1 rounded-full hover:bg-blue-700 transition"
@@ -126,7 +126,7 @@ const Profile = () => {
               className="bg-transparent w-full font-medium outline-none"
             />
           ) : (
-            <p className="font-medium text-gray-800">{firstName}</p>
+            <h3 className="font-medium text-gray-800">{firstName}</h3>
           )}
         </div>
 
@@ -141,14 +141,14 @@ const Profile = () => {
               className="bg-transparent w-full font-medium outline-none"
             />
           ) : (
-            <p className="font-medium text-gray-800">{lastName}</p>
+            <h3 className="font-medium text-gray-800">{lastName}</h3>
           )}
         </div>
 
         {/* Email (Read-only) */}
         <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Email</p>
-          <p className="font-medium text-gray-800">{email}</p>
+          <h3 className="font-medium text-gray-800">{email}</h3>
         </div>
 
         {/* Phone Number */}
@@ -162,14 +162,14 @@ const Profile = () => {
               className="bg-transparent w-full font-medium outline-none"
             />
           ) : (
-            <p className="font-medium text-gray-800">{phone}</p>
+            <h3 className="font-medium text-gray-800">{phone}</h3>
           )}
         </div>
 
         {/* Role (Read-only) */}
         <div className="bg-gray-100 p-3 rounded-xl col-span-1 md:col-span-2">
           <p className="text-xs text-gray-500">Role</p>
-          <p className="font-medium capitalize text-gray-800">{role}</p>
+          <h3 className="font-medium capitalize text-gray-800">{role}</h3>
         </div>
 
         {/* Bio */}
@@ -184,7 +184,7 @@ const Profile = () => {
               className="bg-transparent w-full font-medium outline-none resize-none"
             />
           ) : (
-            <p className="font-medium text-gray-800">{bio || "No bio yet"}</p>
+            <h3 className="font-medium text-gray-800">{bio || "No bio yet"}</h3>
           )}
         </div>
       </div>

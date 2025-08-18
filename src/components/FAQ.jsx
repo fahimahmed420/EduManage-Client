@@ -37,47 +37,44 @@ const FAQ = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-green-50 via-white to-blue-50">
+    <div className="section-4">
       <div className="max-w-5xl mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold text-center text-blue-600 mb-8 flex items-center justify-center gap-3">
-        <FaQuestionCircle className="w-8 h-8 text-blue-600" />
-        Frequently Asked Questions
-      </h2>
+        <h2 className="text-3xl font-bold text-center  mb-8 flex items-center justify-center gap-3">
+          <FaQuestionCircle className="w-8 h-8 " size={28}/>
+          Frequently Asked Questions
+        </h2>
 
-      <div className="space-y-4">
-        {faqs.map((item, index) => (
-          <div
-            key={index}
-            className={`border rounded-lg transition-all duration-300 ${
-              openIndex === index
-                ? "border-blue-400 shadow-lg bg-blue-50"
-                : "border-blue-100 bg-white hover:shadow-md"
-            }`}
-          >
-            <button
-              onClick={() => toggle(index)}
-              className="w-full px-6 py-4 text-left text-lg font-medium text-blue-800 focus:outline-none"
-            >
-              <div className="flex justify-between items-center w-full">
-                <span>{item.question}</span>
-                <FaChevronDown
-                  className={`transition-transform duration-300 ${
-                    openIndex === index ? "rotate-180 text-blue-600" : ""
-                  }`}
-                />
-              </div>
-            </button>
+        <div className="space-y-4">
+          {faqs.map((item, index) => (
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openIndex === index ? "max-h-40 py-2 px-6" : "max-h-0"
-              } text-gray-700`}
+              key={index}
+              className={`border rounded-lg transition-all duration-300 ${openIndex === index
+                  ? "border-blue-400 shadow-lg"
+                  : "border-blue-100 bg-theme hover:shadow-md"
+                }`}
             >
-              {item.answer}
+              <button
+                onClick={() => toggle(index)}
+                className="w-full px-6 py-4 text-left text-lg font-medium focus:outline-none"
+              >
+                <h1 className="flex justify-between items-center w-full">
+                  <h3 className="">{item.question}</h3>
+                  <FaChevronDown
+                    className={`transition-transform duration-300 ${openIndex === index ? "rotate-180 text-blue-600" : ""
+                      }`}
+                  />
+                </h1>
+              </button>
+              <p
+                className={`overflow-hidden transition-all duration-300 ${openIndex === index ? "max-h-40 py-2 px-6" : "max-h-0"
+                  } text-gray-700`}
+              >
+                {item.answer}
+              </p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

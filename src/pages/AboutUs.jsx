@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const AboutUs = () => {
     return (
-        <div className="bg-gradient-to-b from-white to-blue-50 text-gray-800">
+        <div className="section-0 text-gray-800">
             {/* Hero Section */}
             <section className="max-w-7xl mx-auto px-6 py-20 text-center">
                 <motion.h1
@@ -17,8 +17,8 @@ const AboutUs = () => {
                     About Us
                 </motion.h1>
                 <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto">
-                    We are a comprehensive <span className="font-semibold">full-stack e-learning platform</span>
-                    offering courses in <span className="text-blue-600">Web Development</span>,
+                    We are a comprehensive <span className="font-semibold">full-stack e-learning platform</span> offering
+                     courses in <span className="text-blue-600">Web Development</span>,
                     <span className="text-blue-600"> UI/UX Design</span>, and
                     <span className="text-blue-600"> Artificial Intelligence</span>.
                     Our mission is to deliver a smooth and engaging learning experience
@@ -103,8 +103,8 @@ const AboutUs = () => {
                             className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl transition"
                         >
                             {feature.icon}
-                            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                            <p className="text-gray-600">{feature.desc}</p>
+                            <h1 className="text-xl font-semibold mb-2">{feature.title}</h1>
+                            <p className="">{feature.desc}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -113,18 +113,18 @@ const AboutUs = () => {
             {/* CTA */}
             <section className="bg-blue-600 py-16 text-white text-center">
                 <div className="px-4">
-                    <h2 className="text-3xl font-bold mb-4">Join Our Learning Community</h2>
-                    <p className="max-w-2xl mx-auto mb-6">
+                    <h3 className="text-3xl font-bold mb-4">Join Our Learning Community</h3>
+                    <h3 className="max-w-2xl opacity-80 mx-auto mb-6">
                         Start your journey today and gain the skills needed to succeed in
                         the fast-paced digital world.
-                    </p>
+                    </h3>
                     <Link
                         to="/all-classes"
                         className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-full shadow-md hover:bg-blue-100 transition"
                     >
                         Get Started
                     </Link>
-                    <div className="max-w-7xl mx-auto border-b mt-7" />
+                    <div className="max-w-7xl mx-auto border-b opacity-50 mt-7" />
                 </div>
             </section>
         </div>

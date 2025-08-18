@@ -83,7 +83,7 @@ const Teach = () => {
   };
 
   return (
-    <section className="bg-gradient-to-b from-white to-blue-50 min-h-screen">
+    <section className="section-0 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-12">
         <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-center text-blue-600">
           Teach Application

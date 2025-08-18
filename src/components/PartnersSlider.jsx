@@ -57,9 +57,9 @@ const partners = [
 
 const PartnersSlider = () => {
   return (
-    <div className="w-full bg-gradient-to-b from-blue-50 to-white py-12 overflow-hidden mb-16">
-      <h2 className="text-3xl font-bold text-center text-blue-600 flex justify-center items-center gap-2 mb-12">
-        <FaHandshake className="text-4xl text-blue-600" /> 
+    <div className="w-full section-reverse py-12 overflow-hidden pb-16">
+      <h2 className="text-3xl font-bold text-center flex justify-center items-center gap-2 mb-12">
+        <FaHandshake className="text-4xl " /> 
         Our Partners & Collaborators
       </h2>
 

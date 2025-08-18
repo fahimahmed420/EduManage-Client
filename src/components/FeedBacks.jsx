@@ -93,12 +93,12 @@ const FeedBacks = () => {
 
               {/* Content */}
               <div className="flex flex-col flex-grow text-center">
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-lg text-gray-800 font-semibold">
                   {fb.student?.name || "Anonymous"}
                 </h3>
-                <p className="text-sm text-blue-600 font-medium mb-2">
+                <h3 className="text-sm text-blue-600 font-medium mb-2">
                   {fb.classInfo?.title || "Unknown Class"}
-                </p>
+                </h3>
 
                 {/* FIXED HEIGHT DESCRIPTION */}
                 <p className="text-gray-700 italic mb-4 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">

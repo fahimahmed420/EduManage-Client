@@ -1,6 +1,82 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* theme */
+/* Light Theme (default) */
+:root {
+  --bg-default: #ffffff;
+  --bg-theme: #ffffff;
+  --text-theme: #1f2937;           /* normal text */
+  --text-theme-hover: #2563eb;     /* hover text */
+
+  --text-primary: #1f2937;
+  --text-secondary: #3b82f6;
+  --text-muted: #6b7280;
+
+  --blue-50: #ebf5ff;
+  --orange-50: #fff7ed;
+  --purple-50: #f5efff;
+  --green-50: #f0fff4;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg-default: #121212;
+  --bg-theme: #000000;
+  --text-theme: #f5f5f5;           /* normal text */
+  --text-theme-hover: #60a5fa;     /* lighter hover text */
+
+  --text-primary: #e5e5e5;
+  --text-secondary: #4ea3ff;
+  --text-muted: #a3a3a3;
+
+  --blue-50: #0f1b33;
+  --orange-50: #33210f;
+  --purple-50: #2a1733;
+  --green-50: #13331f;
+}
+
+
+/* Sections using variables */
+.section-0 {
+  background: linear-gradient(to bottom, var(--bg-default), var(--blue-50));
+}
+.section-reverse {
+  background: linear-gradient(to bottom, var(--blue-50), var(--bg-default));
+}
+.section-1 {
+  background: linear-gradient(to bottom, var(--bg-default), var(--blue-50), var(--orange-50));
+}
+.section-2 {
+  background: linear-gradient(to bottom, var(--orange-50), var(--bg-default), var(--purple-50));
+}
+.section-3 {
+  background: linear-gradient(to bottom, var(--purple-50), var(--bg-default), var(--green-50));
+}
+.section-4 {
+  background: linear-gradient(to bottom, var(--green-50), var(--bg-default), var(--blue-50));
+}
+
+/* Text colors */
+h1 { color: var(--text-primary); }
+h2 { color: var(--text-secondary); }
+p { color: var(--text-muted); }
+
+.bg-theme {
+  background-color: var(--bg-theme);
+}
+.text-theme {
+  color: var(--text-theme);
+}
+.text-theme-hover:hover {
+  color: var(--text-theme-hover);
+}
+
+
+
+
+
+/* animation for footer */
 @keyframes marquee {
   0%   { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
@@ -20,7 +96,7 @@
 .active {
   color: #3870e7;
 }
-/* From Uiverse.io by vinodjangid07 */ 
+
 .button {
   width: 110px;
   height: 40px;

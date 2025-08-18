@@ -68,22 +68,22 @@ const FreeResources = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-4 text-blue-600 flex items-center justify-center gap-2">
-          <FaDownload className="text-blue-600" />
+        <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-2">
+          <FaDownload className="" size={28}/>
           Free Resources & Downloads
         </h2>
-        <p className="text-gray-600">
+        <p className="">
           Download helpful study PDFs for free and boost your skills.
         </p>
         <Slider {...settings}>
           {resources.map((item, index) => (
             <div key={index} className="py-10 p-4">
-              <div className="group bg-gray-50 border border-gray-200 p-6 rounded-xl shadow-md transition-transform transform hover:-translate-y-3 hover:rotate-1 hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
+              <div className="group bg-theme  p-6 rounded-xl shadow-md transition-transform transform hover:-translate-y-3 hover:rotate-1 hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
                 <HiOutlineDocumentText className={`text-4xl mb-4 ${item.iconColor}`} />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                <h1 className="text-xl text-gray-800 font-semibold mb-2 ">
                   {item.title}
-                </h3>
-                <p className="text-gray-600 mb-4">{item.description}</p>
+                </h1>
+                <p className=" mb-4">{item.description}</p>
                 <a
                   href={item.file}
                   target="_blank"

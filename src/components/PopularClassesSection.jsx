@@ -76,13 +76,13 @@ const PopularClassesSection = () => {
 
             {/* Class content */}
             <div className="flex flex-col px-4 pb-4 pt-6 flex-grow text-center">
-              <h3 className="text-lg font-semibold">{cls.title}</h3>
-              <p
-                className="text-sm opacity-90 mt-2 mb-4 line-clamp-3"
+              <h1 className="text-lg font-semibold">{cls.title}</h1>
+              <span
+                className="text-sm opacity-80 mt-2 mb-4 line-clamp-3"
                 title={cls.description}
               >
                 {cls.description?.slice(0, 100)}...
-              </p>
+              </span>
 
               {/* Enroll Button */}
               <div className="mt-auto">

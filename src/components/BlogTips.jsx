@@ -70,17 +70,16 @@ const BlogTips = () => {
   return (
     <section className=" py-12">
       <div className="max-w-7xl mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold text-blue-600 text-center mb-10 flex items-center justify-center gap-2">
-          <FaBookOpen className="text-blue-600 w-8 h-8" />
+        <h2 className="text-3xl font-bold  text-center mb-10 flex items-center justify-center gap-2">
+          <FaBookOpen size={28}/>
           Blog & Learning Tips
-
         </h2>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((post) => (
             <div
               key={post.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 flex flex-col"
+              className="bg-theme rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 flex flex-col"
             >
               <img
                 src={post.image}
@@ -89,8 +88,8 @@ const BlogTips = () => {
               />
               <div className="p-4 flex flex-col justify-between flex-grow">
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-800">{post.title}</h3>
-                  <p className="text-gray-600 mt-1 text-sm">{post.excerpt}</p>
+                  <h1 className="text-lg font-semibold ">{post.title}</h1>
+                  <p className="mt-1 text-sm">{post.excerpt}</p>
                 </div>
                 <div className="flex justify-center mt-4">
                  

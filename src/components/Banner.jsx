@@ -35,17 +35,17 @@ const Banner = () => {
   ];
 
   return (
-    <div className="relative w-full bg-gradient-to-b from-white to-blue-50  overflow-hidden py-32">
+    <div className="relative w-full section-0 overflow-hidden py-32">
       <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
         {/* Left Section */}
         <div className="flex flex-col items-center lg:items-start gap-4 text-center lg:text-left">
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center">
               <Lottie animationData={GraduationHat} loop autoplay />
             </div>
-            <h1 className="text-3xl font-bold text-gray-800">EduManage</h1>
+            <h1 className="text-3xl font-bold">EduManage</h1>
           </div>
-          <p className="text-gray-500 text-lg max-w-md">
+          <p className="text-lg max-w-md">
             One platform for students and teachers. Manage classes, assignments, and collaborate with ease.
           </p>
           <Link

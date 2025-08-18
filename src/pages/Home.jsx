@@ -12,24 +12,27 @@ import CareerInvestSection from '../components/CareerInvestSection';
 const Home = () => {
   return (
     <>
-      {/* Inspire → Show offerings → Prove credibility → Build trust → Add value → Reassure. */}
       <Banner />
       <PartnersSlider />
-      <div className='bg-gradient-to-b from-white via-blue-50 to-orange-50'>
+
+      <div className="section-1">
         <CareerInvestSection />
         <PopularClassesSection />
         <FeedBacks />
       </div>
-      <div className='bg-gradient-to-b from-orange-50 via-white to-purple-50'>
+
+      <div className="section-2">
         <InspireTeachers />
       </div>
-      <div className='bg-gradient-to-b from-purple-50 via-white to-green-50'>
+
+      <div className="section-3">
         <FreeResources />
         <BlogTips />
       </div>
-      <FAQ />
 
+      <FAQ />
     </>
+
   );
 };
 

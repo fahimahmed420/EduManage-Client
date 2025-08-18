@@ -9,8 +9,8 @@ import { GiTeacher } from "react-icons/gi";
 const InspireTeachers = () => {
   return (
     <div className="py-16 max-w-7xl px-4 mx-auto">
-      <h2 className="text-3xl font-bold text-center text-blue-600 flex items-center justify-center gap-2 mb-8">
-        <GiTeacher className="text-blue-600" size={28} />
+      <h2 className="text-3xl font-bold text-center flex items-center justify-center gap-2 mb-8">
+        <GiTeacher className="" size={28} />
         Join EduManage
       </h2>
       <div className=" flex flex-col md:flex-row items-center justify-between gap-8">
@@ -32,9 +32,9 @@ const InspireTeachers = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.4 }} // Trigger only once when 40% visible
         >
-          <h2 className="text-4xl font-bold text-gray-700 mb-4 text-center md:text-end">
+          <h1 className="text-4xl font-bold mb-4 text-center md:text-end">
             Inspire Students. Share Your Knowledge.
-          </h2>
+          </h1>
           <p className="text-gray-600 text-lg mb-6 text-center md:text-end">
             Join EduManage as a teacher and impact thousands of learners. Teach
             live classes, share assignments, and grow your teaching career while

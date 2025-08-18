@@ -32,9 +32,9 @@ const AboutUs = () => {
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.7 }}
-                    className="bg-white rounded-2xl shadow-lg p-8"
+                    className="bg-theme rounded-2xl shadow-lg p-8"
                 >
-                    <h2 className="text-2xl font-bold text-blue-600 mb-4">Our Mission</h2>
+                    <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
                     <p>
                         To provide learners with high-quality, accessible education
                         that blends cutting-edge technology with practical, hands-on knowledge.
@@ -46,7 +46,7 @@ const AboutUs = () => {
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.7 }}
-                    className="bg-white rounded-2xl shadow-lg p-8"
+                    className="bg-theme  rounded-2xl shadow-lg p-8"
                 >
                     <h2 className="text-2xl font-bold text-blue-600 mb-4">Our Vision</h2>
                     <p>
@@ -100,7 +100,7 @@ const AboutUs = () => {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.2, duration: 0.6 }}
-                            className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl transition"
+                            className="bg-theme rounded-2xl shadow-md p-6 text-center hover:shadow-xl transition"
                         >
                             {feature.icon}
                             <h1 className="text-xl font-semibold mb-2">{feature.title}</h1>

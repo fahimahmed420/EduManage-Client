@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FiSearch } from "react-icons/fi";
@@ -31,16 +31,24 @@ const sortOptions = [
 
 const AllClasses = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("");
   const navigate = useNavigate();
 
-  // Debounced search to reduce API calls
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const handleSearch = debounce((value) => {
-    setPage(1);
-    setDebouncedSearch(value);
-  }, 300);
+  // Stable debounce function
+  const debouncedHandler = useCallback(
+    debounce((value) => {
+      setPage(1); // reset to first page on new search
+      setDebouncedSearch(value);
+    }, 300),
+    []
+  );
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    debouncedHandler(e.target.value);
+  };
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["classes", page, debouncedSearch, sortOrder],
@@ -64,17 +72,18 @@ const AllClasses = () => {
             <input
               type="text"
               placeholder="Search classes by name..."
-              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => handleSearch(e.target.value)}
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full border border-gray-300 bg-theme text-theme rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme" />
           </div>
 
           {/* Sort */}
           <div className="w-full sm:w-40">
-            <Listbox value={sortOrder} onChange={(value) => setSortOrder(value)}>
+            <Listbox value={sortOrder} onChange={setSortOrder}>
               <div className="relative">
-                <Listbox.Button className="relative w-full cursor-pointer rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <Listbox.Button className="relative w-full cursor-pointer rounded-lg border border-gray-300 bg-theme text-theme py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <span>
                     {sortOptions.find((o) => o.value === sortOrder)?.label ||
                       "Sort by Price"}
@@ -84,7 +93,7 @@ const AllClasses = () => {
                   </span>
                 </Listbox.Button>
 
-                <Listbox.Options className="absolute mt-1 w-full rounded-lg border border-blue-400 bg-white shadow-lg z-10">
+                <Listbox.Options className="absolute mt-1 w-full rounded-lg border border-blue-400 bg-theme text-theme shadow-lg z-10">
                   {sortOptions.map((option) => (
                     <Listbox.Option
                       key={option.value}
@@ -98,7 +107,9 @@ const AllClasses = () => {
                       {({ selected }) => (
                         <div className="flex items-center justify-between">
                           <span>{option.label}</span>
-                          {selected && <CheckIcon className="h-4 w-4 text-blue-600" />}
+                          {selected && (
+                            <CheckIcon className="h-4 w-4 text-blue-600" />
+                          )}
                         </div>
                       )}
                     </Listbox.Option>
@@ -143,7 +154,7 @@ const AllClasses = () => {
               {data.classes.map((cls) => (
                 <div
                   key={cls._id}
-                  className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col"
+                  className="bg-theme rounded-xl overflow-hidden shadow hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col"
                 >
                   <img
                     src={cls.image || "https://via.placeholder.com/400x250"}
@@ -152,11 +163,15 @@ const AllClasses = () => {
                   />
                   <div className="p-4 flex flex-col flex-grow">
                     <div className="space-y-2 mb-4">
-                      <h3 className="text-lg font-semibold truncate">{cls.title}</h3>
+                      <h1 className="text-lg font-semibold truncate">
+                        {cls.title}
+                      </h1>
                       <p className="text-sm text-gray-500 truncate">
                         By {cls.teacherName}
                       </p>
-                      <p className="text-sm text-gray-700 font-medium">${cls.price}</p>
+                      <p className="text-sm text-gray-700 font-medium">
+                        ${cls.price}
+                      </p>
                       <p className="text-sm text-gray-500 line-clamp-2">
                         {cls.description}
                       </p>
@@ -180,7 +195,7 @@ const AllClasses = () => {
               <button
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                 disabled={page === 1}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                className="px-4 py-2 bg-theme text-theme shadow-2xl text-theme-hover rounded hover:bg-gray-300 disabled:opacity-50"
               >
                 Previous
               </button>
@@ -200,7 +215,7 @@ const AllClasses = () => {
               <button
                 onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={page === totalPages}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                className="px-4 py-2 bg-theme text-theme text-theme-hover shadow-2xl rounded hover:bg-gray-300 disabled:opacity-50"
               >
                 Next
               </button>

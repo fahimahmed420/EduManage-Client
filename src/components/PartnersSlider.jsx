@@ -78,7 +78,7 @@ const PartnersSlider = () => {
           {[...partners, ...partners].map((partner, index) => (
             <div
               key={index}
-              className="relative min-w-[200px] h-36 bg-white rounded-4xl shadow-md overflow-hidden group cursor-pointer my-2 hover:scale-105 transition-transform duration-300"
+              className="relative min-w-[200px] h-36 bg-theme rounded-4xl shadow-md overflow-hidden group cursor-pointer my-2 hover:scale-105 transition-transform duration-300"
             >
               {/* Lottie Animation */}
               <div className="flex justify-center items-center h-full p-4">

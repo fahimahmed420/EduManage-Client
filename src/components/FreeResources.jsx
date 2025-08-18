@@ -44,7 +44,6 @@ const resources = [
   },
 ];
 
-
 const FreeResources = () => {
   const settings = {
     dots: true,
@@ -52,7 +51,10 @@ const FreeResources = () => {
     speed: 600,
     slidesToShow: 3,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -69,26 +71,26 @@ const FreeResources = () => {
     <section className="py-16">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-2">
-          <FaDownload className="" size={28}/>
+          <FaDownload size={28} />
           Free Resources & Downloads
         </h2>
-        <p className="">
-          Download helpful study PDFs for free and boost your skills.
-        </p>
+        <p>Download helpful study PDFs for free and boost your skills.</p>
         <Slider {...settings}>
           {resources.map((item, index) => (
             <div key={index} className="py-10 p-4">
-              <div className="group bg-theme  p-6 rounded-xl shadow-md transition-transform transform hover:-translate-y-3 hover:rotate-1 hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
-                <HiOutlineDocumentText className={`text-4xl mb-4 ${item.iconColor}`} />
-                <h1 className="text-xl text-gray-800 font-semibold mb-2 ">
+              <div className="group bg-theme p-6 rounded-xl shadow-md transition-transform transform hover:-translate-y-3 hover:rotate-1 hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
+                <HiOutlineDocumentText
+                  className={`text-4xl mb-4 ${item.iconColor}`}
+                />
+                <h1 className="text-xl text-gray-800 font-semibold mb-2">
                   {item.title}
                 </h1>
-                <p className=" mb-4">{item.description}</p>
+                <p className="mb-4">{item.description}</p>
                 <a
                   href={item.file}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block cursor-progress bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:translate-y-2 px-4 py-2 rounded-full transition"
+                  className="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full transition transform hover:scale-105"
                 >
                   Download PDF
                 </a>

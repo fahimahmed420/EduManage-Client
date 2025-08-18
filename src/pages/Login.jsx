@@ -102,11 +102,11 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-100 to-blue-200 px-4">
-      <div className="glass-card w-full max-w-sm p-6 space-y-6 shadow-2xl rounded-2xl">
+    <div className="min-h-screen flex items-center justify-center section-0 px-4">
+      <div className="w-full max-w-sm p-6 space-y-6 shadow-2xl shadow-gray-950 rounded-2xl">
         {/* Logo */}
         <div className="flex justify-center">
-          <Link to="/" className="flex items-center gap-2 text-blue-600 font-extrabold text-2xl hover:underline">
+          <Link to="/" className="flex items-center gap-2 text-theme font-extrabold text-2xl hover:underline">
             <Lottie className="w-14" animationData={GraduationHat} loop autoplay />
             EduManage
           </Link>
@@ -114,7 +114,7 @@ export default function Login() {
 
         {/* Heading */}
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Sign in to EduManage</h1>
+          <h1 className="text-2xl font-bold ">Sign in to EduManage</h1>
           <p className="text-gray-500 text-sm mt-1">
             Access your classes, assignments, and resources.
           </p>
@@ -134,7 +134,7 @@ export default function Login() {
                   message: "Enter a valid email",
                 },
               })}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 bg-white/70 backdrop-blur-md"
+              className="w-full px-4 py-3 rounded-lg border bg-theme text-theme focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 backdrop-blur-md"
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
@@ -153,7 +153,7 @@ export default function Login() {
                   hasDigit: (v) => /\d/.test(v) || "At least 1 number",
                 },
               })}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 bg-white/70 backdrop-blur-md pr-10"
+              className="w-full px-4 py-3 rounded-lg border bg-theme text-theme focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 backdrop-blur-md pr-10"
             />
             <button
               type="button"
@@ -190,7 +190,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold flex justify-center items-center gap-2 transition ${loading && "opacity-50 cursor-not-allowed"}`}
+            className={`w-full py-3 rounded-lg bg-theme border cursor-pointer text-theme text-theme-hover text-white font-semibold flex justify-center items-center gap-2 transition ${loading && "opacity-50 cursor-not-allowed"}`}
           >
             {loading ? (
               <>
@@ -214,7 +214,7 @@ export default function Login() {
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="flex items-center justify-center w-full py-3 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-md hover:shadow-lg hover:scale-[1.02] transition-all duration-150 ease-in-out"
+            className="flex items-center cursor-pointer text-theme-hover justify-center w-full py-3 rounded-lg border bg-theme text-theme backdrop-blur-md hover:shadow-lg hover:scale-[1.02] transition-all duration-150 ease-in-out"
           >
             <FcGoogle className="text-xl mr-2" /> Sign in with Google
           </button>

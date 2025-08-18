@@ -47,7 +47,6 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [previewPhoto, setPreviewPhoto] = useState("");
   const [loading, setLoading] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
@@ -103,28 +102,36 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-100 to-blue-200 px-4">
-      <div className="glass-card w-full max-w-sm p-6 space-y-6 shadow-2xl rounded-2xl">
+    <div className="min-h-screen flex items-center justify-center section-0 px-4 bg-theme text-theme">
+      <div className="w-full max-w-sm p-6 space-y-6 shadow-2xl shadow-gray-950 rounded-2xl backdrop-blur-md bg-theme/80">
+        {/* Logo */}
         <div className="flex justify-center">
-          <Link to="/" className="flex items-center gap-2 text-blue-600 font-extrabold text-2xl hover:underline">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-theme font-extrabold text-2xl hover:underline"
+          >
             <Lottie className="w-14" animationData={GraduationHat} loop autoplay />
             EduManage
           </Link>
         </div>
 
+        {/* Heading */}
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign up to access all educational tools and resources.</p>
+          <h1 className="text-2xl font-bold">Create your account</h1>
+          <p className="text-gray-400 text-sm mt-1">
+            Sign up to access all educational tools and resources.
+          </p>
         </div>
 
+        {/* Form */}
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {/* Name */}
           <div>
             <input
               type="text"
               placeholder="Full Name"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               {...register("name", { required: true })}
+              className="w-full px-4 py-3 rounded-lg border bg-theme text-theme focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 backdrop-blur-md"
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">Name is required.</p>}
           </div>
@@ -134,13 +141,16 @@ export default function Register() {
             <input
               type="url"
               placeholder="Profile Photo URL (optional)"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               {...register("photo")}
-              onChange={(e) => setPreviewPhoto(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border bg-theme text-theme focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 backdrop-blur-md"
             />
             {photoURL && (
               <div className="flex justify-center mt-2">
-                <img src={photoURL} alt="Profile Preview" className="w-20 h-20 rounded-full object-cover border-2 border-blue-500" />
+                <img
+                  src={photoURL}
+                  alt="Profile Preview"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-blue-500"
+                />
               </div>
             )}
           </div>
@@ -150,7 +160,6 @@ export default function Register() {
             <input
               type="email"
               placeholder="student@example.com"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -158,6 +167,7 @@ export default function Register() {
                   message: "Enter a valid email",
                 },
               })}
+              className="w-full px-4 py-3 rounded-lg border bg-theme text-theme focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 backdrop-blur-md"
             />
             {errors.email && (
               <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
@@ -169,23 +179,25 @@ export default function Register() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full px-4 py-3 pr-10 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               {...register("password", {
                 required: "Password is required",
                 validate: {
                   length: (val) => passwordRegex.length.test(val) || "At least 8 characters",
-                  upper: (val) => passwordRegex.uppercase.test(val) || "At least 1 uppercase letter",
-                  lower: (val) => passwordRegex.lowercase.test(val) || "At least 1 lowercase letter",
+                  upper: (val) =>
+                    passwordRegex.uppercase.test(val) || "At least 1 uppercase letter",
+                  lower: (val) =>
+                    passwordRegex.lowercase.test(val) || "At least 1 lowercase letter",
                   digit: (val) => passwordRegex.digit.test(val) || "At least 1 number",
                 },
               })}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(false)}
+              className="w-full px-4 py-3 pr-10 rounded-lg border bg-theme text-theme focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400 backdrop-blur-md"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
               tabIndex={-1}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
@@ -193,13 +205,25 @@ export default function Register() {
             </button>
           </div>
 
-          {/* Checklist */}
+          {/* Password Checklist */}
           {(passwordFocused || password) && (
             <div className="space-y-1">
-              <ChecklistItem valid={passwordRegex.length.test(password)} label="At least 8 characters" />
-              <ChecklistItem valid={passwordRegex.uppercase.test(password)} label="At least 1 uppercase letter" />
-              <ChecklistItem valid={passwordRegex.lowercase.test(password)} label="At least 1 lowercase letter" />
-              <ChecklistItem valid={passwordRegex.digit.test(password)} label="At least 1 number" />
+              <ChecklistItem
+                valid={passwordRegex.length.test(password)}
+                label="At least 8 characters"
+              />
+              <ChecklistItem
+                valid={passwordRegex.uppercase.test(password)}
+                label="At least 1 uppercase letter"
+              />
+              <ChecklistItem
+                valid={passwordRegex.lowercase.test(password)}
+                label="At least 1 lowercase letter"
+              />
+              <ChecklistItem
+                valid={passwordRegex.digit.test(password)}
+                label="At least 1 number"
+              />
             </div>
           )}
 
@@ -207,7 +231,10 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold flex justify-center items-center gap-2 transition ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`w-full py-3 mt-10 border rounded-lg bg-theme text-theme text-theme-hover font-semibold flex justify-center
+               items-center gap-2 transition cursor-pointer ${loading ? 
+                "opacity-50 cursor-not-allowed" : ""
+              }`}
           >
             {loading ? <><FaSpinner className="animate-spin" /> Creating account...</> : "Create Account"}
           </button>
@@ -215,9 +242,9 @@ export default function Register() {
 
         {/* Divider */}
         <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
-          <div className="h-px flex-1 bg-gray-300" />
+          <div className="h-px flex-1 bg-gray-600" />
           <span>or</span>
-          <div className="h-px flex-1 bg-gray-300" />
+          <div className="h-px flex-1 bg-gray-600" />
         </div>
 
         {/* Google Signup */}
@@ -225,16 +252,20 @@ export default function Register() {
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="flex items-center justify-center w-full py-3 rounded-lg border border-gray-300 bg-white/70 backdrop-blur-md hover:shadow-lg hover:scale-[1.02] transition-all duration-150 ease-in-out"
+            className="flex items-center cursor-pointer justify-center w-full py-3 rounded-lg border
+             bg-theme text-theme text-theme-hover hover:shadow-lg hover:scale-[1.02] transition-all
+              duration-150 ease-in-out"
           >
             <FcGoogle className="text-xl mr-2" /> Sign up with Google
           </button>
         </div>
 
         {/* Login Link */}
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-gray-400 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline font-medium">Sign in</Link>
+          <Link to="/login" className="text-blue-500 hover:underline font-medium">
+            Sign in
+          </Link>
         </p>
       </div>
 
